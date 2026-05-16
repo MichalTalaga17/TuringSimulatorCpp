@@ -704,16 +704,6 @@ void TuringSimulatorUI::validateAndBuildMachine()
         return;
     }
 
-    // If no accepting states defined, set the last state as accepting (default)
-    if (acceptingStates.empty()) {
-        if (!states.empty()) {
-            acceptingStates.insert(states.back());
-        } else {
-            QMessageBox::warning(this, "Validation Error", "Please define at least one state");
-            return;
-        }
-    }
-
     // Extract blank symbol
     QString blankStr = blankSymbolField->text();
     if (blankStr.isEmpty() || blankStr.length() != 1) {
@@ -725,6 +715,9 @@ void TuringSimulatorUI::validateAndBuildMachine()
     // Build machine
     machine = std::make_unique<TuringMachine>(blankSymbol);
     machine->setInitialState(initialState);
+
+    // If the UI does not define accepting states explicitly, build the machine without them.
+    acceptingStates.clear();
 
     for (const auto& state : acceptingStates) {
         machine->addAcceptingState(state);
