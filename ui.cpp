@@ -9,6 +9,7 @@
 #include <QPalette>
 #include <QTabWidget>
 #include <QMessageBox>
+#include <QResizeEvent>
 #include <QScrollBar>
 #include <QTimer>
 #include <QSpinBox>
@@ -75,6 +76,19 @@ void TuringSimulatorUI::setupUI()
 
     mainLayout->addWidget(tabWidget);
     setCentralWidget(centralWidget);
+}
+
+void TuringSimulatorUI::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+
+    if (!machine || !tapeScrollArea || tapeCells.empty()) {
+        return;
+    }
+
+    QTimer::singleShot(0, this, [this]() {
+        updateTapeDisplay();
+    });
 }
 
 QWidget* TuringSimulatorUI::setupBuilderTab()

@@ -26,6 +26,10 @@ public:
     explicit TuringSimulatorUI(QWidget *parent = nullptr);
     ~TuringSimulatorUI() = default;
 
+protected:
+    /// Reaguje na zmianę rozmiaru okna i ponownie centruje aktywną komórkę taśmy.
+    void resizeEvent(QResizeEvent *event) override;
+
 private slots:
     // Builder slots
     void onNumStatesChanged(int value);
