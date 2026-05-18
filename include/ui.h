@@ -26,6 +26,10 @@ public:
     explicit TuringSimulatorUI(QWidget *parent = nullptr);
     ~TuringSimulatorUI() = default;
 
+protected:
+    /// Reaguje na zmianę rozmiaru okna i ponownie centruje aktywną komórkę taśmy.
+    void resizeEvent(QResizeEvent *event) override;
+
 private slots:
     // Builder slots
     void onNumStatesChanged(int value);
@@ -59,6 +63,8 @@ private:
     void updateStateDisplay();
     /// Odtwarza aktualny wycinek taśmy i centruje aktywną komórkę.
     void updateTapeDisplay();
+    /// Planuje pojedyncze odświeżenie widoku taśmy po zakończeniu bieżącej pętli zdarzeń.
+    void scheduleTapeDisplayRefresh();
     /// Tworzy zestaw widocznych komórek używanych do wizualizacji taśmy.
     void setupTapeCells();
     /// Wypełnia formularz i tabelę przykładową maszyną startową.
@@ -115,6 +121,8 @@ private:
     bool isRunning;
     int executionSpeed;
     std::unique_ptr<QTimer> executionTimer;
+    /// Jednostrzałowy timer współdzielony przez odświeżenia widoku taśmy, aby uniknąć kolejkowania duplikatów.
+    std::unique_ptr<QTimer> tapeDisplayRefreshTimer;
     /// Bufor etykiet pojedynczych komórek taśmy używanych przy odświeżaniu widoku.
     std::vector<QLabel*> tapeCells;
 

@@ -9,6 +9,7 @@
 #include <QPalette>
 #include <QTabWidget>
 #include <QMessageBox>
+#include <QResizeEvent>
 #include <QScrollBar>
 #include <QTimer>
 #include <QSpinBox>
@@ -41,16 +42,17 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
     , isRunning(false)
     , executionSpeed(500)
     , executionTimer(std::make_unique<QTimer>())
+    , tapeDisplayRefreshTimer(std::make_unique<QTimer>())
 {
     setupUI();
     applyModernStyle();
 
     // Connect timer for execution
     connect(executionTimer.get(), &QTimer::timeout, this, &TuringSimulatorUI::onExecutionTimer);
+    tapeDisplayRefreshTimer->setSingleShot(true);
+    connect(tapeDisplayRefreshTimer.get(), &QTimer::timeout, this, &TuringSimulatorUI::updateTapeDisplay);
 
-    QTimer::singleShot(0, this, [this]() {
-        updateTapeDisplay();
-    });
+    scheduleTapeDisplayRefresh();
 }
 
 void TuringSimulatorUI::setupUI()
@@ -75,6 +77,17 @@ void TuringSimulatorUI::setupUI()
 
     mainLayout->addWidget(tabWidget);
     setCentralWidget(centralWidget);
+}
+
+void TuringSimulatorUI::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+
+    if (!machine || !tapeScrollArea || tapeCells.empty()) {
+        return;
+    }
+
+    scheduleTapeDisplayRefresh();
 }
 
 QWidget* TuringSimulatorUI::setupBuilderTab()
@@ -934,14 +947,21 @@ void TuringSimulatorUI::updateTapeDisplay()
     QLabel *activeCell = tapeCells[activeCellIndex];
     const int viewportWidth = tapeScrollArea->viewport()->width();
     if (viewportWidth <= 0) {
-        QTimer::singleShot(0, this, [this]() {
-            updateTapeDisplay();
-        });
+        scheduleTapeDisplayRefresh();
         return;
     }
 
     const int targetValue = activeCell->x() + (activeCell->width() / 2) - (viewportWidth / 2);
     tapeScrollArea->horizontalScrollBar()->setValue(std::max(0, targetValue));
+}
+
+void TuringSimulatorUI::scheduleTapeDisplayRefresh()
+{
+    if (tapeDisplayRefreshTimer->isActive()) {
+        return;
+    }
+
+    tapeDisplayRefreshTimer->start(0);
 }
 
 void TuringSimulatorUI::setupTapeCells()
