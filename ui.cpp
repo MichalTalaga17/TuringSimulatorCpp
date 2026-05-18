@@ -42,13 +42,15 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
     , isRunning(false)
     , executionSpeed(500)
     , executionTimer(std::make_unique<QTimer>())
-    , tapeDisplayRefreshPending(false)
+    , tapeDisplayRefreshTimer(std::make_unique<QTimer>())
 {
     setupUI();
     applyModernStyle();
 
     // Connect timer for execution
     connect(executionTimer.get(), &QTimer::timeout, this, &TuringSimulatorUI::onExecutionTimer);
+    tapeDisplayRefreshTimer->setSingleShot(true);
+    connect(tapeDisplayRefreshTimer.get(), &QTimer::timeout, this, &TuringSimulatorUI::updateTapeDisplay);
 
     scheduleTapeDisplayRefresh();
 }
@@ -955,15 +957,11 @@ void TuringSimulatorUI::updateTapeDisplay()
 
 void TuringSimulatorUI::scheduleTapeDisplayRefresh()
 {
-    if (tapeDisplayRefreshPending) {
+    if (!tapeDisplayRefreshTimer || tapeDisplayRefreshTimer->isActive()) {
         return;
     }
 
-    tapeDisplayRefreshPending = true;
-    QTimer::singleShot(0, this, [this]() {
-        tapeDisplayRefreshPending = false;
-        updateTapeDisplay();
-    });
+    tapeDisplayRefreshTimer->start(0);
 }
 
 void TuringSimulatorUI::setupTapeCells()

@@ -121,8 +121,8 @@ private:
     bool isRunning;
     int executionSpeed;
     std::unique_ptr<QTimer> executionTimer;
-    /// Flaga zapobiegająca kolejkowaniu wielu odświeżeń widoku taśmy naraz.
-    bool tapeDisplayRefreshPending;
+    /// Jednostrzałowy timer współdzielony przez odświeżenia widoku taśmy, aby uniknąć kolejkowania duplikatów.
+    std::unique_ptr<QTimer> tapeDisplayRefreshTimer;
     /// Bufor etykiet pojedynczych komórek taśmy używanych przy odświeżaniu widoku.
     std::vector<QLabel*> tapeCells;
 
