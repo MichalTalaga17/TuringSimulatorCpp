@@ -1,14 +1,15 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QWidget>
 #include <QPushButton>
 #include <QLabel>
-#include <QTextEdit>
 #include <QSlider>
 #include <QTableWidget>
 #include <QLineEdit>
 #include <QComboBox>
 #include <QSpinBox>
+#include <QScrollArea>
 #include <QTimer>
 #include <memory>
 #include <map>
@@ -44,17 +45,35 @@ private slots:
     void onLoadTapeClicked();
 
 private:
+    /// Buduje główny układ okna i zakładki aplikacji.
     void setupUI();
+    /// Tworzy zakładkę konfiguracji maszyny i tabeli przejść.
     QWidget* setupBuilderTab();
+    /// Tworzy zakładkę uruchamiania symulacji oraz widok taśmy.
     QWidget* setupExecutorTab();
+    /// Nakłada wspólny styl wizualny na całą aplikację.
     void applyModernStyle();
+    /// Odświeża wszystkie elementy prezentujące bieżący stan maszyny.
     void updateDisplay();
+    /// Aktualizuje etykiety stanu sterowania i licznika kroków.
     void updateStateDisplay();
+    /// Odtwarza aktualny wycinek taśmy i centruje aktywną komórkę.
     void updateTapeDisplay();
+    /// Tworzy zestaw widocznych komórek używanych do wizualizacji taśmy.
+    void setupTapeCells();
+    /// Wypełnia formularz i tabelę przykładową maszyną startową.
+    void applyDefaultExample();
+    /// Buduje maszynę z aktualnej konfiguracji formularza i opcjonalnie pokazuje komunikat sukcesu.
+    bool buildMachineFromCurrentConfiguration(bool showSuccessDialog);
+    /// Waliduje formularz użytkownika i uruchamia budowanie maszyny.
     void validateAndBuildMachine();
+    /// Przebudowuje tabelę przejść po zmianie liczby stanów lub alfabetu.
     void rebuildTransitionsTable();
+    /// Czyści pomocniczą pamięć podręczną wskaźników do kontrolek tabeli.
     void clearTableCache();
+    /// Ustawia domyślne wartości dla pojedynczej komórki tabeli przejść.
     void setCellDefaults(int row, int col, QComboBox *writeCombo, QComboBox *moveCombo, QComboBox *toStateCombo);
+    /// Synchronizuje mapę przejść z aktualną zawartością tabeli.
     void populateTransitionMapWithDefaults();
 
     // Builder Components
@@ -68,7 +87,10 @@ private:
     // Executor Components
     QLabel *machineStateLabel;
     QLabel *stepCountLabel;
-    QTextEdit *tapeDisplay;
+    /// Przewijany kontener widoku taśmy używany do centrowania aktywnej komórki.
+    QScrollArea *tapeScrollArea;
+    /// Kontener z widocznymi komórkami reprezentującymi wycinek taśmy.
+    QWidget *tapeDisplay;
     QLineEdit *tapeInputField;
     QPushButton *loadTapeButton;
     QPushButton *stepButton;
@@ -93,6 +115,8 @@ private:
     bool isRunning;
     int executionSpeed;
     std::unique_ptr<QTimer> executionTimer;
+    /// Bufor etykiet pojedynczych komórek taśmy używanych przy odświeżaniu widoku.
+    std::vector<QLabel*> tapeCells;
 
     // Cache for combo boxes to speed up lookup
     std::map<std::pair<int, int>, std::tuple<QComboBox*, QComboBox*, QComboBox*>> comboCache;

@@ -4,12 +4,15 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGroupBox>
+#include <QFrame>
 #include <QStyleFactory>
 #include <QPalette>
 #include <QTabWidget>
 #include <QMessageBox>
+#include <QScrollBar>
 #include <QTimer>
 #include <QSpinBox>
+#include <algorithm>
 #include <sstream>
 #include <tuple>
 
@@ -23,6 +26,7 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
     , buildMachineButton(nullptr)
     , machineStateLabel(nullptr)
     , stepCountLabel(nullptr)
+    , tapeScrollArea(nullptr)
     , tapeDisplay(nullptr)
     , tapeInputField(nullptr)
     , loadTapeButton(nullptr)
@@ -43,6 +47,10 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
 
     // Connect timer for execution
     connect(executionTimer.get(), &QTimer::timeout, this, &TuringSimulatorUI::onExecutionTimer);
+
+    QTimer::singleShot(0, this, [this]() {
+        updateTapeDisplay();
+    });
 }
 
 void TuringSimulatorUI::setupUI()
@@ -153,6 +161,7 @@ QWidget* TuringSimulatorUI::setupBuilderTab()
     transitionsTable->blockSignals(true);
     onNumStatesChanged(2);
     transitionsTable->blockSignals(false);
+    applyDefaultExample();
 
     return builderWidget;
 }
@@ -195,13 +204,35 @@ QWidget* TuringSimulatorUI::setupExecutorTab()
 
     // --- Tape Display ---
     QGroupBox *tapeGroup = new QGroupBox("Tape Visualization", executorWidget);
+    tapeGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    tapeGroup->setMaximumHeight(120);
     QVBoxLayout *tapeLayout = new QVBoxLayout(tapeGroup);
-    tapeDisplay = new QTextEdit();
-    tapeDisplay->setReadOnly(true);
-    tapeDisplay->setMaximumHeight(100);
-    tapeDisplay->setFontFamily("Courier New");
-    tapeDisplay->setFontPointSize(10);
-    tapeLayout->addWidget(tapeDisplay);
+    tapeLayout->setContentsMargins(8, 6, 8, 8);
+    tapeLayout->setSpacing(6);
+
+    tapeScrollArea = new QScrollArea(tapeGroup);
+    tapeScrollArea->setWidgetResizable(false);
+    tapeScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    tapeScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    tapeScrollArea->setFrameShape(QFrame::NoFrame);
+    tapeScrollArea->setFixedHeight(88);
+    tapeScrollArea->setStyleSheet("QScrollArea { border: none; background: transparent; }");
+
+    QFrame *tapeFrame = new QFrame(tapeGroup);
+    tapeFrame->setObjectName("tapeFrame");
+    tapeFrame->setFrameShape(QFrame::NoFrame);
+    tapeFrame->setFixedHeight(84);
+    tapeFrame->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+
+    QHBoxLayout *tapeFrameLayout = new QHBoxLayout(tapeFrame);
+    tapeFrameLayout->setContentsMargins(8, 8, 8, 8);
+    tapeFrameLayout->setSpacing(4);
+    tapeFrameLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+    tapeDisplay = tapeFrame;
+    setupTapeCells();
+    tapeScrollArea->setWidget(tapeFrame);
+    tapeLayout->addWidget(tapeScrollArea);
     executorLayout->addWidget(tapeGroup);
 
     // --- Control Buttons ---
@@ -681,27 +712,27 @@ void TuringSimulatorUI::onBuildMachineClicked()
     validateAndBuildMachine();
 }
 
-void TuringSimulatorUI::validateAndBuildMachine()
+bool TuringSimulatorUI::buildMachineFromCurrentConfiguration(bool showSuccessDialog)
 {
     // Validation
     if (states.empty()) {
         QMessageBox::warning(this, "Validation Error", "Please set the number of states");
-        return;
+        return false;
     }
 
     if (alphabet.empty()) {
         QMessageBox::warning(this, "Validation Error", "Please define the alphabet");
-        return;
+        return false;
     }
 
     if (initialState.empty()) {
         QMessageBox::warning(this, "Validation Error", "Please select an initial state");
-        return;
+        return false;
     }
 
     if (transitionMap.empty()) {
         QMessageBox::warning(this, "Validation Error", "Please define at least one transition");
-        return;
+        return false;
     }
 
     // Extract blank symbol
@@ -742,7 +773,17 @@ void TuringSimulatorUI::validateAndBuildMachine()
 
     statusLabel->setText("✓ Machine built successfully!");
     statusLabel->setStyleSheet("font-size: 11px; color: #107c10; font-weight: bold;");
-    QMessageBox::information(this, "Success", "Machine built successfully! Switch to Executor tab to run.");
+
+    if (showSuccessDialog) {
+        QMessageBox::information(this, "Success", "Machine built successfully! Switch to Executor tab to run.");
+    }
+
+    return true;
+}
+
+void TuringSimulatorUI::validateAndBuildMachine()
+{
+    buildMachineFromCurrentConfiguration(true);
 }
 
 // === Executor Slots ===
@@ -853,14 +894,151 @@ void TuringSimulatorUI::updateStateDisplay()
 
 void TuringSimulatorUI::updateTapeDisplay()
 {
-    if (machine) {
-        const Tape& tape = machine->tape();
-        const int headPos = tape.headPosition();
-        const int from = headPos - 12;
-        const int to = headPos + 12;
+    if (!machine || tapeCells.empty() || !tapeScrollArea) {
+        return;
+    }
 
-        QString tapeStr = QString::fromStdString(tape.snapshot(from, to));
-        tapeDisplay->setText(tapeStr);
+    const Tape& tape = machine->tape();
+    const std::size_t activeCellIndex = tapeCells.size() / 2;
+    const int headPos = tape.headPosition();
+    const int from = headPos - static_cast<int>(activeCellIndex);
+
+    for (std::size_t index = 0; index < tapeCells.size(); ++index) {
+        const int tapePosition = from + static_cast<int>(index);
+        const char symbol = tape.snapshot(tapePosition, tapePosition).front();
+        QLabel *cell = tapeCells[index];
+
+        cell->setText(QString(symbol));
+
+        if (index == activeCellIndex) {
+            cell->setStyleSheet(
+                "background-color: #eaf4ff;"
+                "border: 2px solid #0078d4;"
+                "border-radius: 10px;"
+                "color: #005a9e;"
+                "font-size: 22px;"
+                "font-weight: 700;"
+            );
+        } else {
+            cell->setStyleSheet(
+                "background-color: #ffffff;"
+                "border: 1px solid #d0d0d0;"
+                "border-radius: 10px;"
+                "color: #202020;"
+                "font-size: 20px;"
+                "font-weight: 600;"
+            );
+        }
+    }
+
+    QLabel *activeCell = tapeCells[activeCellIndex];
+    const int viewportWidth = tapeScrollArea->viewport()->width();
+    if (viewportWidth <= 0) {
+        QTimer::singleShot(0, this, [this]() {
+            updateTapeDisplay();
+        });
+        return;
+    }
+
+    const int targetValue = activeCell->x() + (activeCell->width() / 2) - (viewportWidth / 2);
+    tapeScrollArea->horizontalScrollBar()->setValue(std::max(0, targetValue));
+}
+
+void TuringSimulatorUI::setupTapeCells()
+{
+    tapeCells.clear();
+
+    auto *layout = qobject_cast<QHBoxLayout*>(tapeDisplay->layout());
+    if (!layout) {
+        return;
+    }
+
+    constexpr int visibleCellCount = 41;
+    constexpr int activeCellIndex = visibleCellCount / 2;
+
+    for (int index = 0; index < visibleCellCount; ++index) {
+        QLabel *cell = new QLabel("-", tapeDisplay);
+        cell->setAlignment(Qt::AlignCenter);
+        cell->setFixedSize(46, 58);
+
+        if (index == activeCellIndex) {
+            cell->setStyleSheet(
+                "background-color: #eaf4ff;"
+                "border: 2px solid #0078d4;"
+                "border-radius: 10px;"
+                "color: #005a9e;"
+                "font-size: 22px;"
+                "font-weight: 700;"
+            );
+        } else {
+            cell->setStyleSheet(
+                "background-color: #ffffff;"
+                "border: 1px solid #d0d0d0;"
+                "border-radius: 10px;"
+                "color: #202020;"
+                "font-size: 20px;"
+                "font-weight: 600;"
+            );
+        }
+
+        layout->addWidget(cell);
+        tapeCells.push_back(cell);
+    }
+}
+
+void TuringSimulatorUI::applyDefaultExample()
+{
+    numStatesSpinBox->setValue(1);
+    alphabetInputField->setText("01");
+    blankSymbolField->setText("_");
+    tapeInputField->setText("100010111");
+
+    auto findColumnForSymbol = [this](char symbol) -> int {
+        int columnIndex = 0;
+        for (char alphabetSymbol : alphabet) {
+            if (alphabetSymbol == symbol) {
+                return columnIndex;
+            }
+            ++columnIndex;
+        }
+        return -1;
+    };
+
+    const int row = 0;
+    const int blankColumn = findColumnForSymbol('_');
+    const int zeroColumn = findColumnForSymbol('0');
+    const int oneColumn = findColumnForSymbol('1');
+
+    auto setTransitionCell = [this, row](int column, char writeSymbol, const QString& moveText, const QString& nextStateText) {
+        if (column < 0) {
+            return;
+        }
+
+        const auto cacheIt = comboCache.find({row, column});
+        if (cacheIt == comboCache.end()) {
+            return;
+        }
+
+        QComboBox *writeCombo = std::get<0>(cacheIt->second);
+        QComboBox *moveCombo = std::get<1>(cacheIt->second);
+        QComboBox *toStateCombo = std::get<2>(cacheIt->second);
+
+        writeCombo->setCurrentText(QString(writeSymbol));
+        moveCombo->setCurrentText(moveText);
+        toStateCombo->setCurrentText(nextStateText);
+    };
+
+    setTransitionCell(zeroColumn, '1', "R", "q0");
+    setTransitionCell(oneColumn, '0', "R", "q0");
+    setTransitionCell(blankColumn, '_', "Stop", "q0");
+
+    populateTransitionMapWithDefaults();
+
+    if (buildMachineFromCurrentConfiguration(false) && machine) {
+        machine->loadTape(tapeInputField->text().trimmed().toStdString());
+        updateDisplay();
+        statusLabel->setText("Example machine loaded. Ready to execute.");
+        statusLabel->setStyleSheet("font-size: 11px; color: #0078d4;");
     }
 }
 

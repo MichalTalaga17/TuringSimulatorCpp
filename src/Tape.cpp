@@ -70,7 +70,12 @@ char Tape::blank() const {
 
 std::string Tape::snapshot(int from, int to) const {
     std::string result;
-    result.reserve(static_cast<std::size_t>(to - from + 1));
+    if (to < from) {
+        return result;
+    }
+
+    const auto length = static_cast<std::size_t>(to - from) + 1;
+    result.reserve(length);
 
     for (int position = from; position <= to; ++position) {
         const auto it = cells_.find(position);
