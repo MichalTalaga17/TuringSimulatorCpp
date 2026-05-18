@@ -957,7 +957,7 @@ void TuringSimulatorUI::updateTapeDisplay()
 
 void TuringSimulatorUI::scheduleTapeDisplayRefresh()
 {
-    if (!tapeDisplayRefreshTimer || tapeDisplayRefreshTimer->isActive()) {
+    if (tapeDisplayRefreshTimer->isActive()) {
         return;
     }
 
