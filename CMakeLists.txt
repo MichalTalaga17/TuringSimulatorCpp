@@ -37,7 +37,12 @@ target_include_directories(turing_core PUBLIC include)
 # GUI executable
 add_executable(TuringSimulatorCpp
     main.cpp
-    ui.cpp
+    src/ui/MachineEditorTabLogic.cpp
+    src/ui/MachineEditorTabPersistence.cpp
+    src/ui/MachineEditorTabView.cpp
+    src/ui/TuringSimulatorUI.cpp
+    include/MachineEditorTab.h
+    include/TuringSimulatorUI.h
     include/ui.h
     include/storage.h
     storage.cpp
