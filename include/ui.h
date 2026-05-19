@@ -36,7 +36,7 @@ private slots:
     void onAlphabetChanged();
     void onBlankSymbolChanged();
     void onCellComboChanged();
-    void onBuildMachineClicked();
+    void onTapeInputChanged();
 
     // Execution slots
     void onStepClicked();
@@ -45,15 +45,12 @@ private slots:
     void onSpeedChanged(int value);
     void onExecutionTimer();
 
-    // Input slots
-    void onLoadTapeClicked();
-
 private:
-    /// Buduje główny układ okna i zakładki aplikacji.
+    /// Buduje główny układ okna jako jedną wspólną stronę aplikacji.
     void setupUI();
-    /// Tworzy zakładkę konfiguracji maszyny i tabeli przejść.
+    /// Tworzy edytor logiki z konfiguracją maszyny i tabelą przejść.
     QWidget* setupBuilderTab();
-    /// Tworzy zakładkę uruchamiania symulacji oraz widok taśmy.
+    /// Tworzy panel uruchamiania symulacji oraz widok taśmy.
     QWidget* setupExecutorTab();
     /// Nakłada wspólny styl wizualny na całą aplikację.
     void applyModernStyle();
@@ -69,10 +66,12 @@ private:
     void setupTapeCells();
     /// Wypełnia formularz i tabelę przykładową maszyną startową.
     void applyDefaultExample();
+    /// Przebudowuje maszynę z edytora i wczytuje aktualną zawartość pola taśmy.
+    bool rebuildMachineFromEditor();
     /// Buduje maszynę z aktualnej konfiguracji formularza i opcjonalnie pokazuje komunikat sukcesu.
     bool buildMachineFromCurrentConfiguration(bool showSuccessDialog);
-    /// Waliduje formularz użytkownika i uruchamia budowanie maszyny.
-    void validateAndBuildMachine();
+    /// Tworzy pojedynczą komórkę tabeli przejść z kontrolkami zapisu, ruchu i stanu docelowego.
+    QWidget* createTransitionCell(int row, int col);
     /// Przebudowuje tabelę przejść po zmianie liczby stanów lub alfabetu.
     void rebuildTransitionsTable();
     /// Czyści pomocniczą pamięć podręczną wskaźników do kontrolek tabeli.
@@ -88,7 +87,6 @@ private:
     QLineEdit *blankSymbolField;
     QComboBox *initialStateCombo;
     QTableWidget *transitionsTable;
-    QPushButton *buildMachineButton;
 
     // Executor Components
     QLabel *machineStateLabel;
@@ -98,7 +96,6 @@ private:
     /// Kontener z widocznymi komórkami reprezentującymi wycinek taśmy.
     QWidget *tapeDisplay;
     QLineEdit *tapeInputField;
-    QPushButton *loadTapeButton;
     QPushButton *stepButton;
     QPushButton *runButton;
     QPushButton *resetButton;
@@ -111,7 +108,6 @@ private:
     std::vector<std::string> states;  // q0, q1, q2, ...
     std::set<char> alphabet;
     std::string initialState;
-    std::set<std::string> acceptingStates;
 
     // Maps: (state, readSymbol) -> (writeSymbol, moveString, nextState)
     std::map<std::pair<std::string, char>, std::tuple<char, std::string, std::string>> transitionMap;
