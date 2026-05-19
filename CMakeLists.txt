@@ -26,6 +26,8 @@ find_package(Qt6 REQUIRED COMPONENTS
 
 # Core Turing Machine library (non-GUI)
 add_library(turing_core
+    include/Tape.h
+    include/TuringMachine.h
     src/Tape.cpp
     src/TuringMachine.cpp
 )
@@ -37,6 +39,8 @@ add_executable(TuringSimulatorCpp
     main.cpp
     ui.cpp
     include/ui.h
+    include/storage.h
+    storage.cpp
 )
 
 target_include_directories(TuringSimulatorCpp PRIVATE include)

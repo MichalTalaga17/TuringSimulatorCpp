@@ -8,14 +8,16 @@
 #include <string>
 
 /// Opisuje pojedyncze przejście funkcji przejścia maszyny Turinga.
-struct Transition {
+struct Transition
+{
     char writeSymbol;
     HeadMove move;
     std::string nextState;
 };
 
 /// Udostępnia logikę jednotaśmowej deterministycznej maszyny Turinga.
-class TuringMachine {
+class TuringMachine
+{
 public:
     /// Tworzy maszynę z wybranym symbolem pustym taśmy.
     explicit TuringMachine(char blankSymbol = '_');
@@ -26,12 +28,11 @@ public:
     void addAcceptingState(std::string state);
     /// Dodaje regułę dla pary: aktualny stan i odczytany symbol.
     void addTransition(
-        const std::string& state,
+        const std::string &state,
         char readSymbol,
-        Transition transition
-    );
+        Transition transition);
     /// Wczytuje wejściową zawartość taśmy oraz zapamiętuje ją na potrzeby resetu.
-    void loadTape(const std::string& input);
+    void loadTape(const std::string &input);
     /// Przywraca stan początkowy, licznik kroków i startową zawartość taśmy.
     void reset();
 
@@ -43,11 +44,14 @@ public:
     bool isAccepted() const;
 
     /// Zwraca nazwę aktualnego stanu sterowania.
-    const std::string& currentState() const;
+    const std::string &currentState() const;
     /// Udostępnia bieżący stan taśmy tylko do odczytu.
-    const Tape& tape() const;
+    const Tape &tape() const;
     /// Zwraca liczbę wykonanych kroków od ostatniego resetu.
     std::size_t stepCount() const;
+    /// Getter do zapisu instrukcji z maszyny
+    using TransitionMap = std::map<std::pair<std::string, char>, Transition>;
+    const TransitionMap &getTransitions() const { return transitions_; };
 
 private:
     using TransitionKey = std::pair<std::string, char>;

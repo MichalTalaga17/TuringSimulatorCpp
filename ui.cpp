@@ -1,6 +1,8 @@
 #include "ui.h"
+#include "Storage.h"
 
 #include <QApplication>
+#include <QFileDialog>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGroupBox>
@@ -19,11 +21,12 @@
 #include <sstream>
 #include <tuple>
 
-namespace {
-
-const QString& compactLogicComboStyle()
+namespace
 {
-    static const QString style = R"(
+
+    const QString &compactLogicComboStyle()
+    {
+        static const QString style = R"(
         QComboBox {
             border: 1px solid #d0d0d0;
             border-radius: 6px;
@@ -70,23 +73,23 @@ const QString& compactLogicComboStyle()
             color: #005a9e;
         }
     )";
-    return style;
-}
+        return style;
+    }
 
-void applyCompactLogicComboStyle(QComboBox *combo, int popupMinimumWidth = 64)
-{
-    combo->setStyleSheet(compactLogicComboStyle());
+    void applyCompactLogicComboStyle(QComboBox *combo, int popupMinimumWidth = 64)
+    {
+        combo->setStyleSheet(compactLogicComboStyle());
 
-    QListView *popupView = new QListView(combo);
-    popupView->setMinimumWidth(popupMinimumWidth);
-    popupView->setTextElideMode(Qt::ElideNone);
-    popupView->setFrameShape(QFrame::NoFrame);
-    popupView->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
-    popupView->setAttribute(Qt::WA_TranslucentBackground);
-    popupView->setAutoFillBackground(false);
-    popupView->viewport()->setAttribute(Qt::WA_TranslucentBackground);
-    popupView->viewport()->setAutoFillBackground(false);
-    popupView->setStyleSheet(R"(
+        QListView *popupView = new QListView(combo);
+        popupView->setMinimumWidth(popupMinimumWidth);
+        popupView->setTextElideMode(Qt::ElideNone);
+        popupView->setFrameShape(QFrame::NoFrame);
+        popupView->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+        popupView->setAttribute(Qt::WA_TranslucentBackground);
+        popupView->setAutoFillBackground(false);
+        popupView->viewport()->setAttribute(Qt::WA_TranslucentBackground);
+        popupView->viewport()->setAutoFillBackground(false);
+        popupView->setStyleSheet(R"(
         QListView {
             border: 1px solid #d0d0d0;
             border-radius: 6px;
@@ -106,35 +109,13 @@ void applyCompactLogicComboStyle(QComboBox *combo, int popupMinimumWidth = 64)
             color: #005a9e;
         }
     )");
-    combo->setView(popupView);
-}
+        combo->setView(popupView);
+    }
 
 } // namespace
 
 TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
-    : QMainWindow(parent)
-    , numStatesSpinBox(nullptr)
-    , alphabetInputField(nullptr)
-    , blankSymbolField(nullptr)
-    , initialStateCombo(nullptr)
-    , transitionsTable(nullptr)
-    , machineStateLabel(nullptr)
-    , stepCountLabel(nullptr)
-    , tapeScrollArea(nullptr)
-    , tapeDisplay(nullptr)
-    , tapeInputField(nullptr)
-    , stepButton(nullptr)
-    , runButton(nullptr)
-    , resetButton(nullptr)
-    , speedSlider(nullptr)
-    , speedLabel(nullptr)
-    , statusLabel(nullptr)
-    , machine(nullptr)
-    , blankSymbol('_')
-    , isRunning(false)
-    , executionSpeed(500)
-    , executionTimer(std::make_unique<QTimer>())
-    , tapeDisplayRefreshTimer(std::make_unique<QTimer>())
+    : QMainWindow(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), loadFromFileButton(nullptr), saveToFileButton(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>())
 {
     setupUI();
     applyModernStyle();
@@ -181,14 +162,15 @@ void TuringSimulatorUI::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
 
-    if (!machine || !tapeScrollArea || tapeCells.empty()) {
+    if (!machine || !tapeScrollArea || tapeCells.empty())
+    {
         return;
     }
 
     scheduleTapeDisplayRefresh();
 }
 
-QWidget* TuringSimulatorUI::setupBuilderTab()
+QWidget *TuringSimulatorUI::setupBuilderTab()
 {
     QWidget *builderWidget = new QWidget();
     builderWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -291,16 +273,37 @@ QWidget* TuringSimulatorUI::setupBuilderTab()
 
     builderLayout->addWidget(logicEditorGroup, 1);
 
+    // --- Save/Load Buttons ---
+    QHBoxLayout *fileButtonsLayout = new QHBoxLayout();
+    fileButtonsLayout->setContentsMargins(0, 0, 0, 0);
+    fileButtonsLayout->setSpacing(8);
+
+    loadFromFileButton = new QPushButton("Wczytaj z pliku");
+    saveToFileButton = new QPushButton("Zapisz do pliku");
+
+    // Dodajemy lekkie style do przycisków zapisu
+    QString fileBtnStyle = "QPushButton { background-color: #ffffff; color: #202020; border: 1px solid #d0d0d0; border-radius: 6px; min-height: 28px; padding: 4px 16px; font-weight: bold; } QPushButton:hover { background-color: #f7f7f7; }";
+    loadFromFileButton->setStyleSheet(fileBtnStyle);
+    saveToFileButton->setStyleSheet(fileBtnStyle);
+
+    fileButtonsLayout->addStretch();
+    fileButtonsLayout->addWidget(loadFromFileButton);
+    fileButtonsLayout->addWidget(saveToFileButton);
+    builderLayout->addLayout(fileButtonsLayout);
+
     // Connect signals (after all widgets are created)
     connect(numStatesSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &TuringSimulatorUI::onNumStatesChanged);
     connect(alphabetInputField, &QLineEdit::textChanged, this, &TuringSimulatorUI::onAlphabetChanged);
     connect(blankSymbolField, &QLineEdit::textChanged, this, &TuringSimulatorUI::onBlankSymbolChanged);
-    connect(initialStateCombo, &QComboBox::currentTextChanged, this, [this](const QString& state) {
+    connect(initialStateCombo, &QComboBox::currentTextChanged, this, [this](const QString &state)
+            {
         initialState = state.toStdString();
         if (rebuildMachineFromEditor() && statusLabel) {
             statusLabel->setText("Rebuilt");
-        }
-    });
+        } });
+
+    connect(saveToFileButton, &QPushButton::clicked, this, &TuringSimulatorUI::onSaveToFileClicked);
+    connect(loadFromFileButton, &QPushButton::clicked, this, &TuringSimulatorUI::onLoadFromFileClicked);
 
     // Initialize with safe blocking
     transitionsTable->blockSignals(true);
@@ -311,7 +314,7 @@ QWidget* TuringSimulatorUI::setupBuilderTab()
     return builderWidget;
 }
 
-QWidget* TuringSimulatorUI::setupExecutorTab()
+QWidget *TuringSimulatorUI::setupExecutorTab()
 {
     QWidget *executorWidget = new QWidget();
     executorWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
@@ -323,7 +326,8 @@ QWidget* TuringSimulatorUI::setupExecutorTab()
     QHBoxLayout *statusLayout = new QHBoxLayout(statusGroup);
     statusLayout->setSpacing(6);
 
-    auto createStatusMetric = [statusGroup](const QString& title, QLabel *&valueLabel, const QString& value, int minWidth) {
+    auto createStatusMetric = [statusGroup](const QString &title, QLabel *&valueLabel, const QString &value, int minWidth)
+    {
         QWidget *metricWidget = new QWidget(statusGroup);
         metricWidget->setMinimumWidth(minWidth);
 
@@ -581,24 +585,6 @@ void TuringSimulatorUI::applyModernStyle()
             width: 0;
             height: 0;
         }
-        QComboBox QAbstractItemView {
-            border: 1px solid #d0d0d0;
-            border-radius: 6px;
-            background-color: #ffffff;
-            color: #202020;
-            outline: 0;
-            selection-background-color: #eaf4ff;
-            selection-color: #005a9e;
-        }
-        QComboBox QAbstractItemView::item {
-            min-height: 24px;
-            padding: 4px 8px;
-        }
-        QComboBox QAbstractItemView::item:hover,
-        QComboBox QAbstractItemView::item:selected {
-            background-color: #eaf4ff;
-            color: #005a9e;
-        }
         QTableWidget#transitionsTable {
             border: 1px solid #d0d0d0;
             border-radius: 8px;
@@ -713,7 +699,8 @@ void TuringSimulatorUI::applyModernStyle()
 void TuringSimulatorUI::onNumStatesChanged(int value)
 {
     states.clear();
-    for (int i = 0; i < value; ++i) {
+    for (int i = 0; i < value; ++i)
+    {
         states.push_back("q" + std::to_string(i));
     }
 
@@ -721,18 +708,21 @@ void TuringSimulatorUI::onNumStatesChanged(int value)
     initialStateCombo->blockSignals(true);
     initialStateCombo->clear();
 
-    for (const auto& state : states) {
+    for (const auto &state : states)
+    {
         initialStateCombo->addItem(QString::fromStdString(state));
     }
 
-    if (initialStateCombo->count() > 0) {
+    if (initialStateCombo->count() > 0)
+    {
         initialStateCombo->setCurrentIndex(0);
         initialState = states[0];
     }
     initialStateCombo->blockSignals(false);
 
     // Update only the toState combos if table already exists with same column count
-    if (transitionsTable->rowCount() > 0 && transitionsTable->columnCount() > 0) {
+    if (transitionsTable->rowCount() > 0 && transitionsTable->columnCount() > 0)
+    {
         transitionsTable->blockSignals(true);
 
         int oldRowCount = transitionsTable->rowCount();
@@ -743,36 +733,48 @@ void TuringSimulatorUI::onNumStatesChanged(int value)
 
         // THEN update vertical headers (state names) after row count is set
         QStringList stateLabels;
-        for (const auto& state : states) {
+        for (const auto &state : states)
+        {
             stateLabels << QString::fromStdString(state);
         }
         transitionsTable->setVerticalHeaderLabels(stateLabels);
 
         // If rows were added, create cells for new rows
-        if (newRowCount > oldRowCount) {
-            for (int row = oldRowCount; row < newRowCount; ++row) {
+        if (newRowCount > oldRowCount)
+        {
+            for (int row = oldRowCount; row < newRowCount; ++row)
+            {
                 transitionsTable->setRowHeight(row, 38);
-                for (int col = 0; col < transitionsTable->columnCount(); ++col) {
+                for (int col = 0; col < transitionsTable->columnCount(); ++col)
+                {
                     transitionsTable->setCellWidget(row, col, createTransitionCell(row, col));
                 }
             }
-        } else {
+        }
+        else
+        {
             // Rows were removed or stayed same, update all existing rows
-            for (int row = 0; row < newRowCount; ++row) {
+            for (int row = 0; row < newRowCount; ++row)
+            {
                 transitionsTable->setRowHeight(row, 38);
-                for (int col = 0; col < transitionsTable->columnCount(); ++col) {
+                for (int col = 0; col < transitionsTable->columnCount(); ++col)
+                {
                     QWidget *cellWidget = transitionsTable->cellWidget(row, col);
-                    if (!cellWidget) continue;
+                    if (!cellWidget)
+                        continue;
 
-                    QComboBox *toStateCombo = cellWidget->findChild<QComboBox*>(QString("tostate_%1_%2").arg(row).arg(col));
-                    if (toStateCombo) {
+                    QComboBox *toStateCombo = cellWidget->findChild<QComboBox *>(QString("tostate_%1_%2").arg(row).arg(col));
+                    if (toStateCombo)
+                    {
                         toStateCombo->blockSignals(true);
                         int currentIdx = toStateCombo->currentIndex();
                         toStateCombo->clear();
-                        for (const auto& state : states) {
+                        for (const auto &state : states)
+                        {
                             toStateCombo->addItem(QString::fromStdString(state));
                         }
-                        if (currentIdx >= 0 && currentIdx < toStateCombo->count()) {
+                        if (currentIdx >= 0 && currentIdx < toStateCombo->count())
+                        {
                             toStateCombo->setCurrentIndex(currentIdx);
                         }
                         toStateCombo->blockSignals(false);
@@ -785,13 +787,16 @@ void TuringSimulatorUI::onNumStatesChanged(int value)
 
         // Repopulate transition map with updated defaults
         populateTransitionMapWithDefaults();
-    } else {
+    }
+    else
+    {
         // First time: rebuild the entire table
         rebuildTransitionsTable();
     }
 
     const bool rebuilt = rebuildMachineFromEditor();
-    if (statusLabel) {
+    if (statusLabel)
+    {
         statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
     }
 }
@@ -806,9 +811,11 @@ void TuringSimulatorUI::onAlphabetChanged()
     char currentBlank = blankStr.isEmpty() || blankStr.length() != 1 ? '_' : blankStr[0].toLatin1();
 
     // Parse alphabet (comma or space separated, or just chars)
-    for (int i = 0; i < alphaStr.length(); ++i) {
+    for (int i = 0; i < alphaStr.length(); ++i)
+    {
         char c = alphaStr[i].toLatin1();
-        if (c != ',' && c != ' ' && c != 0) {
+        if (c != ',' && c != ' ' && c != 0)
+        {
             newAlphabet.insert(c);
         }
     }
@@ -817,14 +824,16 @@ void TuringSimulatorUI::onAlphabetChanged()
     newAlphabet.insert(currentBlank);
 
     // Only rebuild if alphabet changed
-    if (newAlphabet != alphabet) {
+    if (newAlphabet != alphabet)
+    {
         alphabet = newAlphabet;
         rebuildTransitionsTable();
         // Note: transitionMap is populated by rebuildTransitionsTable() via populateTransitionMapWithDefaults()
     }
 
     const bool rebuilt = rebuildMachineFromEditor();
-    if (statusLabel) {
+    if (statusLabel)
+    {
         statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
     }
 }
@@ -837,7 +846,8 @@ void TuringSimulatorUI::onBlankSymbolChanged()
     // Check if blank symbol is already in alphabet
     bool blankInAlphabet = alphabet.find(newBlank) != alphabet.end();
 
-    if (!blankInAlphabet && !alphabet.empty()) {
+    if (!blankInAlphabet && !alphabet.empty())
+    {
         // Blank symbol changed and it's not in the current alphabet, rebuild table
         std::set<char> newAlphabet = alphabet;
 
@@ -849,7 +859,8 @@ void TuringSimulatorUI::onBlankSymbolChanged()
     }
 
     const bool rebuilt = rebuildMachineFromEditor();
-    if (statusLabel) {
+    if (statusLabel)
+    {
         statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
     }
 }
@@ -857,8 +868,9 @@ void TuringSimulatorUI::onBlankSymbolChanged()
 void TuringSimulatorUI::onCellComboChanged()
 {
     // Sender is a QComboBox inside a cell
-    QComboBox *senderCombo = qobject_cast<QComboBox*>(sender());
-    if (!senderCombo) return;
+    QComboBox *senderCombo = qobject_cast<QComboBox *>(sender());
+    if (!senderCombo)
+        return;
 
     // Use the object name to directly determine row/col instead of searching
     QString objName = senderCombo->objectName();
@@ -866,49 +878,60 @@ void TuringSimulatorUI::onCellComboChanged()
 
     // Parse name like "write_0_1" or "move_0_1" or "tostate_0_1"
     QStringList parts = objName.split('_');
-    if (parts.size() >= 3) {
+    if (parts.size() >= 3)
+    {
         row = parts[1].toInt();
         col = parts[2].toInt();
     }
 
-    if (row < 0 || col < 0 || row >= transitionsTable->rowCount() || col >= transitionsTable->columnCount()) {
+    if (row < 0 || col < 0 || row >= transitionsTable->rowCount() || col >= transitionsTable->columnCount())
+    {
         return;
     }
 
     QWidget *cellWidget = transitionsTable->cellWidget(row, col);
-    if (!cellWidget) return;
+    if (!cellWidget)
+        return;
 
     // Get the 3 combos from cache or find them
     auto cacheKey = std::make_pair(row, col);
     QComboBox *writeCombo = nullptr, *moveCombo = nullptr, *toStateCombo = nullptr;
 
     auto it = comboCache.find(cacheKey);
-    if (it != comboCache.end()) {
+    if (it != comboCache.end())
+    {
         std::tie(writeCombo, moveCombo, toStateCombo) = it->second;
-    } else {
-        writeCombo = cellWidget->findChild<QComboBox*>(QString("write_%1_%2").arg(row).arg(col));
-        moveCombo = cellWidget->findChild<QComboBox*>(QString("move_%1_%2").arg(row).arg(col));
-        toStateCombo = cellWidget->findChild<QComboBox*>(QString("tostate_%1_%2").arg(row).arg(col));
+    }
+    else
+    {
+        writeCombo = cellWidget->findChild<QComboBox *>(QString("write_%1_%2").arg(row).arg(col));
+        moveCombo = cellWidget->findChild<QComboBox *>(QString("move_%1_%2").arg(row).arg(col));
+        toStateCombo = cellWidget->findChild<QComboBox *>(QString("tostate_%1_%2").arg(row).arg(col));
 
-        if (writeCombo && moveCombo && toStateCombo) {
+        if (writeCombo && moveCombo && toStateCombo)
+        {
             comboCache[cacheKey] = std::make_tuple(writeCombo, moveCombo, toStateCombo);
         }
     }
 
-    if (!writeCombo || !moveCombo || !toStateCombo) return;
+    if (!writeCombo || !moveCombo || !toStateCombo)
+        return;
 
     // Build transition string
     QString write = writeCombo->currentText();
     QString move = moveCombo->currentText();
     QString toState = toStateCombo->currentText();
 
-    if (!write.isEmpty() && !move.isEmpty() && !toState.isEmpty()) {
+    if (!write.isEmpty() && !move.isEmpty() && !toState.isEmpty())
+    {
         // Get the symbol for this column by index
         std::string state = states[row];
         char symbol = '0';
         int idx = 0;
-        for (char s : alphabet) {
-            if (idx == col) {
+        for (char s : alphabet)
+        {
+            if (idx == col)
+            {
                 symbol = s;
                 break;
             }
@@ -917,14 +940,19 @@ void TuringSimulatorUI::onCellComboChanged()
 
         // Store in map
         transitionMap[{state, symbol}] = {write[0].toLatin1(), move.toStdString(), toState.toStdString()};
-    } else {
+    }
+    else
+    {
         // Remove from map if incomplete
-        if (row < static_cast<int>(states.size()) && col < static_cast<int>(alphabet.size())) {
+        if (row < static_cast<int>(states.size()) && col < static_cast<int>(alphabet.size()))
+        {
             std::string state = states[row];
             char symbol = '0';
             int idx = 0;
-            for (char s : alphabet) {
-                if (idx == col) {
+            for (char s : alphabet)
+            {
+                if (idx == col)
+                {
                     symbol = s;
                     break;
                 }
@@ -934,45 +962,55 @@ void TuringSimulatorUI::onCellComboChanged()
         }
     }
 
-    if (rebuildMachineFromEditor() && statusLabel) {
+    if (rebuildMachineFromEditor() && statusLabel)
+    {
         statusLabel->setText("Rebuilt");
     }
 }
 
 bool TuringSimulatorUI::buildMachineFromCurrentConfiguration(bool showSuccessDialog)
 {
-    auto showValidationWarning = [this, showSuccessDialog](const QString& message) {
-        if (showSuccessDialog) {
+    auto showValidationWarning = [this, showSuccessDialog](const QString &message)
+    {
+        if (showSuccessDialog)
+        {
             QMessageBox::warning(this, "Validation Error", message);
         }
     };
 
     // Validation
-    if (states.empty()) {
+    if (states.empty())
+    {
         showValidationWarning("Please set the number of states");
         return false;
     }
 
-    if (alphabet.empty()) {
+    if (alphabet.empty())
+    {
         showValidationWarning("Please define the alphabet");
         return false;
     }
 
-    if (initialState.empty()) {
+    if (initialState.empty())
+    {
         showValidationWarning("Please select an initial state");
         return false;
     }
 
-    if (transitionMap.empty()) {
+    if (transitionMap.empty())
+    {
         showValidationWarning("Please define at least one transition");
         return false;
     }
 
     // Extract blank symbol
     QString blankStr = blankSymbolField->text();
-    if (blankStr.isEmpty() || blankStr.length() != 1) {
+    if (blankStr.isEmpty() || blankStr.length() != 1)
+    {
         blankSymbol = '_';
-    } else {
+    }
+    else
+    {
         blankSymbol = blankStr[0].toLatin1();
     }
 
@@ -981,7 +1019,8 @@ bool TuringSimulatorUI::buildMachineFromCurrentConfiguration(bool showSuccessDia
     machine->setInitialState(initialState);
 
     // Add transitions from map
-    for (const auto& [key, value] : transitionMap) {
+    for (const auto &[key, value] : transitionMap)
+    {
         std::string fromState = key.first;
         char readSymbol = key.second;
 
@@ -990,14 +1029,18 @@ bool TuringSimulatorUI::buildMachineFromCurrentConfiguration(bool showSuccessDia
         std::string toState = std::get<2>(value);
 
         HeadMove move = HeadMove::Stay;
-        if (moveStr == "L") move = HeadMove::L;
-        else if (moveStr == "R") move = HeadMove::R;
-        else if (moveStr == "Stop") move = HeadMove::STOP;
+        if (moveStr == "L")
+            move = HeadMove::L;
+        else if (moveStr == "R")
+            move = HeadMove::R;
+        else if (moveStr == "Stop")
+            move = HeadMove::STOP;
 
         machine->addTransition(fromState, readSymbol, {writeSymbol, move, toState});
     }
 
-    if (showSuccessDialog) {
+    if (showSuccessDialog)
+    {
         statusLabel->setText("Built");
         QMessageBox::information(this, "Success", "Machine built successfully! You can run it above.");
     }
@@ -1007,14 +1050,16 @@ bool TuringSimulatorUI::buildMachineFromCurrentConfiguration(bool showSuccessDia
 
 bool TuringSimulatorUI::rebuildMachineFromEditor()
 {
-    if (isRunning) {
+    if (isRunning)
+    {
         isRunning = false;
         executionTimer->stop();
         runButton->setText("Run");
         stepButton->setEnabled(true);
     }
 
-    if (!buildMachineFromCurrentConfiguration(false) || !machine) {
+    if (!buildMachineFromCurrentConfiguration(false) || !machine)
+    {
         return false;
     }
 
@@ -1027,28 +1072,34 @@ bool TuringSimulatorUI::rebuildMachineFromEditor()
 
 void TuringSimulatorUI::onTapeInputChanged()
 {
-    if (rebuildMachineFromEditor() && statusLabel) {
+    if (rebuildMachineFromEditor() && statusLabel)
+    {
         statusLabel->setText("Rebuilt");
     }
 }
 
 void TuringSimulatorUI::onStepClicked()
 {
-    if (!machine) {
+    if (!machine)
+    {
         QMessageBox::warning(this, "Error", "Please build a machine first");
         return;
     }
 
-    if (machine->step()) {
+    if (machine->step())
+    {
         updateDisplay();
-    } else {
+    }
+    else
+    {
         statusLabel->setText(machine->isAccepted() ? "Accepted" : "Halted");
     }
 }
 
 void TuringSimulatorUI::onRunClicked()
 {
-    if (!machine) {
+    if (!machine)
+    {
         QMessageBox::warning(this, "Error", "Please build a machine first");
         return;
     }
@@ -1057,10 +1108,13 @@ void TuringSimulatorUI::onRunClicked()
     runButton->setText(isRunning ? "Stop" : "Run");
     stepButton->setEnabled(!isRunning);
 
-    if (isRunning) {
+    if (isRunning)
+    {
         statusLabel->setText("Running");
         executionTimer->start(2001 - executionSpeed);
-    } else {
+    }
+    else
+    {
         statusLabel->setText("Paused");
         executionTimer->stop();
     }
@@ -1068,7 +1122,8 @@ void TuringSimulatorUI::onRunClicked()
 
 void TuringSimulatorUI::onResetClicked()
 {
-    if (machine) {
+    if (machine)
+    {
         machine->reset();
         isRunning = false;
         runButton->setText("Run");
@@ -1082,15 +1137,18 @@ void TuringSimulatorUI::onResetClicked()
 void TuringSimulatorUI::onSpeedChanged(int value)
 {
     executionSpeed = value;
-    if (isRunning) {
+    if (isRunning)
+    {
         executionTimer->setInterval(2001 - value);
     }
 }
 
 void TuringSimulatorUI::onExecutionTimer()
 {
-    if (machine && isRunning) {
-        if (!machine->step()) {
+    if (machine && isRunning)
+    {
+        if (!machine->step())
+        {
             isRunning = false;
             runButton->setText("Run");
             stepButton->setEnabled(true);
@@ -1111,7 +1169,8 @@ void TuringSimulatorUI::updateDisplay()
 
 void TuringSimulatorUI::updateStateDisplay()
 {
-    if (machine) {
+    if (machine)
+    {
         machineStateLabel->setText(QString::fromStdString(machine->currentState()));
         stepCountLabel->setText(QString::fromStdString(std::to_string(machine->stepCount())));
     }
@@ -1119,46 +1178,50 @@ void TuringSimulatorUI::updateStateDisplay()
 
 void TuringSimulatorUI::updateTapeDisplay()
 {
-    if (!machine || tapeCells.empty() || !tapeScrollArea) {
+    if (!machine || tapeCells.empty() || !tapeScrollArea)
+    {
         return;
     }
 
-    const Tape& tape = machine->tape();
+    const Tape &tape = machine->tape();
     const std::size_t activeCellIndex = tapeCells.size() / 2;
     const int headPos = tape.headPosition();
     const int from = headPos - static_cast<int>(activeCellIndex);
 
-    for (std::size_t index = 0; index < tapeCells.size(); ++index) {
+    for (std::size_t index = 0; index < tapeCells.size(); ++index)
+    {
         const int tapePosition = from + static_cast<int>(index);
         const char symbol = tape.snapshot(tapePosition, tapePosition).front();
         QLabel *cell = tapeCells[index];
 
         cell->setText(QString(symbol));
 
-        if (index == activeCellIndex) {
+        if (index == activeCellIndex)
+        {
             cell->setStyleSheet(
                 "background-color: #eaf4ff;"
                 "border: 2px solid #0078d4;"
                 "border-radius: 10px;"
                 "color: #005a9e;"
                 "font-size: 22px;"
-                "font-weight: 700;"
-            );
-        } else {
+                "font-weight: 700;");
+        }
+        else
+        {
             cell->setStyleSheet(
                 "background-color: #ffffff;"
                 "border: 1px solid #d0d0d0;"
                 "border-radius: 10px;"
                 "color: #202020;"
                 "font-size: 20px;"
-                "font-weight: 600;"
-            );
+                "font-weight: 600;");
         }
     }
 
     QLabel *activeCell = tapeCells[activeCellIndex];
     const int viewportWidth = tapeScrollArea->viewport()->width();
-    if (viewportWidth <= 0) {
+    if (viewportWidth <= 0)
+    {
         scheduleTapeDisplayRefresh();
         return;
     }
@@ -1169,7 +1232,8 @@ void TuringSimulatorUI::updateTapeDisplay()
 
 void TuringSimulatorUI::scheduleTapeDisplayRefresh()
 {
-    if (tapeDisplayRefreshTimer->isActive()) {
+    if (tapeDisplayRefreshTimer->isActive())
+    {
         return;
     }
 
@@ -1180,37 +1244,40 @@ void TuringSimulatorUI::setupTapeCells()
 {
     tapeCells.clear();
 
-    auto *layout = qobject_cast<QHBoxLayout*>(tapeDisplay->layout());
-    if (!layout) {
+    auto *layout = qobject_cast<QHBoxLayout *>(tapeDisplay->layout());
+    if (!layout)
+    {
         return;
     }
 
     constexpr int visibleCellCount = 41;
     constexpr int activeCellIndex = visibleCellCount / 2;
 
-    for (int index = 0; index < visibleCellCount; ++index) {
+    for (int index = 0; index < visibleCellCount; ++index)
+    {
         QLabel *cell = new QLabel("-", tapeDisplay);
         cell->setAlignment(Qt::AlignCenter);
         cell->setFixedSize(46, 58);
 
-        if (index == activeCellIndex) {
+        if (index == activeCellIndex)
+        {
             cell->setStyleSheet(
                 "background-color: #eaf4ff;"
                 "border: 2px solid #0078d4;"
                 "border-radius: 10px;"
                 "color: #005a9e;"
                 "font-size: 22px;"
-                "font-weight: 700;"
-            );
-        } else {
+                "font-weight: 700;");
+        }
+        else
+        {
             cell->setStyleSheet(
                 "background-color: #ffffff;"
                 "border: 1px solid #d0d0d0;"
                 "border-radius: 10px;"
                 "color: #202020;"
                 "font-size: 20px;"
-                "font-weight: 600;"
-            );
+                "font-weight: 600;");
         }
 
         layout->addWidget(cell);
@@ -1225,10 +1292,13 @@ void TuringSimulatorUI::applyDefaultExample()
     blankSymbolField->setText("_");
     tapeInputField->setText("100010111");
 
-    auto findColumnForSymbol = [this](char symbol) -> int {
+    auto findColumnForSymbol = [this](char symbol) -> int
+    {
         int columnIndex = 0;
-        for (char alphabetSymbol : alphabet) {
-            if (alphabetSymbol == symbol) {
+        for (char alphabetSymbol : alphabet)
+        {
+            if (alphabetSymbol == symbol)
+            {
                 return columnIndex;
             }
             ++columnIndex;
@@ -1241,13 +1311,16 @@ void TuringSimulatorUI::applyDefaultExample()
     const int zeroColumn = findColumnForSymbol('0');
     const int oneColumn = findColumnForSymbol('1');
 
-    auto setTransitionCell = [this, row](int column, char writeSymbol, const QString& moveText, const QString& nextStateText) {
-        if (column < 0) {
+    auto setTransitionCell = [this, row](int column, char writeSymbol, const QString &moveText, const QString &nextStateText)
+    {
+        if (column < 0)
+        {
             return;
         }
 
         const auto cacheIt = comboCache.find({row, column});
-        if (cacheIt == comboCache.end()) {
+        if (cacheIt == comboCache.end())
+        {
             return;
         }
 
@@ -1266,12 +1339,13 @@ void TuringSimulatorUI::applyDefaultExample()
 
     populateTransitionMapWithDefaults();
 
-    if (rebuildMachineFromEditor()) {
+    if (rebuildMachineFromEditor())
+    {
         statusLabel->setText("Ready");
     }
 }
 
-QWidget* TuringSimulatorUI::createTransitionCell(int row, int col)
+QWidget *TuringSimulatorUI::createTransitionCell(int row, int col)
 {
     QWidget *cellWidget = new QWidget();
     cellWidget->setStyleSheet("background-color: transparent;");
@@ -1285,7 +1359,8 @@ QWidget* TuringSimulatorUI::createTransitionCell(int row, int col)
     writeCombo->setMinimumHeight(28);
     writeCombo->setMaximumHeight(28);
     writeCombo->setFixedWidth(36);
-    for (char c : alphabet) {
+    for (char c : alphabet)
+    {
         writeCombo->addItem(QString(c));
     }
     applyCompactLogicComboStyle(writeCombo, 56);
@@ -1305,7 +1380,8 @@ QWidget* TuringSimulatorUI::createTransitionCell(int row, int col)
     toStateCombo->setMinimumHeight(28);
     toStateCombo->setMaximumHeight(28);
     toStateCombo->setFixedWidth(36);
-    for (const auto& state : states) {
+    for (const auto &state : states)
+    {
         toStateCombo->addItem(QString::fromStdString(state));
     }
     applyCompactLogicComboStyle(toStateCombo, 64);
@@ -1327,7 +1403,8 @@ void TuringSimulatorUI::rebuildTransitionsTable()
     clearTableCache();
     transitionsTable->clear();
 
-    if (states.empty() || alphabet.empty()) {
+    if (states.empty() || alphabet.empty())
+    {
         transitionsTable->blockSignals(false);
         return;
     }
@@ -1339,22 +1416,26 @@ void TuringSimulatorUI::rebuildTransitionsTable()
 
     // Set vertical headers (state names)
     QStringList stateLabels;
-    for (const auto& state : states) {
+    for (const auto &state : states)
+    {
         stateLabels << QString::fromStdString(state);
     }
     transitionsTable->setVerticalHeaderLabels(stateLabels);
 
     // Set horizontal headers (alphabet symbols)
     QStringList alphabetLabels;
-    for (char symbol : alphabet) {
+    for (char symbol : alphabet)
+    {
         alphabetLabels << QString(symbol);
     }
     transitionsTable->setHorizontalHeaderLabels(alphabetLabels);
 
     // Create cells with embedded combo boxes
-    for (int row = 0; row < numRows; ++row) {
+    for (int row = 0; row < numRows; ++row)
+    {
         transitionsTable->setRowHeight(row, 38);
-        for (int col = 0; col < numCols; ++col) {
+        for (int col = 0; col < numCols; ++col)
+        {
             transitionsTable->setCellWidget(row, col, createTransitionCell(row, col));
         }
     }
@@ -1373,26 +1454,30 @@ void TuringSimulatorUI::populateTransitionMapWithDefaults()
     transitionMap.clear();
 
     int colIdx = 0;
-    for (char readSymbol : alphabet) {
-        for (int row = 0; row < static_cast<int>(states.size()); ++row) {
+    for (char readSymbol : alphabet)
+    {
+        for (int row = 0; row < static_cast<int>(states.size()); ++row)
+        {
             QWidget *cellWidget = transitionsTable->cellWidget(row, colIdx);
-            if (!cellWidget) continue;
+            if (!cellWidget)
+                continue;
 
-            QComboBox *writeCombo = cellWidget->findChild<QComboBox*>(QString("write_%1_%2").arg(row).arg(colIdx));
-            QComboBox *moveCombo = cellWidget->findChild<QComboBox*>(QString("move_%1_%2").arg(row).arg(colIdx));
-            QComboBox *toStateCombo = cellWidget->findChild<QComboBox*>(QString("tostate_%1_%2").arg(row).arg(colIdx));
+            QComboBox *writeCombo = cellWidget->findChild<QComboBox *>(QString("write_%1_%2").arg(row).arg(colIdx));
+            QComboBox *moveCombo = cellWidget->findChild<QComboBox *>(QString("move_%1_%2").arg(row).arg(colIdx));
+            QComboBox *toStateCombo = cellWidget->findChild<QComboBox *>(QString("tostate_%1_%2").arg(row).arg(colIdx));
 
-            if (writeCombo && moveCombo && toStateCombo) {
+            if (writeCombo && moveCombo && toStateCombo)
+            {
                 QString write = writeCombo->currentText();
                 QString move = moveCombo->currentText();
                 QString toState = toStateCombo->currentText();
 
-                if (!write.isEmpty() && !move.isEmpty() && !toState.isEmpty()) {
+                if (!write.isEmpty() && !move.isEmpty() && !toState.isEmpty())
+                {
                     transitionMap[{states[row], readSymbol}] = {
                         write[0].toLatin1(),
                         move.toStdString(),
-                        toState.toStdString()
-                    };
+                        toState.toStdString()};
                 }
             }
         }
@@ -1407,7 +1492,8 @@ void TuringSimulatorUI::clearTableCache()
 
 void TuringSimulatorUI::setCellDefaults(int row, int col, QComboBox *writeCombo, QComboBox *moveCombo, QComboBox *toStateCombo)
 {
-    if (!writeCombo || !moveCombo || !toStateCombo) return;
+    if (!writeCombo || !moveCombo || !toStateCombo)
+        return;
 
     // Block signals during default setting
     writeCombo->blockSignals(true);
@@ -1417,8 +1503,10 @@ void TuringSimulatorUI::setCellDefaults(int row, int col, QComboBox *writeCombo,
     // Get the read symbol for this column
     char readSymbol = '0';
     int idx = 0;
-    for (char s : alphabet) {
-        if (idx == col) {
+    for (char s : alphabet)
+    {
+        if (idx == col)
+        {
             readSymbol = s;
             break;
         }
@@ -1427,20 +1515,24 @@ void TuringSimulatorUI::setCellDefaults(int row, int col, QComboBox *writeCombo,
 
     // Set write combo to read symbol (default: write = read)
     int writeIdx = writeCombo->findText(QString(readSymbol));
-    if (writeIdx >= 0) {
+    if (writeIdx >= 0)
+    {
         writeCombo->setCurrentIndex(writeIdx);
     }
 
     // Set move combo to "L" (default: always left)
     int moveIdx = moveCombo->findText("L");
-    if (moveIdx >= 0) {
+    if (moveIdx >= 0)
+    {
         moveCombo->setCurrentIndex(moveIdx);
     }
 
     // Set state combo to current state (default: stay in same state)
-    if (row < static_cast<int>(states.size())) {
+    if (row < static_cast<int>(states.size()))
+    {
         int stateIdx = toStateCombo->findText(QString::fromStdString(states[row]));
-        if (stateIdx >= 0) {
+        if (stateIdx >= 0)
+        {
             toStateCombo->setCurrentIndex(stateIdx);
         }
     }
@@ -1449,4 +1541,158 @@ void TuringSimulatorUI::setCellDefaults(int row, int col, QComboBox *writeCombo,
     writeCombo->blockSignals(false);
     moveCombo->blockSignals(false);
     toStateCombo->blockSignals(false);
+}
+
+// === FILE I/O Slots ===
+
+void TuringSimulatorUI::onSaveToFileClicked()
+{
+    // Używamy nowej logiki (rebuildMachineFromEditor), bo HEAD nie ma przycisku Build
+    if (!rebuildMachineFromEditor())
+    {
+        return;
+    }
+
+    QString filePath = QFileDialog::getSaveFileName(this, "Zapisz maszynę", "", "JSON Files (*.json)");
+    if (filePath.isEmpty())
+    {
+        return;
+    }
+
+    // Pobieramy aktualne wartości z UI
+    QString currentInitialState = initialStateCombo->currentText();
+    char currentBlank = blankSymbolField->text().isEmpty() ? '_' : blankSymbolField->text()[0].toLatin1();
+
+    if (saveInstructionsToFile(*machine, filePath, currentInitialState, currentBlank))
+    {
+        statusLabel->setText("Zapisano maszynę");
+        QMessageBox::information(this, "Sukces", "Zapisano pomyślnie do pliku.");
+    }
+    else
+    {
+        QMessageBox::warning(this, "Błąd", "Nie udało się zapisać pliku.");
+    }
+}
+
+void TuringSimulatorUI::onLoadFromFileClicked()
+{
+    QString filePath = QFileDialog::getOpenFileName(this, "Wczytaj maszynę", "", "JSON Files (*.json)");
+    if (filePath.isEmpty())
+    {
+        return;
+    }
+
+    MachineData data = loadInstructionsFromFile(filePath);
+    if (!data.success)
+    {
+        QMessageBox::warning(this, "Błąd", data.errorMessage);
+        return;
+    }
+
+    // ==========================================================
+    // BLOKUJEMY SYGNAŁY UI
+    // ==========================================================
+    numStatesSpinBox->blockSignals(true);
+    alphabetInputField->blockSignals(true);
+    blankSymbolField->blockSignals(true);
+    initialStateCombo->blockSignals(true);
+
+    blankSymbolField->setText(QString(QChar(data.blankSymbol)));
+    numStatesSpinBox->setValue(data.numStates);
+
+    QString newAlphabetStr = "";
+    for (char c : data.alphabet)
+    {
+        if (c != data.blankSymbol)
+        {
+            newAlphabetStr += c;
+        }
+    }
+    alphabetInputField->setText(newAlphabetStr);
+
+    states.clear();
+    for (int i = 0; i < data.numStates; ++i)
+    {
+        states.push_back("q" + std::to_string(i));
+    }
+    alphabet = data.alphabet;
+
+    initialStateCombo->clear();
+    for (const auto &state : states)
+    {
+        initialStateCombo->addItem(QString::fromStdString(state));
+    }
+    if (!data.initialState.empty())
+    {
+        initialStateCombo->setCurrentText(QString::fromStdString(data.initialState));
+    }
+
+    // 4. Budujemy idealnie dopasowaną tabelę JEDEN RAZ
+    rebuildTransitionsTable();
+
+    // ==========================================================
+    // ODBLOKOWUJEMY SYGNAŁY UI
+    // ==========================================================
+    numStatesSpinBox->blockSignals(false);
+    alphabetInputField->blockSignals(false);
+    blankSymbolField->blockSignals(false);
+    initialStateCombo->blockSignals(false);
+
+    // 5. Uzupełniamy komórki gotowej tabeli
+    for (const auto &transition : data.transitions)
+    {
+        std::string currentState = std::get<0>(transition);
+        char readSymbol = std::get<1>(transition);
+        std::string nextState = std::get<2>(transition);
+        char writeSymbol = std::get<3>(transition);
+        std::string move = std::get<4>(transition);
+
+        QString uiMove = "Stay";
+        if (move == "L")
+            uiMove = "L";
+        else if (move == "P" || move == "R")
+            uiMove = "R";
+        else if (move == "_")
+            uiMove = "Stay";
+        else if (move == "STOP")
+            uiMove = "Stop";
+
+        int row = -1;
+        for (size_t s = 0; s < states.size(); ++s)
+        {
+            if (states[s] == currentState)
+            {
+                row = static_cast<int>(s);
+                break;
+            }
+        }
+
+        int col = -1;
+        int colIdx = 0;
+        for (char a : alphabet)
+        {
+            if (a == readSymbol)
+            {
+                col = colIdx;
+                break;
+            }
+            colIdx++;
+        }
+
+        if (row != -1 && col != -1)
+        {
+            auto cacheIt = comboCache.find({row, col});
+            if (cacheIt != comboCache.end())
+            {
+                std::get<0>(cacheIt->second)->setCurrentText(QString(writeSymbol));
+                std::get<1>(cacheIt->second)->setCurrentText(uiMove);
+                std::get<2>(cacheIt->second)->setCurrentText(QString::fromStdString(nextState));
+            }
+        }
+    }
+
+    if (rebuildMachineFromEditor() && statusLabel)
+    {
+        statusLabel->setText("Wczytano z pliku");
+    }
 }

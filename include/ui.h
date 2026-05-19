@@ -19,7 +19,8 @@
 #include "TuringMachine.h"
 
 /// Main window for the Turing Machine Simulator with modern Windows 11 UI style
-class TuringSimulatorUI : public QMainWindow {
+class TuringSimulatorUI : public QMainWindow
+{
     Q_OBJECT
 
 public:
@@ -45,13 +46,17 @@ private slots:
     void onSpeedChanged(int value);
     void onExecutionTimer();
 
+    // File I/O slots
+    void onSaveToFileClicked();
+    void onLoadFromFileClicked();
+
 private:
     /// Buduje główny układ okna jako jedną wspólną stronę aplikacji.
     void setupUI();
     /// Tworzy edytor logiki z konfiguracją maszyny i tabelą przejść.
-    QWidget* setupBuilderTab();
+    QWidget *setupBuilderTab();
     /// Tworzy panel uruchamiania symulacji oraz widok taśmy.
-    QWidget* setupExecutorTab();
+    QWidget *setupExecutorTab();
     /// Nakłada wspólny styl wizualny na całą aplikację.
     void applyModernStyle();
     /// Odświeża wszystkie elementy prezentujące bieżący stan maszyny.
@@ -71,7 +76,7 @@ private:
     /// Buduje maszynę z aktualnej konfiguracji formularza i opcjonalnie pokazuje komunikat sukcesu.
     bool buildMachineFromCurrentConfiguration(bool showSuccessDialog);
     /// Tworzy pojedynczą komórkę tabeli przejść z kontrolkami zapisu, ruchu i stanu docelowego.
-    QWidget* createTransitionCell(int row, int col);
+    QWidget *createTransitionCell(int row, int col);
     /// Przebudowuje tabelę przejść po zmianie liczby stanów lub alfabetu.
     void rebuildTransitionsTable();
     /// Czyści pomocniczą pamięć podręczną wskaźników do kontrolek tabeli.
@@ -87,6 +92,8 @@ private:
     QLineEdit *blankSymbolField;
     QComboBox *initialStateCombo;
     QTableWidget *transitionsTable;
+    QPushButton *saveToFileButton;
+    QPushButton *loadFromFileButton;
 
     // Executor Components
     QLabel *machineStateLabel;
@@ -105,9 +112,10 @@ private:
 
     // Logic
     std::unique_ptr<TuringMachine> machine;
-    std::vector<std::string> states;  // q0, q1, q2, ...
+    std::vector<std::string> states; // q0, q1, q2, ...
     std::set<char> alphabet;
     std::string initialState;
+    std::set<std::string> acceptingStates;
 
     // Maps: (state, readSymbol) -> (writeSymbol, moveString, nextState)
     std::map<std::pair<std::string, char>, std::tuple<char, std::string, std::string>> transitionMap;
@@ -120,8 +128,8 @@ private:
     /// Jednostrzałowy timer współdzielony przez odświeżenia widoku taśmy, aby uniknąć kolejkowania duplikatów.
     std::unique_ptr<QTimer> tapeDisplayRefreshTimer;
     /// Bufor etykiet pojedynczych komórek taśmy używanych przy odświeżaniu widoku.
-    std::vector<QLabel*> tapeCells;
+    std::vector<QLabel *> tapeCells;
 
     // Cache for combo boxes to speed up lookup
-    std::map<std::pair<int, int>, std::tuple<QComboBox*, QComboBox*, QComboBox*>> comboCache;
+    std::map<std::pair<int, int>, std::tuple<QComboBox *, QComboBox *, QComboBox *>> comboCache;
 };
