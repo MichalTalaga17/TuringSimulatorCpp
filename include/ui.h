@@ -10,7 +10,9 @@
 #include <QComboBox>
 #include <QSpinBox>
 #include <QScrollArea>
+#include <QTabWidget>
 #include <QTimer>
+#include <QAction>
 #include <memory>
 #include <map>
 #include <set>
@@ -18,14 +20,36 @@
 
 #include "TuringMachine.h"
 
-/// Main window for the Turing Machine Simulator with modern Windows 11 UI style
-class TuringSimulatorUI : public QMainWindow
+/// Pojedyncza karta edycji i uruchamiania maszyny Turinga.
+class MachineEditorTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TuringSimulatorUI(QWidget *parent = nullptr);
-    ~TuringSimulatorUI() = default;
+    explicit MachineEditorTab(const QString &untitledTitle, QWidget *parent = nullptr);
+    ~MachineEditorTab() = default;
+
+    /// Zwraca tytuł prezentowany na karcie.
+    QString tabTitle() const;
+    /// Wczytuje maszynę ze wskazanego pliku do tej karty.
+    bool loadFromFile(const QString &filePath);
+    /// Zapisuje maszynę do znanej ścieżki albo pyta o nią, jeśli karta jest nowa.
+    bool saveToFile();
+    /// Zapisuje maszynę po wskazaniu ścieżki przez użytkownika.
+    bool saveToFileAs();
+    /// Przebudowuje maszynę i pokazuje wynik walidacji.
+    bool validateMachine();
+    /// Przywraca przykład startowy w bieżącej karcie.
+    void resetToDefaultExample();
+
+signals:
+    void titleChanged(const QString &title);
+
+public slots:
+    // Execution slots
+    void onStepClicked();
+    void onRunClicked();
+    void onResetClicked();
 
 protected:
     /// Reaguje na zmianę rozmiaru okna i ponownie centruje aktywną komórkę taśmy.
@@ -39,16 +63,8 @@ private slots:
     void onCellComboChanged();
     void onTapeInputChanged();
 
-    // Execution slots
-    void onStepClicked();
-    void onRunClicked();
-    void onResetClicked();
     void onSpeedChanged(int value);
     void onExecutionTimer();
-
-    // File I/O slots
-    void onSaveToFileClicked();
-    void onLoadFromFileClicked();
 
 private:
     /// Buduje główny układ okna jako jedną wspólną stronę aplikacji.
@@ -85,6 +101,8 @@ private:
     void setCellDefaults(int row, int col, QComboBox *writeCombo, QComboBox *moveCombo, QComboBox *toStateCombo);
     /// Synchronizuje mapę przejść z aktualną zawartością tabeli.
     void populateTransitionMapWithDefaults();
+    /// Zapisuje aktualną definicję maszyny do wskazanej ścieżki.
+    bool saveMachineToPath(const QString &filePath);
 
     // Builder Components
     QSpinBox *numStatesSpinBox;
@@ -92,8 +110,6 @@ private:
     QLineEdit *blankSymbolField;
     QComboBox *initialStateCombo;
     QTableWidget *transitionsTable;
-    QPushButton *saveToFileButton;
-    QPushButton *loadFromFileButton;
 
     // Executor Components
     QLabel *machineStateLabel;
@@ -132,4 +148,52 @@ private:
 
     // Cache for combo boxes to speed up lookup
     std::map<std::pair<int, int>, std::tuple<QComboBox *, QComboBox *, QComboBox *>> comboCache;
+
+    QString untitledTitle;
+    QString currentFilePath;
+};
+
+/// Main window for the Turing Machine Simulator with tabbed documents and menu bar.
+class TuringSimulatorUI : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit TuringSimulatorUI(QWidget *parent = nullptr);
+    ~TuringSimulatorUI() = default;
+
+private slots:
+    void createNewMachineTab();
+    void openMachineInNewTab();
+    void saveCurrentMachine();
+    void saveCurrentMachineAs();
+    void closeCurrentMachineTab();
+    void validateCurrentMachine();
+    void resetCurrentMachineToExample();
+    void stepCurrentMachine();
+    void toggleCurrentMachineRun();
+    void resetCurrentMachine();
+    void selectPreviousTab();
+    void selectNextTab();
+    void updateMenuState();
+    void showAboutDialog();
+
+private:
+    void setupUI();
+    void setupMenu();
+    MachineEditorTab *currentMachineTab() const;
+    void addMachineTab(MachineEditorTab *tab);
+
+    QTabWidget *machineTabs;
+    QAction *saveAction;
+    QAction *saveAsAction;
+    QAction *closeTabAction;
+    QAction *validateAction;
+    QAction *resetExampleAction;
+    QAction *stepAction;
+    QAction *runAction;
+    QAction *resetAction;
+    QAction *previousTabAction;
+    QAction *nextTabAction;
+    int untitledTabCounter;
 };

@@ -1,12 +1,17 @@
 #include "ui.h"
-#include "Storage.h"
+#include "storage.h"
 
 #include <QApplication>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGroupBox>
 #include <QFrame>
+#include <QMenuBar>
+#include <QMenu>
+#include <QKeySequence>
+#include <QTabBar>
 #include <QStyleFactory>
 #include <QPalette>
 #include <QMessageBox>
@@ -18,7 +23,6 @@
 #include <QListView>
 #include <QSpinBox>
 #include <algorithm>
-#include <sstream>
 #include <tuple>
 
 namespace
@@ -114,37 +118,67 @@ namespace
 
 } // namespace
 
-TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
-    : QMainWindow(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), loadFromFileButton(nullptr), saveToFileButton(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>())
+MachineEditorTab::MachineEditorTab(const QString &untitledTitle, QWidget *parent)
+    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle)
 {
     setupUI();
     applyModernStyle();
 
     // Connect timer for execution
-    connect(executionTimer.get(), &QTimer::timeout, this, &TuringSimulatorUI::onExecutionTimer);
+    connect(executionTimer.get(), &QTimer::timeout, this, &MachineEditorTab::onExecutionTimer);
     tapeDisplayRefreshTimer->setSingleShot(true);
-    connect(tapeDisplayRefreshTimer.get(), &QTimer::timeout, this, &TuringSimulatorUI::updateTapeDisplay);
+    connect(tapeDisplayRefreshTimer.get(), &QTimer::timeout, this, &MachineEditorTab::updateTapeDisplay);
 
     scheduleTapeDisplayRefresh();
 }
 
-void TuringSimulatorUI::setupUI()
+QString MachineEditorTab::tabTitle() const
 {
-    setWindowTitle("Turing Machine Simulator");
-    setGeometry(100, 100, 1200, 850);
+    if (!currentFilePath.isEmpty())
+    {
+        return QFileInfo(currentFilePath).fileName();
+    }
 
-    QWidget *centralWidget = new QWidget(this);
-    QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
+    return untitledTitle;
+}
+
+bool MachineEditorTab::validateMachine()
+{
+    const bool isValid = buildMachineFromCurrentConfiguration(true);
+    if (isValid && machine)
+    {
+        machine->loadTape(tapeInputField->text().trimmed().toStdString());
+        updateDisplay();
+    }
+    return isValid;
+}
+
+void MachineEditorTab::resetToDefaultExample()
+{
+    currentFilePath.clear();
+    applyDefaultExample();
+    emit titleChanged(tabTitle());
+}
+
+void MachineEditorTab::setupUI()
+{
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    QScrollArea *pageScrollArea = new QScrollArea(centralWidget);
+    QFrame *tabContentFade = new QFrame(this);
+    tabContentFade->setObjectName("tabContentFade");
+    tabContentFade->setFrameShape(QFrame::NoFrame);
+    tabContentFade->setFixedHeight(8);
+    mainLayout->addWidget(tabContentFade);
+
+    QScrollArea *pageScrollArea = new QScrollArea(this);
     pageScrollArea->setWidgetResizable(true);
     pageScrollArea->setFrameShape(QFrame::NoFrame);
     pageScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     QWidget *pageWidget = new QWidget(pageScrollArea);
     QVBoxLayout *pageLayout = new QVBoxLayout(pageWidget);
-    pageLayout->setContentsMargins(16, 16, 16, 16);
+    pageLayout->setContentsMargins(16, 4, 16, 16);
     pageLayout->setSpacing(12);
 
     // --- Executor Panel FIRST (so statusLabel is created early) ---
@@ -155,12 +189,11 @@ void TuringSimulatorUI::setupUI()
 
     pageScrollArea->setWidget(pageWidget);
     mainLayout->addWidget(pageScrollArea);
-    setCentralWidget(centralWidget);
 }
 
-void TuringSimulatorUI::resizeEvent(QResizeEvent *event)
+void MachineEditorTab::resizeEvent(QResizeEvent *event)
 {
-    QMainWindow::resizeEvent(event);
+    QWidget::resizeEvent(event);
 
     if (!machine || !tapeScrollArea || tapeCells.empty())
     {
@@ -170,7 +203,7 @@ void TuringSimulatorUI::resizeEvent(QResizeEvent *event)
     scheduleTapeDisplayRefresh();
 }
 
-QWidget *TuringSimulatorUI::setupBuilderTab()
+QWidget *MachineEditorTab::setupBuilderTab()
 {
     QWidget *builderWidget = new QWidget();
     builderWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -273,37 +306,16 @@ QWidget *TuringSimulatorUI::setupBuilderTab()
 
     builderLayout->addWidget(logicEditorGroup, 1);
 
-    // --- Save/Load Buttons ---
-    QHBoxLayout *fileButtonsLayout = new QHBoxLayout();
-    fileButtonsLayout->setContentsMargins(0, 0, 0, 0);
-    fileButtonsLayout->setSpacing(8);
-
-    loadFromFileButton = new QPushButton("Wczytaj z pliku");
-    saveToFileButton = new QPushButton("Zapisz do pliku");
-
-    // Dodajemy lekkie style do przycisków zapisu
-    QString fileBtnStyle = "QPushButton { background-color: #ffffff; color: #202020; border: 1px solid #d0d0d0; border-radius: 6px; min-height: 28px; padding: 4px 16px; font-weight: bold; } QPushButton:hover { background-color: #f7f7f7; }";
-    loadFromFileButton->setStyleSheet(fileBtnStyle);
-    saveToFileButton->setStyleSheet(fileBtnStyle);
-
-    fileButtonsLayout->addStretch();
-    fileButtonsLayout->addWidget(loadFromFileButton);
-    fileButtonsLayout->addWidget(saveToFileButton);
-    builderLayout->addLayout(fileButtonsLayout);
-
     // Connect signals (after all widgets are created)
-    connect(numStatesSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &TuringSimulatorUI::onNumStatesChanged);
-    connect(alphabetInputField, &QLineEdit::textChanged, this, &TuringSimulatorUI::onAlphabetChanged);
-    connect(blankSymbolField, &QLineEdit::textChanged, this, &TuringSimulatorUI::onBlankSymbolChanged);
+    connect(numStatesSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &MachineEditorTab::onNumStatesChanged);
+    connect(alphabetInputField, &QLineEdit::textChanged, this, &MachineEditorTab::onAlphabetChanged);
+    connect(blankSymbolField, &QLineEdit::textChanged, this, &MachineEditorTab::onBlankSymbolChanged);
     connect(initialStateCombo, &QComboBox::currentTextChanged, this, [this](const QString &state)
             {
         initialState = state.toStdString();
         if (rebuildMachineFromEditor() && statusLabel) {
             statusLabel->setText("Rebuilt");
         } });
-
-    connect(saveToFileButton, &QPushButton::clicked, this, &TuringSimulatorUI::onSaveToFileClicked);
-    connect(loadFromFileButton, &QPushButton::clicked, this, &TuringSimulatorUI::onLoadFromFileClicked);
 
     // Initialize with safe blocking
     transitionsTable->blockSignals(true);
@@ -314,7 +326,7 @@ QWidget *TuringSimulatorUI::setupBuilderTab()
     return builderWidget;
 }
 
-QWidget *TuringSimulatorUI::setupExecutorTab()
+QWidget *MachineEditorTab::setupExecutorTab()
 {
     QWidget *executorWidget = new QWidget();
     executorWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
@@ -457,16 +469,16 @@ QWidget *TuringSimulatorUI::setupExecutorTab()
     executorLayout->addWidget(tapeGroup);
 
     // Connect signals
-    connect(tapeInputField, &QLineEdit::textChanged, this, &TuringSimulatorUI::onTapeInputChanged);
-    connect(stepButton, &QPushButton::clicked, this, &TuringSimulatorUI::onStepClicked);
-    connect(runButton, &QPushButton::clicked, this, &TuringSimulatorUI::onRunClicked);
-    connect(resetButton, &QPushButton::clicked, this, &TuringSimulatorUI::onResetClicked);
-    connect(speedSlider, QOverload<int>::of(&QSlider::valueChanged), this, &TuringSimulatorUI::onSpeedChanged);
+    connect(tapeInputField, &QLineEdit::textChanged, this, &MachineEditorTab::onTapeInputChanged);
+    connect(stepButton, &QPushButton::clicked, this, &MachineEditorTab::onStepClicked);
+    connect(runButton, &QPushButton::clicked, this, &MachineEditorTab::onRunClicked);
+    connect(resetButton, &QPushButton::clicked, this, &MachineEditorTab::onResetClicked);
+    connect(speedSlider, QOverload<int>::of(&QSlider::valueChanged), this, &MachineEditorTab::onSpeedChanged);
 
     return executorWidget;
 }
 
-void TuringSimulatorUI::applyModernStyle()
+void MachineEditorTab::applyModernStyle()
 {
     qApp->setStyle(QStyleFactory::create("Fusion"));
 
@@ -490,6 +502,113 @@ void TuringSimulatorUI::applyModernStyle()
     QString styleSheet = R"(
         QMainWindow {
             background-color: #f3f3f3;
+        }
+        QMenuBar {
+            background-color: #ffffff;
+            color: #202020;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        QMenuBar::item {
+            background: transparent;
+            border-radius: 6px;
+            padding: 6px 10px;
+        }
+        QMenuBar::item:selected {
+            background-color: #eaf4ff;
+            color: #005a9e;
+        }
+        QMenu {
+            background-color: #ffffff;
+            color: #202020;
+            border: 1px solid #d0d0d0;
+            border-radius: 8px;
+            padding: 6px;
+        }
+        QMenu::item {
+            border-radius: 6px;
+            padding: 7px 28px 7px 12px;
+        }
+        QMenu::item:selected {
+            background-color: #eaf4ff;
+            color: #005a9e;
+        }
+        QMenu::separator {
+            height: 1px;
+            background-color: #eeeeee;
+            margin: 5px 6px;
+        }
+        QTabWidget::pane {
+            border: none;
+            background-color: #f3f3f3;
+            top: 0;
+        }
+        QTabWidget::tab-bar {
+            left: 8px;
+        }
+        QTabBar {
+            background: qlineargradient(
+                x1: 0, y1: 0, x2: 0, y2: 1,
+                stop: 0 #f7f9fc,
+                stop: 1 #edf3fb
+            );
+        }
+        QTabBar::base {
+            border: none;
+            height: 0;
+        }
+        QTabBar::tab {
+            background-color: transparent;
+            color: #505050;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            min-width: 96px;
+            min-height: 22px;
+            padding: 3px 30px 3px 12px;
+            margin: 5px 3px 5px 0;
+        }
+        QTabBar::tab:selected {
+            background-color: #dfeaff;
+            color: #174ea6;
+            border-color: #3f74d8;
+            font-weight: 700;
+        }
+        QTabBar::tab:hover:!selected {
+            background-color: #eaf2ff;
+            color: #174ea6;
+            border-color: #b8ccf2;
+        }
+        QPushButton#tabCloseButton {
+            background-color: transparent;
+            color: #667085;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            min-width: 14px;
+            max-width: 14px;
+            min-height: 14px;
+            max-height: 14px;
+            padding: 0;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        QPushButton#tabCloseButton:hover {
+            background-color: #cfe0ff;
+            border-color: #9dbaf0;
+            color: #174ea6;
+        }
+        QPushButton#tabCloseButton:pressed {
+            background-color: #bfd4fb;
+            border-color: #3f74d8;
+        }
+        QFrame#tabContentFade {
+            border: none;
+            background: qlineargradient(
+                x1: 0, y1: 0, x2: 0, y2: 1,
+                stop: 0 #edf3fb,
+                stop: 0.45 #f1f5fa,
+                stop: 1 #f3f3f3
+            );
         }
         QGroupBox {
             color: #202020;
@@ -696,7 +815,7 @@ void TuringSimulatorUI::applyModernStyle()
 
 // === Builder Slots ===
 
-void TuringSimulatorUI::onNumStatesChanged(int value)
+void MachineEditorTab::onNumStatesChanged(int value)
 {
     states.clear();
     for (int i = 0; i < value; ++i)
@@ -801,7 +920,7 @@ void TuringSimulatorUI::onNumStatesChanged(int value)
     }
 }
 
-void TuringSimulatorUI::onAlphabetChanged()
+void MachineEditorTab::onAlphabetChanged()
 {
     QString alphaStr = alphabetInputField->text();
     std::set<char> newAlphabet;
@@ -838,7 +957,7 @@ void TuringSimulatorUI::onAlphabetChanged()
     }
 }
 
-void TuringSimulatorUI::onBlankSymbolChanged()
+void MachineEditorTab::onBlankSymbolChanged()
 {
     QString blankStr = blankSymbolField->text();
     char newBlank = blankStr.isEmpty() || blankStr.length() != 1 ? '_' : blankStr[0].toLatin1();
@@ -865,7 +984,7 @@ void TuringSimulatorUI::onBlankSymbolChanged()
     }
 }
 
-void TuringSimulatorUI::onCellComboChanged()
+void MachineEditorTab::onCellComboChanged()
 {
     // Sender is a QComboBox inside a cell
     QComboBox *senderCombo = qobject_cast<QComboBox *>(sender());
@@ -968,7 +1087,7 @@ void TuringSimulatorUI::onCellComboChanged()
     }
 }
 
-bool TuringSimulatorUI::buildMachineFromCurrentConfiguration(bool showSuccessDialog)
+bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDialog)
 {
     auto showValidationWarning = [this, showSuccessDialog](const QString &message)
     {
@@ -1048,7 +1167,7 @@ bool TuringSimulatorUI::buildMachineFromCurrentConfiguration(bool showSuccessDia
     return true;
 }
 
-bool TuringSimulatorUI::rebuildMachineFromEditor()
+bool MachineEditorTab::rebuildMachineFromEditor()
 {
     if (isRunning)
     {
@@ -1070,7 +1189,7 @@ bool TuringSimulatorUI::rebuildMachineFromEditor()
 
 // === Executor Slots ===
 
-void TuringSimulatorUI::onTapeInputChanged()
+void MachineEditorTab::onTapeInputChanged()
 {
     if (rebuildMachineFromEditor() && statusLabel)
     {
@@ -1078,7 +1197,7 @@ void TuringSimulatorUI::onTapeInputChanged()
     }
 }
 
-void TuringSimulatorUI::onStepClicked()
+void MachineEditorTab::onStepClicked()
 {
     if (!machine)
     {
@@ -1096,7 +1215,7 @@ void TuringSimulatorUI::onStepClicked()
     }
 }
 
-void TuringSimulatorUI::onRunClicked()
+void MachineEditorTab::onRunClicked()
 {
     if (!machine)
     {
@@ -1120,7 +1239,7 @@ void TuringSimulatorUI::onRunClicked()
     }
 }
 
-void TuringSimulatorUI::onResetClicked()
+void MachineEditorTab::onResetClicked()
 {
     if (machine)
     {
@@ -1134,7 +1253,7 @@ void TuringSimulatorUI::onResetClicked()
     }
 }
 
-void TuringSimulatorUI::onSpeedChanged(int value)
+void MachineEditorTab::onSpeedChanged(int value)
 {
     executionSpeed = value;
     if (isRunning)
@@ -1143,7 +1262,7 @@ void TuringSimulatorUI::onSpeedChanged(int value)
     }
 }
 
-void TuringSimulatorUI::onExecutionTimer()
+void MachineEditorTab::onExecutionTimer()
 {
     if (machine && isRunning)
     {
@@ -1161,13 +1280,13 @@ void TuringSimulatorUI::onExecutionTimer()
 
 // === Display Updates ===
 
-void TuringSimulatorUI::updateDisplay()
+void MachineEditorTab::updateDisplay()
 {
     updateStateDisplay();
     updateTapeDisplay();
 }
 
-void TuringSimulatorUI::updateStateDisplay()
+void MachineEditorTab::updateStateDisplay()
 {
     if (machine)
     {
@@ -1176,7 +1295,7 @@ void TuringSimulatorUI::updateStateDisplay()
     }
 }
 
-void TuringSimulatorUI::updateTapeDisplay()
+void MachineEditorTab::updateTapeDisplay()
 {
     if (!machine || tapeCells.empty() || !tapeScrollArea)
     {
@@ -1230,7 +1349,7 @@ void TuringSimulatorUI::updateTapeDisplay()
     tapeScrollArea->horizontalScrollBar()->setValue(std::max(0, targetValue));
 }
 
-void TuringSimulatorUI::scheduleTapeDisplayRefresh()
+void MachineEditorTab::scheduleTapeDisplayRefresh()
 {
     if (tapeDisplayRefreshTimer->isActive())
     {
@@ -1240,7 +1359,7 @@ void TuringSimulatorUI::scheduleTapeDisplayRefresh()
     tapeDisplayRefreshTimer->start(0);
 }
 
-void TuringSimulatorUI::setupTapeCells()
+void MachineEditorTab::setupTapeCells()
 {
     tapeCells.clear();
 
@@ -1285,7 +1404,7 @@ void TuringSimulatorUI::setupTapeCells()
     }
 }
 
-void TuringSimulatorUI::applyDefaultExample()
+void MachineEditorTab::applyDefaultExample()
 {
     numStatesSpinBox->setValue(1);
     alphabetInputField->setText("01");
@@ -1345,7 +1464,7 @@ void TuringSimulatorUI::applyDefaultExample()
     }
 }
 
-QWidget *TuringSimulatorUI::createTransitionCell(int row, int col)
+QWidget *MachineEditorTab::createTransitionCell(int row, int col)
 {
     QWidget *cellWidget = new QWidget();
     cellWidget->setStyleSheet("background-color: transparent;");
@@ -1390,14 +1509,14 @@ QWidget *TuringSimulatorUI::createTransitionCell(int row, int col)
     comboCache[{row, col}] = std::make_tuple(writeCombo, moveCombo, toStateCombo);
     setCellDefaults(row, col, writeCombo, moveCombo, toStateCombo);
 
-    connect(writeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TuringSimulatorUI::onCellComboChanged);
-    connect(moveCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TuringSimulatorUI::onCellComboChanged);
-    connect(toStateCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TuringSimulatorUI::onCellComboChanged);
+    connect(writeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MachineEditorTab::onCellComboChanged);
+    connect(moveCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MachineEditorTab::onCellComboChanged);
+    connect(toStateCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MachineEditorTab::onCellComboChanged);
 
     return cellWidget;
 }
 
-void TuringSimulatorUI::rebuildTransitionsTable()
+void MachineEditorTab::rebuildTransitionsTable()
 {
     transitionsTable->blockSignals(true);
     clearTableCache();
@@ -1446,7 +1565,7 @@ void TuringSimulatorUI::rebuildTransitionsTable()
     populateTransitionMapWithDefaults();
 }
 
-void TuringSimulatorUI::populateTransitionMapWithDefaults()
+void MachineEditorTab::populateTransitionMapWithDefaults()
 {
     // Populate the transition map with default values for all cells
     // Defaults: write = read symbol, move = L, state = current state
@@ -1485,12 +1604,12 @@ void TuringSimulatorUI::populateTransitionMapWithDefaults()
     }
 }
 
-void TuringSimulatorUI::clearTableCache()
+void MachineEditorTab::clearTableCache()
 {
     comboCache.clear();
 }
 
-void TuringSimulatorUI::setCellDefaults(int row, int col, QComboBox *writeCombo, QComboBox *moveCombo, QComboBox *toStateCombo)
+void MachineEditorTab::setCellDefaults(int row, int col, QComboBox *writeCombo, QComboBox *moveCombo, QComboBox *toStateCombo)
 {
     if (!writeCombo || !moveCombo || !toStateCombo)
         return;
@@ -1543,50 +1662,59 @@ void TuringSimulatorUI::setCellDefaults(int row, int col, QComboBox *writeCombo,
     toStateCombo->blockSignals(false);
 }
 
-// === FILE I/O Slots ===
+// === FILE I/O ===
 
-void TuringSimulatorUI::onSaveToFileClicked()
+bool MachineEditorTab::saveToFile()
 {
-    // Używamy nowej logiki (rebuildMachineFromEditor), bo HEAD nie ma przycisku Build
-    if (!rebuildMachineFromEditor())
+    if (currentFilePath.isEmpty())
     {
-        return;
+        return saveToFileAs();
     }
 
-    QString filePath = QFileDialog::getSaveFileName(this, "Zapisz maszynę", "", "JSON Files (*.json)");
-    if (filePath.isEmpty())
-    {
-        return;
-    }
-
-    // Pobieramy aktualne wartości z UI
-    QString currentInitialState = initialStateCombo->currentText();
-    char currentBlank = blankSymbolField->text().isEmpty() ? '_' : blankSymbolField->text()[0].toLatin1();
-
-    if (saveInstructionsToFile(*machine, filePath, currentInitialState, currentBlank))
-    {
-        statusLabel->setText("Zapisano maszynę");
-        QMessageBox::information(this, "Sukces", "Zapisano pomyślnie do pliku.");
-    }
-    else
-    {
-        QMessageBox::warning(this, "Błąd", "Nie udało się zapisać pliku.");
-    }
+    return saveMachineToPath(currentFilePath);
 }
 
-void TuringSimulatorUI::onLoadFromFileClicked()
+bool MachineEditorTab::saveToFileAs()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, "Wczytaj maszynę", "", "JSON Files (*.json)");
+    QString filePath = QFileDialog::getSaveFileName(this, "Zapisz maszynę", currentFilePath, "JSON Files (*.json)");
     if (filePath.isEmpty())
     {
-        return;
+        return false;
     }
 
+    return saveMachineToPath(filePath);
+}
+
+bool MachineEditorTab::saveMachineToPath(const QString &filePath)
+{
+    if (!rebuildMachineFromEditor())
+    {
+        return false;
+    }
+
+    const QString currentInitialState = initialStateCombo->currentText();
+    const char currentBlank = blankSymbolField->text().isEmpty() ? '_' : blankSymbolField->text()[0].toLatin1();
+
+    if (!saveInstructionsToFile(*machine, filePath, currentInitialState, currentBlank))
+    {
+        QMessageBox::warning(this, "Błąd", "Nie udało się zapisać pliku.");
+        return false;
+    }
+
+    currentFilePath = filePath;
+    statusLabel->setText("Zapisano maszynę");
+    emit titleChanged(tabTitle());
+    QMessageBox::information(this, "Sukces", "Zapisano pomyślnie do pliku.");
+    return true;
+}
+
+bool MachineEditorTab::loadFromFile(const QString &filePath)
+{
     MachineData data = loadInstructionsFromFile(filePath);
     if (!data.success)
     {
         QMessageBox::warning(this, "Błąd", data.errorMessage);
-        return;
+        return false;
     }
 
     // ==========================================================
@@ -1695,4 +1823,334 @@ void TuringSimulatorUI::onLoadFromFileClicked()
     {
         statusLabel->setText("Wczytano z pliku");
     }
+
+    currentFilePath = filePath;
+    emit titleChanged(tabTitle());
+    return true;
+}
+
+TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
+    : QMainWindow(parent),
+      machineTabs(nullptr),
+      saveAction(nullptr),
+      saveAsAction(nullptr),
+      closeTabAction(nullptr),
+      validateAction(nullptr),
+      resetExampleAction(nullptr),
+      stepAction(nullptr),
+      runAction(nullptr),
+      resetAction(nullptr),
+      previousTabAction(nullptr),
+      nextTabAction(nullptr),
+      untitledTabCounter(1)
+{
+    setWindowTitle("Turing Machine Simulator");
+    setGeometry(100, 100, 1200, 850);
+    setMinimumWidth(980);
+    setMinimumHeight(720);
+
+    setupMenu();
+    setupUI();
+    createNewMachineTab();
+    updateMenuState();
+}
+
+void TuringSimulatorUI::setupUI()
+{
+    machineTabs = new QTabWidget(this);
+    machineTabs->setDocumentMode(true);
+    machineTabs->setMovable(true);
+    machineTabs->setTabsClosable(false);
+    machineTabs->setElideMode(Qt::ElideRight);
+    machineTabs->tabBar()->setDrawBase(false);
+    machineTabs->tabBar()->setExpanding(false);
+
+    connect(machineTabs, &QTabWidget::currentChanged, this, [this](int)
+            { updateMenuState(); });
+
+    setCentralWidget(machineTabs);
+}
+
+void TuringSimulatorUI::setupMenu()
+{
+    menuBar()->setNativeMenuBar(false);
+
+    auto bindShortcut = [this](QAction *action, const QKeySequence &shortcut)
+    {
+        action->setShortcut(shortcut);
+        action->setShortcutContext(Qt::ApplicationShortcut);
+        addAction(action);
+    };
+
+    QMenu *fileMenu = menuBar()->addMenu("Plik");
+    QAction *newTabAction = fileMenu->addAction("Nowa karta");
+    bindShortcut(newTabAction, QKeySequence(QKeySequence::New));
+    connect(newTabAction, &QAction::triggered, this, &TuringSimulatorUI::createNewMachineTab);
+
+    QAction *openAction = fileMenu->addAction("Otwórz w nowej karcie...");
+    bindShortcut(openAction, QKeySequence(QKeySequence::Open));
+    connect(openAction, &QAction::triggered, this, &TuringSimulatorUI::openMachineInNewTab);
+
+    fileMenu->addSeparator();
+
+    saveAction = fileMenu->addAction("Zapisz");
+    bindShortcut(saveAction, QKeySequence(QKeySequence::Save));
+    connect(saveAction, &QAction::triggered, this, &TuringSimulatorUI::saveCurrentMachine);
+
+    saveAsAction = fileMenu->addAction("Zapisz jako...");
+    bindShortcut(saveAsAction, QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
+    connect(saveAsAction, &QAction::triggered, this, &TuringSimulatorUI::saveCurrentMachineAs);
+
+    fileMenu->addSeparator();
+
+    closeTabAction = fileMenu->addAction("Zamknij kartę");
+    bindShortcut(closeTabAction, QKeySequence(QKeySequence::Close));
+    connect(closeTabAction, &QAction::triggered, this, &TuringSimulatorUI::closeCurrentMachineTab);
+
+    fileMenu->addSeparator();
+
+    QAction *quitAction = fileMenu->addAction("Zakończ");
+    bindShortcut(quitAction, QKeySequence(QKeySequence::Quit));
+    connect(quitAction, &QAction::triggered, qApp, &QApplication::quit);
+
+    QMenu *machineMenu = menuBar()->addMenu("Maszyna");
+    validateAction = machineMenu->addAction("Waliduj i przebuduj");
+    bindShortcut(validateAction, QKeySequence(Qt::CTRL | Qt::Key_B));
+    connect(validateAction, &QAction::triggered, this, &TuringSimulatorUI::validateCurrentMachine);
+
+    resetExampleAction = machineMenu->addAction("Przywróć przykład startowy");
+    connect(resetExampleAction, &QAction::triggered, this, &TuringSimulatorUI::resetCurrentMachineToExample);
+
+    QMenu *simulationMenu = menuBar()->addMenu("Symulacja");
+    stepAction = simulationMenu->addAction("Krok");
+    bindShortcut(stepAction, QKeySequence(Qt::Key_F10));
+    connect(stepAction, &QAction::triggered, this, &TuringSimulatorUI::stepCurrentMachine);
+
+    runAction = simulationMenu->addAction("Uruchom / pauza");
+    bindShortcut(runAction, QKeySequence(Qt::Key_F5));
+    connect(runAction, &QAction::triggered, this, &TuringSimulatorUI::toggleCurrentMachineRun);
+
+    resetAction = simulationMenu->addAction("Reset");
+    bindShortcut(resetAction, QKeySequence(Qt::CTRL | Qt::Key_R));
+    connect(resetAction, &QAction::triggered, this, &TuringSimulatorUI::resetCurrentMachine);
+
+    QMenu *viewMenu = menuBar()->addMenu("Widok");
+    previousTabAction = viewMenu->addAction("Poprzednia karta");
+    bindShortcut(previousTabAction, QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab));
+    connect(previousTabAction, &QAction::triggered, this, &TuringSimulatorUI::selectPreviousTab);
+
+    nextTabAction = viewMenu->addAction("Następna karta");
+    bindShortcut(nextTabAction, QKeySequence(Qt::CTRL | Qt::Key_Tab));
+    connect(nextTabAction, &QAction::triggered, this, &TuringSimulatorUI::selectNextTab);
+
+    QMenu *helpMenu = menuBar()->addMenu("Pomoc");
+    QAction *aboutAction = helpMenu->addAction("O programie");
+    connect(aboutAction, &QAction::triggered, this, &TuringSimulatorUI::showAboutDialog);
+}
+
+MachineEditorTab *TuringSimulatorUI::currentMachineTab() const
+{
+    if (!machineTabs)
+    {
+        return nullptr;
+    }
+
+    return qobject_cast<MachineEditorTab *>(machineTabs->currentWidget());
+}
+
+void TuringSimulatorUI::addMachineTab(MachineEditorTab *tab)
+{
+    const int index = machineTabs->addTab(tab, tab->tabTitle());
+    machineTabs->setCurrentIndex(index);
+
+    QWidget *closeButtonWrapper = new QWidget(machineTabs);
+    QHBoxLayout *closeButtonLayout = new QHBoxLayout(closeButtonWrapper);
+    closeButtonLayout->setContentsMargins(0, 0, 6, 0);
+    closeButtonLayout->setSpacing(0);
+
+    QPushButton *closeButton = new QPushButton("x", closeButtonWrapper);
+    closeButton->setObjectName("tabCloseButton");
+    closeButton->setCursor(Qt::PointingHandCursor);
+    closeButton->setFocusPolicy(Qt::NoFocus);
+    closeButton->setToolTip("Zamknij kartę");
+    closeButtonLayout->addWidget(closeButton);
+    machineTabs->tabBar()->setTabButton(index, QTabBar::RightSide, closeButtonWrapper);
+
+    connect(closeButton, &QPushButton::clicked, this, [this, tab]()
+            {
+        const int tabIndex = machineTabs->indexOf(tab);
+        if (tabIndex >= 0)
+        {
+            machineTabs->setCurrentIndex(tabIndex);
+            closeCurrentMachineTab();
+        } });
+
+    connect(tab, &MachineEditorTab::titleChanged, this, [this, tab](const QString &title)
+            {
+        const int tabIndex = machineTabs->indexOf(tab);
+        if (tabIndex >= 0)
+        {
+            machineTabs->setTabText(tabIndex, title);
+        }
+        updateMenuState(); });
+
+    updateMenuState();
+}
+
+void TuringSimulatorUI::createNewMachineTab()
+{
+    MachineEditorTab *tab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), machineTabs);
+    addMachineTab(tab);
+}
+
+void TuringSimulatorUI::openMachineInNewTab()
+{
+    const QString filePath = QFileDialog::getOpenFileName(this, "Wczytaj maszynę", "", "JSON Files (*.json)");
+    if (filePath.isEmpty())
+    {
+        return;
+    }
+
+    MachineEditorTab *tab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), machineTabs);
+    if (!tab->loadFromFile(filePath))
+    {
+        tab->deleteLater();
+        return;
+    }
+
+    addMachineTab(tab);
+}
+
+void TuringSimulatorUI::saveCurrentMachine()
+{
+    if (MachineEditorTab *tab = currentMachineTab())
+    {
+        tab->saveToFile();
+    }
+}
+
+void TuringSimulatorUI::saveCurrentMachineAs()
+{
+    if (MachineEditorTab *tab = currentMachineTab())
+    {
+        tab->saveToFileAs();
+    }
+}
+
+void TuringSimulatorUI::closeCurrentMachineTab()
+{
+    const int index = machineTabs->currentIndex();
+    if (index < 0)
+    {
+        return;
+    }
+
+    QWidget *tab = machineTabs->widget(index);
+    machineTabs->removeTab(index);
+    tab->deleteLater();
+
+    if (machineTabs->count() == 0)
+    {
+        createNewMachineTab();
+    }
+
+    updateMenuState();
+}
+
+void TuringSimulatorUI::validateCurrentMachine()
+{
+    if (MachineEditorTab *tab = currentMachineTab())
+    {
+        tab->validateMachine();
+    }
+}
+
+void TuringSimulatorUI::resetCurrentMachineToExample()
+{
+    if (MachineEditorTab *tab = currentMachineTab())
+    {
+        tab->resetToDefaultExample();
+    }
+}
+
+void TuringSimulatorUI::stepCurrentMachine()
+{
+    if (MachineEditorTab *tab = currentMachineTab())
+    {
+        tab->onStepClicked();
+    }
+}
+
+void TuringSimulatorUI::toggleCurrentMachineRun()
+{
+    if (MachineEditorTab *tab = currentMachineTab())
+    {
+        tab->onRunClicked();
+    }
+}
+
+void TuringSimulatorUI::resetCurrentMachine()
+{
+    if (MachineEditorTab *tab = currentMachineTab())
+    {
+        tab->onResetClicked();
+    }
+}
+
+void TuringSimulatorUI::selectPreviousTab()
+{
+    const int count = machineTabs->count();
+    if (count <= 1)
+    {
+        return;
+    }
+
+    const int nextIndex = (machineTabs->currentIndex() - 1 + count) % count;
+    machineTabs->setCurrentIndex(nextIndex);
+}
+
+void TuringSimulatorUI::selectNextTab()
+{
+    const int count = machineTabs->count();
+    if (count <= 1)
+    {
+        return;
+    }
+
+    const int nextIndex = (machineTabs->currentIndex() + 1) % count;
+    machineTabs->setCurrentIndex(nextIndex);
+}
+
+void TuringSimulatorUI::updateMenuState()
+{
+    const bool hasTab = currentMachineTab() != nullptr;
+    const bool hasMultipleTabs = machineTabs && machineTabs->count() > 1;
+
+    saveAction->setEnabled(hasTab);
+    saveAsAction->setEnabled(hasTab);
+    closeTabAction->setEnabled(hasTab);
+    validateAction->setEnabled(hasTab);
+    resetExampleAction->setEnabled(hasTab);
+    stepAction->setEnabled(hasTab);
+    runAction->setEnabled(hasTab);
+    resetAction->setEnabled(hasTab);
+    previousTabAction->setEnabled(hasMultipleTabs);
+    nextTabAction->setEnabled(hasMultipleTabs);
+
+    QString title = "Turing Machine Simulator";
+    if (MachineEditorTab *tab = currentMachineTab())
+    {
+        title += " - " + tab->tabTitle();
+    }
+    setWindowTitle(title);
+}
+
+void TuringSimulatorUI::showAboutDialog()
+{
+    QMessageBox::about(
+        this,
+        "O programie",
+        "Symulator maszyny Turinga\n\n"
+        "Edytuj definicję maszyny, otwieraj wiele plików w osobnych kartach "
+        "i uruchamiaj symulację bez przełączania okien.");
 }
