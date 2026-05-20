@@ -6,8 +6,7 @@
 #include <QJsonDocument>
 #include <algorithm>
 
-// Twój kod funkcji pomocniczej (Zmieniona sygnatura)
-bool saveInstructionsToFile(const TuringMachine& machine, const QString& filePath, const QString& initialState, char blankSymbol) {
+bool saveInstructionsToFile(const TuringMachine& machine, const QString& filePath, const QString& initialState, char blankSymbol, int numStates, const std::set<char>& alphabet) {
     QJsonArray transitionsArray;
 
     for (const auto& [key, transition] : machine.getTransitions()) {
@@ -26,10 +25,17 @@ bool saveInstructionsToFile(const TuringMachine& machine, const QString& filePat
 
     QJsonObject rootObject;
     rootObject["transitions"] = transitionsArray;
-
-    // --- ZAPISUJEMY NOWE POLA ---
     rootObject["initialState"] = initialState;
     rootObject["blankSymbol"] = QString(QChar(blankSymbol));
+
+    // --- ZAPISUJEMY ILOŚĆ STANÓW I ALFABET ---
+    rootObject["numStates"] = numStates;
+
+    QJsonArray alphabetArray;
+    for (char c : alphabet) {
+        alphabetArray.append(QString(QChar(c)));
+    }
+    rootObject["alphabet"] = alphabetArray;
 
     QJsonDocument doc(rootObject);
     QFile file(filePath);
@@ -63,18 +69,33 @@ MachineData loadInstructionsFromFile(const QString& filePath) {
 
     QJsonObject root = doc.object();
 
-    // --- ODCZYTUJEMY NOWE POLA ---
     data.initialState = root["initialState"].toString().toStdString();
     QString blankStr = root["blankSymbol"].toString();
     if (!blankStr.isEmpty()) {
         data.blankSymbol = blankStr[0].toLatin1();
     }
 
-    QJsonArray transitionsArray = root["transitions"].toArray();
+    // --- ODCZYTUJEMY ILOŚĆ STANÓW I ALFABET (Z ZABEZPIECZENIEM DLA STARYCH PLIKÓW) ---
+    bool hasExplicitNumStates = root.contains("numStates");
+    if (hasExplicitNumStates) {
+        data.numStates = root["numStates"].toInt();
+    }
 
+    bool hasExplicitAlphabet = root.contains("alphabet");
+    if (hasExplicitAlphabet) {
+        QJsonArray alphaArray = root["alphabet"].toArray();
+        for (int i = 0; i < alphaArray.size(); ++i) {
+            QString s = alphaArray[i].toString();
+            if (!s.isEmpty()) {
+                data.alphabet.insert(s[0].toLatin1());
+            }
+        }
+    }
+
+    QJsonArray transitionsArray = root["transitions"].toArray();
     int maxStateNumber = 0;
 
-    // Skanujemy JSON
+    // Skanujemy instrukcje przejść
     for (int i = 0; i < transitionsArray.size(); ++i) {
         QJsonObject tObj = transitionsArray[i].toObject();
 
@@ -89,16 +110,20 @@ MachineData loadInstructionsFromFile(const QString& filePath) {
         char readSymbol = readSymbolStr[0].toLatin1();
         char writeSymbol = writeSymbolStr[0].toLatin1();
 
-        // Budujemy alfabet
-        data.alphabet.insert(readSymbol);
-        data.alphabet.insert(writeSymbol);
-
-        // Szukamy najwyższego numeru stanu (np. "q3")
-        if (currentState.startsWith("q")) {
-            maxStateNumber = std::max(maxStateNumber, currentState.mid(1).toInt());
+        // Jeśli stary plik nie miał zapisanego alfabetu, budujemy go zgadując z przejść
+        if (!hasExplicitAlphabet) {
+            data.alphabet.insert(readSymbol);
+            data.alphabet.insert(writeSymbol);
         }
-        if (nextState.startsWith("q")) {
-            maxStateNumber = std::max(maxStateNumber, nextState.mid(1).toInt());
+
+        // Jeśli stary plik nie miał zapisanego numStates, szukamy najwyższego numeru
+        if (!hasExplicitNumStates) {
+            if (currentState.startsWith("q")) {
+                maxStateNumber = std::max(maxStateNumber, currentState.mid(1).toInt());
+            }
+            if (nextState.startsWith("q")) {
+                maxStateNumber = std::max(maxStateNumber, nextState.mid(1).toInt());
+            }
         }
 
         // Zapisujemy przejście
@@ -111,7 +136,11 @@ MachineData loadInstructionsFromFile(const QString& filePath) {
         });
     }
 
-    data.numStates = maxStateNumber + 1;
+    // Uzupełnienie zgadywania dla starych plików
+    if (!hasExplicitNumStates) {
+        data.numStates = maxStateNumber + 1;
+    }
+
     data.success = true;
     return data;
 }

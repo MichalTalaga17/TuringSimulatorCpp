@@ -186,7 +186,8 @@ bool MachineEditorTab::saveMachineToPath(const QString &filePath)
     const QString currentInitialState = initialStateCombo->currentText();
     const char currentBlank = blankSymbolField->text().isEmpty() ? '_' : blankSymbolField->text()[0].toLatin1();
 
-    if (!saveInstructionsToFile(*machine, filePath, currentInitialState, currentBlank))
+    // --- TUTAJ JEST ZMIANA - DODAJEMY states.size() i alphabet ---
+    if (!saveInstructionsToFile(*machine, filePath, currentInitialState, currentBlank, states.size(), alphabet))
     {
         QMessageBox::warning(this, "Błąd", "Nie udało się zapisać pliku.");
         return false;

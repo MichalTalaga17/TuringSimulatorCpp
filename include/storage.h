@@ -23,12 +23,10 @@ struct MachineData {
     QString errorMessage = "";
 };
 
-// Zmieniamy sygnaturę, żeby przyjmowała stan i symbol pusty z UI
-bool saveInstructionsToFile(const TuringMachine& machine, const QString& filePath, const QString& initialState, char blankSymbol);
+// Sygnatura z dodaną liczbą stanów i alfabetem
+bool saveInstructionsToFile(const TuringMachine& machine, const QString& filePath, const QString& initialState, char blankSymbol, int numStates, const std::set<char>& alphabet);
 
-// Nowa funkcja do czytania
+// Funkcja do czytania
 MachineData loadInstructionsFromFile(const QString& filePath);
-
-bool saveInstructionsToFile(const TuringMachine& machine, const QString& filePath);
 
 #endif // STORAGE_H
