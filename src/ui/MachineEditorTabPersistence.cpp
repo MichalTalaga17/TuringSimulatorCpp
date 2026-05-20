@@ -9,6 +9,7 @@
 void MachineEditorTab::rebuildTransitionsTable()
 {
     transitionsTable->blockSignals(true);
+    clearActiveTransitionHighlight();
     clearTableCache();
     transitionsTable->clear();
 

@@ -1,11 +1,18 @@
 #include "MachineEditorTab.h"
 
+#include <QAbstractItemView>
 #include <QFileInfo>
 #include <QHBoxLayout>
 #include <QMessageBox>
 #include <QScrollBar>
 
 #include <algorithm>
+
+namespace
+{
+    constexpr int minimumTapeCellCount = 41;
+    constexpr int tapeInputTailPadding = 4;
+} // namespace
 
 QString MachineEditorTab::tabTitle() const
 {
@@ -431,6 +438,7 @@ void MachineEditorTab::onStepClicked()
     }
     else
     {
+        updateDisplay();
         statusLabel->setText(machine->isAccepted() ? "Accepted" : "Halted");
     }
 }
@@ -504,6 +512,109 @@ void MachineEditorTab::updateDisplay()
 {
     updateStateDisplay();
     updateTapeDisplay();
+    updateActiveTransitionHighlight();
+}
+
+void MachineEditorTab::updateActiveTransitionHighlight()
+{
+    if (!machine || !transitionsTable || machine->isHalted())
+    {
+        clearActiveTransitionHighlight();
+        return;
+    }
+
+    const std::string &currentState = machine->currentState();
+    const auto stateIt = std::find(states.begin(), states.end(), currentState);
+    if (stateIt == states.end())
+    {
+        clearActiveTransitionHighlight();
+        return;
+    }
+
+    const char readSymbol = machine->tape().read();
+    const auto transitionIt = transitionMap.find({currentState, readSymbol});
+    if (transitionIt == transitionMap.end())
+    {
+        clearActiveTransitionHighlight();
+        return;
+    }
+
+    const int row = static_cast<int>(std::distance(states.begin(), stateIt));
+    int col = 0;
+    bool symbolFound = false;
+    for (char alphabetSymbol : alphabet)
+    {
+        if (alphabetSymbol == readSymbol)
+        {
+            symbolFound = true;
+            break;
+        }
+        ++col;
+    }
+
+    if (!symbolFound || row >= transitionsTable->rowCount() || col >= transitionsTable->columnCount())
+    {
+        clearActiveTransitionHighlight();
+        return;
+    }
+
+    if (highlightedTransitionRow == row && highlightedTransitionCol == col)
+    {
+        return;
+    }
+
+    clearActiveTransitionHighlight();
+    setTransitionCellHighlighted(row, col, true);
+    highlightedTransitionRow = row;
+    highlightedTransitionCol = col;
+    transitionsTable->scrollTo(transitionsTable->model()->index(row, col), QAbstractItemView::PositionAtCenter);
+}
+
+void MachineEditorTab::clearActiveTransitionHighlight()
+{
+    if (highlightedTransitionRow >= 0 && highlightedTransitionCol >= 0)
+    {
+        setTransitionCellHighlighted(highlightedTransitionRow, highlightedTransitionCol, false);
+    }
+
+    highlightedTransitionRow = -1;
+    highlightedTransitionCol = -1;
+}
+
+void MachineEditorTab::setTransitionCellHighlighted(int row, int col, bool highlighted)
+{
+    if (!transitionsTable || row < 0 || col < 0)
+    {
+        return;
+    }
+
+    QWidget *cellWidget = transitionsTable->cellWidget(row, col);
+    if (!cellWidget)
+    {
+        return;
+    }
+
+    const QString selector = QString("#%1").arg(cellWidget->objectName());
+    if (highlighted)
+    {
+        cellWidget->setStyleSheet(
+            selector +
+            " {"
+            "background-color: #eaf2ff;"
+            "border: 1px solid #3f74d8;"
+            "border-radius: 6px;"
+            "}");
+    }
+    else
+    {
+        cellWidget->setStyleSheet(
+            selector +
+            " {"
+            "background-color: transparent;"
+            "border: 1px solid #cfcfcf;"
+            "border-radius: 6px;"
+            "}");
+    }
 }
 
 void MachineEditorTab::updateStateDisplay()
@@ -517,7 +628,13 @@ void MachineEditorTab::updateStateDisplay()
 
 void MachineEditorTab::updateTapeDisplay()
 {
-    if (!machine || tapeCells.empty() || !tapeScrollArea)
+    if (!machine || !tapeScrollArea)
+    {
+        return;
+    }
+
+    ensureTapeCellsFitInput();
+    if (tapeCells.empty())
     {
         return;
     }
@@ -534,27 +651,7 @@ void MachineEditorTab::updateTapeDisplay()
         QLabel *cell = tapeCells[index];
 
         cell->setText(QString(symbol));
-
-        if (index == activeCellIndex)
-        {
-            cell->setStyleSheet(
-                "background-color: #eaf4ff;"
-                "border: 2px solid #0078d4;"
-                "border-radius: 10px;"
-                "color: #005a9e;"
-                "font-size: 22px;"
-                "font-weight: 700;");
-        }
-        else
-        {
-            cell->setStyleSheet(
-                "background-color: #ffffff;"
-                "border: 1px solid #d0d0d0;"
-                "border-radius: 10px;"
-                "color: #202020;"
-                "font-size: 20px;"
-                "font-weight: 600;");
-        }
+        applyTapeCellStyle(cell, index == activeCellIndex);
     }
 
     QLabel *activeCell = tapeCells[activeCellIndex];
@@ -589,39 +686,81 @@ void MachineEditorTab::setupTapeCells()
         return;
     }
 
-    constexpr int visibleCellCount = 41;
-    constexpr int activeCellIndex = visibleCellCount / 2;
-
-    for (int index = 0; index < visibleCellCount; ++index)
+    for (int index = 0; index < minimumTapeCellCount; ++index)
     {
-        QLabel *cell = new QLabel("-", tapeDisplay);
-        cell->setAlignment(Qt::AlignCenter);
-        cell->setFixedSize(46, 58);
-
-        if (index == activeCellIndex)
-        {
-            cell->setStyleSheet(
-                "background-color: #eaf4ff;"
-                "border: 2px solid #0078d4;"
-                "border-radius: 10px;"
-                "color: #005a9e;"
-                "font-size: 22px;"
-                "font-weight: 700;");
-        }
-        else
-        {
-            cell->setStyleSheet(
-                "background-color: #ffffff;"
-                "border: 1px solid #d0d0d0;"
-                "border-radius: 10px;"
-                "color: #202020;"
-                "font-size: 20px;"
-                "font-weight: 600;");
-        }
-
+        QLabel *cell = createTapeCell();
         layout->addWidget(cell);
         tapeCells.push_back(cell);
     }
+
+    applyTapeCellStyle(tapeCells[tapeCells.size() / 2], true);
+}
+
+void MachineEditorTab::ensureTapeCellsFitInput()
+{
+    if (!tapeDisplay || !tapeInputField)
+    {
+        return;
+    }
+
+    auto *layout = qobject_cast<QHBoxLayout *>(tapeDisplay->layout());
+    if (!layout)
+    {
+        return;
+    }
+
+    const int inputLength = tapeInputField->text().trimmed().size();
+    const int requiredHalfWidth = std::max(
+        minimumTapeCellCount / 2,
+        std::max(0, inputLength - 1) + tapeInputTailPadding);
+    const int requiredCellCount = (requiredHalfWidth * 2) + 1;
+
+    while (static_cast<int>(tapeCells.size()) < requiredCellCount)
+    {
+        QLabel *cell = createTapeCell();
+        layout->addWidget(cell);
+        tapeCells.push_back(cell);
+    }
+
+    tapeDisplay->adjustSize();
+    tapeDisplay->updateGeometry();
+}
+
+QLabel *MachineEditorTab::createTapeCell()
+{
+    QLabel *cell = new QLabel("-", tapeDisplay);
+    cell->setAlignment(Qt::AlignCenter);
+    cell->setFixedSize(46, 58);
+    applyTapeCellStyle(cell, false);
+    return cell;
+}
+
+void MachineEditorTab::applyTapeCellStyle(QLabel *cell, bool active)
+{
+    if (!cell)
+    {
+        return;
+    }
+
+    if (active)
+    {
+        cell->setStyleSheet(
+            "background-color: #eaf4ff;"
+            "border: 2px solid #0078d4;"
+            "border-radius: 10px;"
+            "color: #005a9e;"
+            "font-size: 22px;"
+            "font-weight: 700;");
+        return;
+    }
+
+    cell->setStyleSheet(
+        "background-color: #ffffff;"
+        "border: 1px solid #d0d0d0;"
+        "border-radius: 10px;"
+        "color: #202020;"
+        "font-size: 20px;"
+        "font-weight: 600;");
 }
 
 void MachineEditorTab::applyDefaultExample()

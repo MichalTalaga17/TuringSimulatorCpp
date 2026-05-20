@@ -76,6 +76,12 @@ private:
     void applyModernStyle();
     /// Odświeża wszystkie elementy prezentujące bieżący stan maszyny.
     void updateDisplay();
+    /// Podświetla komórkę tabeli przejść odpowiadającą aktualnie wykonywanej instrukcji.
+    void updateActiveTransitionHighlight();
+    /// Czyści podświetlenie komórki przejścia.
+    void clearActiveTransitionHighlight();
+    /// Ustawia wizualny stan pojedynczej komórki tabeli przejść.
+    void setTransitionCellHighlighted(int row, int col, bool highlighted);
     /// Aktualizuje etykiety stanu sterowania i licznika kroków.
     void updateStateDisplay();
     /// Odtwarza aktualny wycinek taśmy i centruje aktywną komórkę.
@@ -84,6 +90,12 @@ private:
     void scheduleTapeDisplayRefresh();
     /// Tworzy zestaw widocznych komórek używanych do wizualizacji taśmy.
     void setupTapeCells();
+    /// Rozszerza bufor komórek, gdy wpisana taśma wejściowa nie mieści się w wizualizacji.
+    void ensureTapeCellsFitInput();
+    /// Tworzy pojedynczą etykietę komórki taśmy.
+    QLabel *createTapeCell();
+    /// Nakłada styl zwykłej albo aktywnej komórki taśmy.
+    void applyTapeCellStyle(QLabel *cell, bool active);
     /// Wypełnia formularz i tabelę przykładową maszyną startową.
     void applyDefaultExample();
     /// Wypełnia formularz minimalną pustą konfiguracją do pracy od zera.
@@ -153,4 +165,6 @@ private:
     QString untitledTitle;
     QString currentFilePath;
     bool startWithExample;
+    int highlightedTransitionRow;
+    int highlightedTransitionCol;
 };

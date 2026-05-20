@@ -25,19 +25,19 @@ namespace
     {
         static const QString style = R"(
         QComboBox {
-            border: 1px solid #d0d0d0;
-            border-radius: 6px;
-            padding: 3px 6px;
-            background-color: #ffffff;
+            border: none;
+            border-radius: 0;
+            padding: 0 4px 2px 4px;
+            background-color: transparent;
             color: #202020;
             font-size: 11px;
         }
         QComboBox:hover {
-            border-color: #a8c7e8;
             background-color: #f7fbff;
         }
         QComboBox:focus {
-            border: 1px solid #0078d4;
+            border: none;
+            background-color: #ffffff;
         }
         QComboBox::drop-down {
             subcontrol-origin: padding;
@@ -112,7 +112,7 @@ namespace
 } // namespace
 
 MachineEditorTab::MachineEditorTab(const QString &untitledTitle, bool startWithExample, QWidget *parent)
-    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample)
+    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample), highlightedTransitionRow(-1), highlightedTransitionCol(-1)
 {
     setupUI();
     applyModernStyle();
@@ -809,44 +809,50 @@ void MachineEditorTab::applyModernStyle()
 QWidget *MachineEditorTab::createTransitionCell(int row, int col)
 {
     QWidget *cellWidget = new QWidget();
-    cellWidget->setStyleSheet("background-color: transparent;");
+    cellWidget->setObjectName(QString("transitionCell_%1_%2").arg(row).arg(col));
+    cellWidget->setStyleSheet(
+        QString("#%1 {"
+        "background-color: transparent;"
+        "border: 1px solid #cfcfcf;"
+        "border-radius: 6px;"
+        "}").arg(cellWidget->objectName()));
 
     QHBoxLayout *layout = new QHBoxLayout(cellWidget);
-    layout->setContentsMargins(1, 1, 1, 1);
-    layout->setSpacing(1);
+    layout->setContentsMargins(6, 4, 6, 4);
+    layout->setSpacing(0);
 
     QComboBox *writeCombo = new QComboBox();
     writeCombo->setObjectName(QString("write_%1_%2").arg(row).arg(col));
-    writeCombo->setMinimumHeight(28);
-    writeCombo->setMaximumHeight(28);
+    writeCombo->setMinimumHeight(24);
+    writeCombo->setMaximumHeight(24);
     writeCombo->setFixedWidth(36);
     for (char c : alphabet)
     {
         writeCombo->addItem(QString(c));
     }
     applyCompactLogicComboStyle(writeCombo, 56);
-    layout->addWidget(writeCombo);
+    layout->addWidget(writeCombo, 0, Qt::AlignVCenter);
 
     QComboBox *moveCombo = new QComboBox();
     moveCombo->setObjectName(QString("move_%1_%2").arg(row).arg(col));
-    moveCombo->setMinimumHeight(28);
-    moveCombo->setMaximumHeight(28);
+    moveCombo->setMinimumHeight(24);
+    moveCombo->setMaximumHeight(24);
     moveCombo->setFixedWidth(40);
     moveCombo->addItems({"L", "R", "Stay", "Stop"});
     applyCompactLogicComboStyle(moveCombo, 72);
-    layout->addWidget(moveCombo);
+    layout->addWidget(moveCombo, 0, Qt::AlignVCenter);
 
     QComboBox *toStateCombo = new QComboBox();
     toStateCombo->setObjectName(QString("tostate_%1_%2").arg(row).arg(col));
-    toStateCombo->setMinimumHeight(28);
-    toStateCombo->setMaximumHeight(28);
+    toStateCombo->setMinimumHeight(24);
+    toStateCombo->setMaximumHeight(24);
     toStateCombo->setFixedWidth(36);
     for (const auto &state : states)
     {
         toStateCombo->addItem(QString::fromStdString(state));
     }
     applyCompactLogicComboStyle(toStateCombo, 64);
-    layout->addWidget(toStateCombo);
+    layout->addWidget(toStateCombo, 0, Qt::AlignVCenter);
 
     comboCache[{row, col}] = std::make_tuple(writeCombo, moveCombo, toStateCombo);
     setCellDefaults(row, col, writeCombo, moveCombo, toStateCombo);
