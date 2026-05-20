@@ -29,6 +29,8 @@ private slots:
     void openMachineInNewTab();
     void saveCurrentMachine();
     void saveCurrentMachineAs();
+    void openMachineFromDatabase();
+    void saveCurrentMachineToDatabase();
     void closeCurrentMachineTab();
     void validateCurrentMachine();
     void resetCurrentMachineToExample();

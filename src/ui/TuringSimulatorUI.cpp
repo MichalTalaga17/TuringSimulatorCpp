@@ -14,7 +14,7 @@
 #include <QStyle>
 #include <QStyleFactory>
 #include <QTabBar>
-
+#include <QInputDialog>
 #include <algorithm>
 
 TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
@@ -112,6 +112,15 @@ void TuringSimulatorUI::setupMenu()
     saveAsAction = fileMenu->addAction("Zapisz jako...");
     bindShortcut(saveAsAction, QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
     connect(saveAsAction, &QAction::triggered, this, &TuringSimulatorUI::saveCurrentMachineAs);
+
+    fileMenu->addSeparator();
+
+    QAction *openDbAction = fileMenu->addAction("Wczytaj z bazy danych...");
+    connect(openDbAction, &QAction::triggered, this, &TuringSimulatorUI::openMachineFromDatabase);
+
+
+    QAction *saveDbAction = fileMenu->addAction("Zapisz w bazie danych...");
+    connect(saveDbAction, &QAction::triggered, this, &TuringSimulatorUI::saveCurrentMachineToDatabase);
 
     fileMenu->addSeparator();
 
@@ -450,4 +459,39 @@ void TuringSimulatorUI::showAboutDialog()
         "Symulator maszyny Turinga\n\n"
         "Edytuj definicję maszyny, otwieraj wiele plików w osobnych kartach "
         "i uruchamiaj symulację bez przełączania okien.");
+}
+
+void TuringSimulatorUI::openMachineFromDatabase()
+{
+    // 1. Pobieramy listę dostępnych nazw maszyn z bazy
+    QStringList names = getMachineNamesFromDatabase();
+    if (names.isEmpty()) {
+        QMessageBox::information(this, "Baza danych", "Baza danych jest pusta. Zapisz najpierw jakąś maszynę.");
+        return;
+    }
+
+    // 2. Wyświetlamy okno wyboru
+    bool ok;
+    QString chosenName = QInputDialog::getItem(this, "Wczytaj z bazy", "Wybierz maszynę:", names, 0, false, &ok);
+
+    if (ok && !chosenName.isEmpty()) {
+        // 3. Tworzymy NOWĄ zakładkę (zamiast używać currentMachineTab())
+        MachineEditorTab *tab = new MachineEditorTab(chosenName, false, machineTabs);
+
+        // 4. Delegujemy wczytanie do nowej zakładki (używając wersji z parametrem)
+        if (!tab->loadFromDatabase(chosenName)) {
+            tab->deleteLater(); // Jeśli wczytanie się nie udało, czyścimy
+            return;
+        }
+
+        // 5. Dodajemy nową zakładkę do interfejsu
+        addMachineTab(tab);
+    }
+}
+
+void TuringSimulatorUI::saveCurrentMachineToDatabase()
+{
+    if (MachineEditorTab *tab = currentMachineTab()) {
+        tab->saveToDatabase();
+    }
 }

@@ -5,6 +5,7 @@
 #include <set>
 #include <tuple>
 #include <string>
+#include <QStringList>
 
 // Deklaracja zapowiadająca, żeby nie includować całego pliku nagłówkowego
 class TuringMachine;
@@ -28,5 +29,10 @@ bool saveInstructionsToFile(const TuringMachine& machine, const QString& filePat
 
 // Funkcja do czytania
 MachineData loadInstructionsFromFile(const QString& filePath);
+
+// --- BAZA DANYCH (SQLite) ---
+bool saveMachineToDatabase(const TuringMachine& machine, const QString& machineName, const QString& initialState, char blankSymbol, int numStates, const std::set<char>& alphabet);
+MachineData loadMachineFromDatabase(const QString& machineName);
+QStringList getMachineNamesFromDatabase();
 
 #endif // STORAGE_H

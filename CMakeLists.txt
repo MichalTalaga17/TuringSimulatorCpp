@@ -22,6 +22,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     Core
     Gui
     Widgets
+    Sql
 )
 
 # Core Turing Machine library (non-GUI)
@@ -57,6 +58,7 @@ target_link_libraries(TuringSimulatorCpp PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
+    Qt6::Sql
 )
 
 # Copy Qt runtime DLLs to build directory for Windows
