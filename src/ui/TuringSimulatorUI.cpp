@@ -8,11 +8,15 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QResizeEvent>
 #include <QTabBar>
+
+#include <algorithm>
 
 TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
     : QMainWindow(parent),
       machineTabs(nullptr),
+      newTabButton(nullptr),
       saveAction(nullptr),
       saveAsAction(nullptr),
       closeTabAction(nullptr),
@@ -32,7 +36,7 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
 
     setupMenu();
     setupUI();
-    createNewMachineTab();
+    createExampleMachineTab();
     updateMenuState();
 }
 
@@ -47,7 +51,19 @@ void TuringSimulatorUI::setupUI()
     machineTabs->tabBar()->setExpanding(false);
 
     connect(machineTabs, &QTabWidget::currentChanged, this, [this](int)
-            { updateMenuState(); });
+            {
+        updateMenuState();
+        updateNewTabButtonPosition(); });
+    connect(machineTabs->tabBar(), &QTabBar::tabMoved, this, [this](int, int)
+            { updateNewTabButtonPosition(); });
+
+    newTabButton = new QPushButton("+", machineTabs);
+    newTabButton->setObjectName("tabAddButton");
+    newTabButton->setCursor(Qt::PointingHandCursor);
+    newTabButton->setFocusPolicy(Qt::NoFocus);
+    newTabButton->setToolTip("Nowa maszyna");
+    connect(newTabButton, &QPushButton::clicked, this, &TuringSimulatorUI::showNewTabMenu);
+    machineTabs->setCornerWidget(newTabButton, Qt::TopRightCorner);
 
     setCentralWidget(machineTabs);
 }
@@ -64,9 +80,12 @@ void TuringSimulatorUI::setupMenu()
     };
 
     QMenu *fileMenu = menuBar()->addMenu("Plik");
-    QAction *newTabAction = fileMenu->addAction("Nowa karta");
+    QAction *newTabAction = fileMenu->addAction("Zacznij od zera");
     bindShortcut(newTabAction, QKeySequence(QKeySequence::New));
     connect(newTabAction, &QAction::triggered, this, &TuringSimulatorUI::createNewMachineTab);
+
+    QAction *exampleTabAction = fileMenu->addAction("Zacznij od przykładu");
+    connect(exampleTabAction, &QAction::triggered, this, &TuringSimulatorUI::createExampleMachineTab);
 
     QAction *openAction = fileMenu->addAction("Otwórz w nowej karcie...");
     bindShortcut(openAction, QKeySequence(QKeySequence::Open));
@@ -139,10 +158,48 @@ MachineEditorTab *TuringSimulatorUI::currentMachineTab() const
     return qobject_cast<MachineEditorTab *>(machineTabs->currentWidget());
 }
 
+void TuringSimulatorUI::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    updateNewTabButtonPosition();
+}
+
+void TuringSimulatorUI::updateNewTabButtonPosition()
+{
+    if (!newTabButton)
+    {
+        return;
+    }
+
+    newTabButton->raise();
+    newTabButton->show();
+}
+
+void TuringSimulatorUI::showNewTabMenu()
+{
+    if (!newTabButton)
+    {
+        return;
+    }
+
+    QMenu menu(this);
+    QAction *blankAction = menu.addAction("Zacznij od zera");
+    QAction *exampleAction = menu.addAction("Zacznij od przykładu");
+    QAction *aiAction = menu.addAction("Zacznij z AI");
+    aiAction->setEnabled(false);
+
+    connect(blankAction, &QAction::triggered, this, &TuringSimulatorUI::createNewMachineTab);
+    connect(exampleAction, &QAction::triggered, this, &TuringSimulatorUI::createExampleMachineTab);
+
+    const QPoint menuPos = newTabButton->mapToGlobal(QPoint(0, newTabButton->height()));
+    menu.exec(menuPos);
+}
+
 void TuringSimulatorUI::addMachineTab(MachineEditorTab *tab)
 {
     const int index = machineTabs->addTab(tab, tab->tabTitle());
     machineTabs->setCurrentIndex(index);
+    updateNewTabButtonPosition();
 
     QWidget *closeButtonWrapper = new QWidget(machineTabs);
     QHBoxLayout *closeButtonLayout = new QHBoxLayout(closeButtonWrapper);
@@ -173,14 +230,22 @@ void TuringSimulatorUI::addMachineTab(MachineEditorTab *tab)
         {
             machineTabs->setTabText(tabIndex, title);
         }
-        updateMenuState(); });
+        updateMenuState();
+        updateNewTabButtonPosition(); });
 
     updateMenuState();
+    updateNewTabButtonPosition();
 }
 
 void TuringSimulatorUI::createNewMachineTab()
 {
-    MachineEditorTab *tab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), machineTabs);
+    MachineEditorTab *tab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), false, machineTabs);
+    addMachineTab(tab);
+}
+
+void TuringSimulatorUI::createExampleMachineTab()
+{
+    MachineEditorTab *tab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), true, machineTabs);
     addMachineTab(tab);
 }
 
@@ -192,7 +257,7 @@ void TuringSimulatorUI::openMachineInNewTab()
         return;
     }
 
-    MachineEditorTab *tab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), machineTabs);
+    MachineEditorTab *tab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), false, machineTabs);
     if (!tab->loadFromFile(filePath))
     {
         tab->deleteLater();
@@ -220,22 +285,38 @@ void TuringSimulatorUI::saveCurrentMachineAs()
 
 void TuringSimulatorUI::closeCurrentMachineTab()
 {
-    const int index = machineTabs->currentIndex();
+    MachineEditorTab *currentTab = currentMachineTab();
+    if (!currentTab)
+    {
+        return;
+    }
+
+    const int index = machineTabs->indexOf(currentTab);
     if (index < 0)
     {
         return;
     }
 
-    QWidget *tab = machineTabs->widget(index);
     machineTabs->removeTab(index);
-    tab->deleteLater();
+    currentTab->deleteLater();
 
-    if (machineTabs->count() == 0)
+    bool hasMachineTab = false;
+    for (int tabIndex = 0; tabIndex < machineTabs->count(); ++tabIndex)
     {
-        createNewMachineTab();
+        if (qobject_cast<MachineEditorTab *>(machineTabs->widget(tabIndex)))
+        {
+            hasMachineTab = true;
+            break;
+        }
+    }
+
+    if (!hasMachineTab)
+    {
+        createExampleMachineTab();
     }
 
     updateMenuState();
+    updateNewTabButtonPosition();
 }
 
 void TuringSimulatorUI::validateCurrentMachine()

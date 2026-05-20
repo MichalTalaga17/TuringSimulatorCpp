@@ -111,8 +111,8 @@ namespace
 
 } // namespace
 
-MachineEditorTab::MachineEditorTab(const QString &untitledTitle, QWidget *parent)
-    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle)
+MachineEditorTab::MachineEditorTab(const QString &untitledTitle, bool startWithExample, QWidget *parent)
+    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample)
 {
     setupUI();
     applyModernStyle();
@@ -286,7 +286,14 @@ QWidget *MachineEditorTab::setupBuilderTab()
     transitionsTable->blockSignals(true);
     onNumStatesChanged(2);
     transitionsTable->blockSignals(false);
-    applyDefaultExample();
+    if (startWithExample)
+    {
+        applyDefaultExample();
+    }
+    else
+    {
+        applyBlankMachine();
+    }
 
     return builderWidget;
 }
@@ -558,12 +565,33 @@ void MachineEditorTab::applyModernStyle()
             font-weight: 700;
         }
         QPushButton#tabCloseButton:hover {
-            background-color: #cfe0ff;
-            border-color: #9dbaf0;
             color: #174ea6;
         }
         QPushButton#tabCloseButton:pressed {
-            background-color: #bfd4fb;
+            color: #0f3f8f;
+        }
+        QPushButton#tabAddButton {
+            background-color: transparent;
+            color: #174ea6;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            min-width: 24px;
+            max-width: 24px;
+            min-height: 24px;
+            max-height: 24px;
+            padding: 0;
+            margin: 5px 10px 5px 4px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        QPushButton#tabAddButton:hover {
+            color: #0f3f8f;
+            background-color: #eaf2ff;
+            border-color: #b8ccf2;
+        }
+        QPushButton#tabAddButton:pressed {
+            color: #0f3f8f;
+            background-color: #dfeaff;
             border-color: #3f74d8;
         }
         QFrame#tabContentFade {
