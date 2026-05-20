@@ -25,7 +25,7 @@ class MachineEditorTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit MachineEditorTab(const QString &untitledTitle, QWidget *parent = nullptr);
+    explicit MachineEditorTab(const QString &untitledTitle, bool startWithExample = true, QWidget *parent = nullptr);
     ~MachineEditorTab() = default;
 
     /// Zwraca tytuł prezentowany na karcie.
@@ -86,6 +86,8 @@ private:
     void setupTapeCells();
     /// Wypełnia formularz i tabelę przykładową maszyną startową.
     void applyDefaultExample();
+    /// Wypełnia formularz minimalną pustą konfiguracją do pracy od zera.
+    void applyBlankMachine();
     /// Przebudowuje maszynę z edytora i wczytuje aktualną zawartość pola taśmy.
     bool rebuildMachineFromEditor();
     /// Buduje maszynę z aktualnej konfiguracji formularza i opcjonalnie pokazuje komunikat sukcesu.
@@ -150,4 +152,5 @@ private:
 
     QString untitledTitle;
     QString currentFilePath;
+    bool startWithExample;
 };

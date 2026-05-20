@@ -683,3 +683,18 @@ void MachineEditorTab::applyDefaultExample()
         statusLabel->setText("Ready");
     }
 }
+
+void MachineEditorTab::applyBlankMachine()
+{
+    numStatesSpinBox->setValue(2);
+    alphabetInputField->setText("01");
+    blankSymbolField->setText("_");
+    tapeInputField->clear();
+
+    populateTransitionMapWithDefaults();
+
+    if (rebuildMachineFromEditor())
+    {
+        statusLabel->setText("Ready");
+    }
+}
