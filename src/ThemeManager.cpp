@@ -221,6 +221,7 @@ QString ThemeManager::getStylesheet(Theme theme)
             padding: 4px 8px;
             background-color: rgba(32, 32, 32, 0.85);
             color: #e8e8e8;
+            combobox-popup: 0;
         }
         QComboBox:focus {
             border: 2px solid #7ec4ff;
@@ -236,6 +237,12 @@ QString ThemeManager::getStylesheet(Theme theme)
         QComboBox::down-arrow {
             image: url(:/arrow_down.png);
         }
+        QComboBox[isCompact="true"] {
+            padding: 1px 4px;
+        }
+        QComboBox[isCompact="true"]::drop-down {
+            width: 0px;
+        }
         QComboBox QAbstractItemView {
             border: 1px solid #2a2a2a;
             border-radius: 6px;
@@ -244,6 +251,10 @@ QString ThemeManager::getStylesheet(Theme theme)
             selection-background-color: rgba(100, 180, 255, 0.4);
             selection-color: #7ec4ff;
             outline: 0;
+        }
+        QComboBox QAbstractItemView::item {
+            min-height: 24px;
+            padding: 4px 8px;
         }
         QPushButton {
             background-color: rgba(100, 180, 255, 0.35);
@@ -301,6 +312,15 @@ QString ThemeManager::getStylesheet(Theme theme)
             gridline-color: #252525;
             outline: 0;
             selection-background-color: transparent;
+        }
+        QFrame[isTransitionCell="true"] {
+            background-color: transparent;
+            border: 1px solid #333333;
+            border-radius: 6px;
+        }
+        QFrame[isTransitionCell="true"][isHighlight="true"] {
+            background-color: rgba(63, 116, 216, 0.3);
+            border: 1px solid #7ec4ff;
         }
         QTableWidget#transitionsTable::viewport {
             background-color: rgba(32, 32, 32, 0.95);
@@ -584,6 +604,7 @@ QString ThemeManager::getStylesheet(Theme theme)
             padding: 4px 8px;
             background-color: rgba(255, 255, 255, 0.9);
             color: #202020;
+            combobox-popup: 0;
         }
         QComboBox:focus {
             border: 2px solid #0078d4;
@@ -599,6 +620,12 @@ QString ThemeManager::getStylesheet(Theme theme)
         QComboBox::down-arrow {
             image: url(:/arrow_down.png);
         }
+        QComboBox[isCompact="true"] {
+            padding: 1px 4px;
+        }
+        QComboBox[isCompact="true"]::drop-down {
+            width: 0px;
+        }
         QComboBox QAbstractItemView {
             border: 1px solid #d0d0d0;
             border-radius: 6px;
@@ -607,6 +634,10 @@ QString ThemeManager::getStylesheet(Theme theme)
             selection-background-color: rgba(0, 120, 212, 0.2);
             selection-color: #005a9e;
             outline: 0;
+        }
+        QComboBox QAbstractItemView::item {
+            min-height: 24px;
+            padding: 4px 8px;
         }
         QPushButton {
             background-color: #0078d4;
@@ -661,6 +692,15 @@ QString ThemeManager::getStylesheet(Theme theme)
             gridline-color: #ececec;
             outline: 0;
             selection-background-color: transparent;
+        }
+        QFrame[isTransitionCell="true"] {
+            background-color: transparent;
+            border: 1px solid #cfcfcf;
+            border-radius: 6px;
+        }
+        QFrame[isTransitionCell="true"][isHighlight="true"] {
+            background-color: #eaf2ff;
+            border: 1px solid #3f74d8;
         }
         QTableWidget#transitionsTable::viewport {
             background-color: rgba(255, 255, 255, 0.95);

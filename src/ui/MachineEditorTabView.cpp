@@ -15,72 +15,128 @@
 #include <QStyleFactory>
 #include <QTableWidget>
 #include <QVBoxLayout>
+#include <QStyledItemDelegate>
 
 #include <tuple>
 
 namespace
 {
-
-    const QString &compactLogicComboStyle()
+    class TransitionEditor : public QWidget
     {
-        static const QString style = R"(
-        QComboBox {
-            border: none;
-            border-radius: 0;
-            padding: 0 4px 2px 4px;
-            background-color: transparent;
-            color: #202020;
-            font-size: 11px;
-        }
-        QComboBox:hover {
-            background-color: #f7fbff;
-        }
-        QComboBox:focus {
-            border: none;
-            background-color: #ffffff;
-        }
-        QComboBox::drop-down {
-            subcontrol-origin: padding;
-            subcontrol-position: top right;
-            width: 0;
-            border: none;
-            background: transparent;
-        }
-        QComboBox::down-arrow {
-            image: none;
-            width: 0;
-            height: 0;
-        }
-        QComboBox QAbstractItemView {
-            border: 1px solid #d0d0d0;
-            border-radius: 6px;
-            background-color: #ffffff;
-            color: #202020;
-            outline: 0;
-            selection-background-color: #eaf4ff;
-            selection-color: #005a9e;
-        }
-        QComboBox QAbstractItemView::item {
-            min-height: 24px;
-            padding: 4px 8px;
-        }
-        QComboBox QAbstractItemView::item:hover,
-        QComboBox QAbstractItemView::item:selected {
-            background-color: #eaf4ff;
-            color: #005a9e;
-        }
-    )";
-        return style;
-    }
+        Q_OBJECT
+    public:
+        QComboBox *writeCombo;
+        QComboBox *moveCombo;
+        QComboBox *stateCombo;
 
-    void applyCompactLogicComboStyle(QComboBox *combo, int popupMinimumWidth = 64)
+        TransitionEditor(QWidget *parent = nullptr) : QWidget(parent)
+        {
+            QHBoxLayout *l = new QHBoxLayout(this);
+            l->setContentsMargins(0, 0, 0, 0);
+            l->setSpacing(2);
+
+            writeCombo = new QComboBox(this);
+            writeCombo->setFixedHeight(26);
+            writeCombo->setProperty("isCompact", true);
+            writeCombo->setMaxVisibleItems(8);
+            auto wv = new QListView(this);
+            wv->setMinimumWidth(50);
+            writeCombo->setView(wv);
+
+            moveCombo = new QComboBox(this);
+            moveCombo->setFixedHeight(26);
+            moveCombo->setProperty("isCompact", true);
+            moveCombo->setMaxVisibleItems(8);
+            auto mv = new QListView(this);
+            mv->setMinimumWidth(65);
+            moveCombo->setView(mv);
+
+            stateCombo = new QComboBox(this);
+            stateCombo->setFixedHeight(26);
+            stateCombo->setProperty("isCompact", true);
+            stateCombo->setMaxVisibleItems(8);
+            auto sv = new QListView(this);
+            sv->setMinimumWidth(70);
+            stateCombo->setView(sv);
+
+            l->addWidget(writeCombo);
+            l->addWidget(moveCombo);
+            l->addWidget(stateCombo);
+            setFocusPolicy(Qt::StrongFocus);
+            setFocusProxy(writeCombo);
+            setAutoFillBackground(true);
+        }
+    };
+
+    class TransitionDelegate : public QStyledItemDelegate
     {
-        combo->setStyleSheet(compactLogicComboStyle());
-        // Use a simple default view instead of creating a custom one
-        // The stylesheet handles the appearance, so we don't need a custom QListView
-        // This significantly improves performance on tab creation
-    }
+    private:
+        MachineEditorTab *m_tab;
 
+    public:
+        TransitionDelegate(MachineEditorTab *tab, QObject *parent = nullptr) : QStyledItemDelegate(parent), m_tab(tab) {}
+
+        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override
+        {
+            TransitionEditor *editor = new TransitionEditor(parent);
+            
+            // Populate write combos
+            for (char c : m_tab->getOrderedAlphabet()) {
+                editor->writeCombo->addItem(QString(c));
+            }
+            
+            // Populate move combos
+            editor->moveCombo->addItems({"L", "R", "Stay", "Stop"});
+            
+            // Populate state combos
+            for (const auto &s : m_tab->getStatesList()) {
+                editor->stateCombo->addItem(QString::fromStdString(s));
+            }
+
+            auto commitChanges = [this, editor]() {
+                auto self = const_cast<TransitionDelegate*>(this);
+                emit self->commitData(editor);
+            };
+
+            connect(editor->writeCombo, &QComboBox::currentTextChanged, editor, commitChanges);
+            connect(editor->moveCombo, &QComboBox::currentTextChanged, editor, commitChanges);
+            connect(editor->stateCombo, &QComboBox::currentTextChanged, editor, commitChanges);
+
+            return editor;
+        }
+
+        void setEditorData(QWidget *widget, const QModelIndex &index) const override
+        {
+            TransitionEditor *editor = qobject_cast<TransitionEditor *>(widget);
+            if (!editor) return;
+
+            QString text = index.data(Qt::DisplayRole).toString();
+            QStringList parts = text.split(", ");
+            if (parts.size() == 3) {
+                editor->writeCombo->setCurrentText(parts[0]);
+                editor->moveCombo->setCurrentText(parts[1]);
+                editor->stateCombo->setCurrentText(parts[2]);
+            }
+        }
+
+        void setModelData(QWidget *widget, QAbstractItemModel *model, const QModelIndex &index) const override
+        {
+            TransitionEditor *editor = qobject_cast<TransitionEditor *>(widget);
+            if (!editor) return;
+
+            QString text = QString("%1, %2, %3")
+                               .arg(editor->writeCombo->currentText())
+                               .arg(editor->moveCombo->currentText())
+                               .arg(editor->stateCombo->currentText());
+                               
+            model->setData(index, text, Qt::DisplayRole);
+        }
+
+        void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const override
+        {
+            editor->setGeometry(option.rect);
+        }
+    };
 } // namespace
 
 MachineEditorTab::MachineEditorTab(const QString &untitledTitle, bool startWithExample, QWidget *parent)
@@ -222,11 +278,9 @@ QWidget *MachineEditorTab::setupBuilderTab()
     transitionsTable->setShowGrid(false);
     transitionsTable->setAlternatingRowColors(true);
     transitionsTable->setWordWrap(false);
-    transitionsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    transitionsTable->setFocusPolicy(Qt::NoFocus);
-    transitionsTable->setSelectionMode(QAbstractItemView::NoSelection);
-    transitionsTable->setMinimumHeight(300);
-    transitionsTable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    transitionsTable->setEditTriggers(QAbstractItemView::AllEditTriggers);
+    transitionsTable->setFocusPolicy(Qt::StrongFocus);
+    transitionsTable->setSelectionMode(QAbstractItemView::SingleSelection);
     transitionsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     transitionsTable->horizontalHeader()->setSectionsMovable(false);
     transitionsTable->horizontalHeader()->setDefaultSectionSize(132);
@@ -238,6 +292,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     transitionsTable->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
     transitionsTable->verticalHeader()->setHighlightSections(false);
     transitionsTable->setRowHeight(0, 45);
+    transitionsTable->setItemDelegate(new TransitionDelegate(this, transitionsTable));
     logicEditorLayout->addWidget(transitionsTable, 1);
 
     builderLayout->addWidget(logicEditorGroup, 1);
@@ -252,6 +307,8 @@ QWidget *MachineEditorTab::setupBuilderTab()
         if (rebuildMachineFromEditor() && statusLabel) {
             statusLabel->setText("Rebuilt");
         } });
+    
+    connect(transitionsTable, &QTableWidget::itemChanged, this, &MachineEditorTab::onTableItemChanged);
 
     // Initialize with safe blocking
     transitionsTable->blockSignals(true);
@@ -749,61 +806,4 @@ void MachineEditorTab::applyModernStyle()
     qApp->setStyleSheet(styleSheet);
 }
 
-QWidget *MachineEditorTab::createTransitionCell(int row, int col)
-{
-    QWidget *cellWidget = new QWidget();
-    cellWidget->setObjectName(QString("transitionCell_%1_%2").arg(row).arg(col));
-    cellWidget->setStyleSheet(
-        QString("#%1 {"
-        "background-color: transparent;"
-        "border: 1px solid #cfcfcf;"
-        "border-radius: 6px;"
-        "}").arg(cellWidget->objectName()));
-
-    QHBoxLayout *layout = new QHBoxLayout(cellWidget);
-    layout->setContentsMargins(6, 4, 6, 4);
-    layout->setSpacing(0);
-
-    QComboBox *writeCombo = new QComboBox();
-    writeCombo->setObjectName(QString("write_%1_%2").arg(row).arg(col));
-    writeCombo->setMinimumHeight(24);
-    writeCombo->setMaximumHeight(24);
-    writeCombo->setFixedWidth(36);
-    std::vector<char> orderedAlpha = getOrderedAlphabet();
-    for (char c : orderedAlpha)
-    {
-        writeCombo->addItem(QString(c));
-    }
-    applyCompactLogicComboStyle(writeCombo, 56);
-    layout->addWidget(writeCombo, 0, Qt::AlignVCenter);
-
-    QComboBox *moveCombo = new QComboBox();
-    moveCombo->setObjectName(QString("move_%1_%2").arg(row).arg(col));
-    moveCombo->setMinimumHeight(24);
-    moveCombo->setMaximumHeight(24);
-    moveCombo->setFixedWidth(40);
-    moveCombo->addItems({"L", "R", "Stay", "Stop"});
-    applyCompactLogicComboStyle(moveCombo, 72);
-    layout->addWidget(moveCombo, 0, Qt::AlignVCenter);
-
-    QComboBox *toStateCombo = new QComboBox();
-    toStateCombo->setObjectName(QString("tostate_%1_%2").arg(row).arg(col));
-    toStateCombo->setMinimumHeight(24);
-    toStateCombo->setMaximumHeight(24);
-    toStateCombo->setFixedWidth(36);
-    for (const auto &state : states)
-    {
-        toStateCombo->addItem(QString::fromStdString(state));
-    }
-    applyCompactLogicComboStyle(toStateCombo, 64);
-    layout->addWidget(toStateCombo, 0, Qt::AlignVCenter);
-
-    comboCache[{row, col}] = std::make_tuple(writeCombo, moveCombo, toStateCombo);
-    setCellDefaults(row, col, writeCombo, moveCombo, toStateCombo);
-
-    connect(writeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MachineEditorTab::onCellComboChanged);
-    connect(moveCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MachineEditorTab::onCellComboChanged);
-    connect(toStateCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MachineEditorTab::onCellComboChanged);
-
-    return cellWidget;
-}
+#include "MachineEditorTabView.moc"

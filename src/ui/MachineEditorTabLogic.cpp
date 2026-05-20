@@ -66,77 +66,8 @@ void MachineEditorTab::onNumStatesChanged(int value)
     }
     initialStateCombo->blockSignals(false);
 
-    // Update only the toState combos if table already exists with same column count
-    if (transitionsTable->rowCount() > 0 && transitionsTable->columnCount() > 0)
-    {
-        transitionsTable->blockSignals(true);
-
-        int oldRowCount = transitionsTable->rowCount();
-        int newRowCount = static_cast<int>(states.size());
-
-        // Set row count FIRST
-        transitionsTable->setRowCount(newRowCount);
-
-        // THEN update vertical headers (state names) after row count is set
-        QStringList stateLabels;
-        for (const auto &state : states)
-        {
-            stateLabels << QString::fromStdString(state);
-        }
-        transitionsTable->setVerticalHeaderLabels(stateLabels);
-
-        // Update ALL existing rows with new state list (this is key for fixing the dropdown issue)
-        for (int row = 0; row < oldRowCount && row < newRowCount; ++row)
-        {
-            transitionsTable->setRowHeight(row, 38);
-            for (int col = 0; col < transitionsTable->columnCount(); ++col)
-            {
-                QWidget *cellWidget = transitionsTable->cellWidget(row, col);
-                if (!cellWidget)
-                    continue;
-
-                QComboBox *toStateCombo = cellWidget->findChild<QComboBox *>(QString("tostate_%1_%2").arg(row).arg(col));
-                if (toStateCombo)
-                {
-                    toStateCombo->blockSignals(true);
-                    int currentIdx = toStateCombo->currentIndex();
-                    toStateCombo->clear();
-                    for (const auto &state : states)
-                    {
-                        toStateCombo->addItem(QString::fromStdString(state));
-                    }
-                    if (currentIdx >= 0 && currentIdx < toStateCombo->count())
-                    {
-                        toStateCombo->setCurrentIndex(currentIdx);
-                    }
-                    toStateCombo->blockSignals(false);
-                }
-            }
-        }
-
-        // If rows were added, create cells for new rows
-        if (newRowCount > oldRowCount)
-        {
-            for (int row = oldRowCount; row < newRowCount; ++row)
-            {
-                transitionsTable->setRowHeight(row, 38);
-                for (int col = 0; col < transitionsTable->columnCount(); ++col)
-                {
-                    transitionsTable->setCellWidget(row, col, createTransitionCell(row, col));
-                }
-            }
-        }
-
-        transitionsTable->blockSignals(false);
-
-        // Repopulate transition map with updated defaults
-        populateTransitionMapWithDefaults();
-    }
-    else
-    {
-        // First time: rebuild the entire table
-        rebuildTransitionsTable();
-    }
+    // Completely rebuild table because states logic needs new items
+    rebuildTransitionsTable();
 
     const bool rebuilt = rebuildMachineFromEditor();
     if (statusLabel)
@@ -204,12 +135,8 @@ void MachineEditorTab::onBlankSymbolChanged()
     if (transitionsTable->rowCount() > 0 && transitionsTable->columnCount() > 0)
     {
         // The blank symbol should always be at column 0 due to getOrderedAlphabet()
-        // Just update the header and write combos
+        // Just update the header
         transitionsTable->horizontalHeaderItem(0)->setText(QString(newBlank));
-        updateWriteComboForColumn(0, newBlank);
-
-        // Update all write combos throughout the table that have the old blank symbol selected
-        updateAllWriteCombosForBlankSymbolChange(oldBlank, newBlank);
     }
 
     // Update the alphabet set
@@ -225,91 +152,33 @@ void MachineEditorTab::onBlankSymbolChanged()
     }
 }
 
-void MachineEditorTab::onCellComboChanged()
+void MachineEditorTab::onTableItemChanged(QTableWidgetItem *item)
 {
-    // Sender is a QComboBox inside a cell
-    QComboBox *senderCombo = qobject_cast<QComboBox *>(sender());
-    if (!senderCombo)
-        return;
+    if (!item) return;
 
-    // Use the object name to directly determine row/col instead of searching
-    QString objName = senderCombo->objectName();
-    int row = -1, col = -1;
+    int row = item->row();
+    int col = item->column();
 
-    // Parse name like "write_0_1" or "move_0_1" or "tostate_0_1"
-    QStringList parts = objName.split('_');
-    if (parts.size() >= 3)
+    if (row < 0 || col < 0 || row >= static_cast<int>(states.size())) return;
+
+    QString text = item->text();
+    QStringList parts = text.split(", ");
+
+    std::string state = states[row];
+    std::vector<char> orderedAlpha = getOrderedAlphabet();
+    
+    if (col >= static_cast<int>(orderedAlpha.size())) return;
+    char symbol = orderedAlpha[col];
+
+    if (parts.size() == 3 && !parts[0].isEmpty() && !parts[1].isEmpty() && !parts[2].isEmpty())
     {
-        row = parts[1].toInt();
-        col = parts[2].toInt();
-    }
-
-    if (row < 0 || col < 0 || row >= transitionsTable->rowCount() || col >= transitionsTable->columnCount())
-    {
-        return;
-    }
-
-    QWidget *cellWidget = transitionsTable->cellWidget(row, col);
-    if (!cellWidget)
-        return;
-
-    // Get the 3 combos from cache or find them
-    auto cacheKey = std::make_pair(row, col);
-    QComboBox *writeCombo = nullptr, *moveCombo = nullptr, *toStateCombo = nullptr;
-
-    auto it = comboCache.find(cacheKey);
-    if (it != comboCache.end())
-    {
-        std::tie(writeCombo, moveCombo, toStateCombo) = it->second;
+        QString writeStr = parts[0].trimmed();
+        char writeC = writeStr.isEmpty() ? '_' : writeStr[0].toLatin1();
+        transitionMap[{state, symbol}] = {writeC, parts[1].trimmed().toStdString(), parts[2].trimmed().toStdString()};
     }
     else
     {
-        writeCombo = cellWidget->findChild<QComboBox *>(QString("write_%1_%2").arg(row).arg(col));
-        moveCombo = cellWidget->findChild<QComboBox *>(QString("move_%1_%2").arg(row).arg(col));
-        toStateCombo = cellWidget->findChild<QComboBox *>(QString("tostate_%1_%2").arg(row).arg(col));
-
-        if (writeCombo && moveCombo && toStateCombo)
-        {
-            comboCache[cacheKey] = std::make_tuple(writeCombo, moveCombo, toStateCombo);
-        }
-    }
-
-    if (!writeCombo || !moveCombo || !toStateCombo)
-        return;
-
-    // Build transition string
-    QString write = writeCombo->currentText();
-    QString move = moveCombo->currentText();
-    QString toState = toStateCombo->currentText();
-
-    if (!write.isEmpty() && !move.isEmpty() && !toState.isEmpty())
-    {
-        // Get the symbol for this column by index using ordered alphabet
-        std::string state = states[row];
-        char symbol = '0';
-        std::vector<char> orderedAlpha = getOrderedAlphabet();
-        if (col < static_cast<int>(orderedAlpha.size()))
-        {
-            symbol = orderedAlpha[col];
-        }
-
-        // Store in map
-        transitionMap[{state, symbol}] = {write[0].toLatin1(), move.toStdString(), toState.toStdString()};
-    }
-    else
-    {
-        // Remove from map if incomplete
-        if (row < static_cast<int>(states.size()) && col < static_cast<int>(alphabet.size()))
-        {
-            std::string state = states[row];
-            char symbol = '0';
-            std::vector<char> orderedAlpha = getOrderedAlphabet();
-            if (col < static_cast<int>(orderedAlpha.size()))
-            {
-                symbol = orderedAlpha[col];
-            }
-            transitionMap.erase({state, symbol});
-        }
+        transitionMap.erase({state, symbol});
     }
 
     if (rebuildMachineFromEditor() && statusLabel)
@@ -592,32 +461,21 @@ void MachineEditorTab::setTransitionCellHighlighted(int row, int col, bool highl
         return;
     }
 
-    QWidget *cellWidget = transitionsTable->cellWidget(row, col);
-    if (!cellWidget)
+    QTableWidgetItem *item = transitionsTable->item(row, col);
+    if (!item)
     {
         return;
     }
 
-    const QString selector = QString("#%1").arg(cellWidget->objectName());
     if (highlighted)
     {
-        cellWidget->setStyleSheet(
-            selector +
-            " {"
-            "background-color: #eaf2ff;"
-            "border: 1px solid #3f74d8;"
-            "border-radius: 6px;"
-            "}");
+        // Pomaluj delikatnie tło na niebiesko aby wskazać wykonywany krok 
+        // a przy zgaszeniu cofnij by zajął się tym menedżer motywu
+        item->setBackground(QColor(63, 116, 216, 80));
     }
     else
     {
-        cellWidget->setStyleSheet(
-            selector +
-            " {"
-            "background-color: transparent;"
-            "border: 1px solid #cfcfcf;"
-            "border-radius: 6px;"
-            "}");
+        item->setBackground(QBrush());
     }
 }
 
@@ -801,19 +659,11 @@ void MachineEditorTab::applyDefaultExample()
             return;
         }
 
-        const auto cacheIt = comboCache.find({row, column});
-        if (cacheIt == comboCache.end())
+        QTableWidgetItem *item = transitionsTable->item(row, column);
+        if (item)
         {
-            return;
+            item->setText(QString("%1, %2, %3").arg(writeSymbol).arg(moveText).arg(nextStateText));
         }
-
-        QComboBox *writeCombo = std::get<0>(cacheIt->second);
-        QComboBox *moveCombo = std::get<1>(cacheIt->second);
-        QComboBox *toStateCombo = std::get<2>(cacheIt->second);
-
-        writeCombo->setCurrentText(QString(writeSymbol));
-        moveCombo->setCurrentText(moveText);
-        toStateCombo->setCurrentText(nextStateText);
     };
 
     setTransitionCell(zeroColumn, '1', "R", "q0");

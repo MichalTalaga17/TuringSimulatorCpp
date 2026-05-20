@@ -63,7 +63,7 @@ private slots:
     void onNumStatesChanged(int value);
     void onAlphabetChanged();
     void onBlankSymbolChanged();
-    void onCellComboChanged();
+    void onTableItemChanged(QTableWidgetItem *item);
     void onTapeInputChanged();
 
     void onSpeedChanged(int value);
@@ -80,7 +80,7 @@ private:
     void applyModernStyle();
     /// Odświeża wszystkie elementy prezentujące bieżący stan maszyny.
     void updateDisplay();
-    /// Podświetla komórkę tabeli przejść odpowiadającą aktualnie wykonywanej instrukcji.
+    /// Podświetla komórkę tabeli przejść odpowiadająca aktualnie wykonywanej instrukcji.
     void updateActiveTransitionHighlight();
     /// Czyści podświetlenie komórki przejścia.
     void clearActiveTransitionHighlight();
@@ -108,22 +108,10 @@ private:
     bool rebuildMachineFromEditor();
     /// Buduje maszynę z aktualnej konfiguracji formularza i opcjonalnie pokazuje komunikat sukcesu.
     bool buildMachineFromCurrentConfiguration(bool showSuccessDialog);
-     /// Tworzy pojedynczą komórkę tabeli przejść z kontrolkami zapisu, ruchu i stanu docelowego.
-    QWidget *createTransitionCell(int row, int col);
     /// Przebudowuje tabelę przejść po zmianie liczby stanów lub alfabetu.
     void rebuildTransitionsTable();
     /// Zmienia symbol w kolumnie bez przebudowania całej tabeli (dla zmiany symbolu pustego).
     void changeColumnSymbol(int col, char oldSymbol, char newSymbol);
-    /// Aktualizuje wszystkie dropdowny write w danej kolumnie.
-    void updateWriteComboForColumn(int col, char newSymbol);
-    /// Zwraca wektor alfabetu z symbolem pustym zawsze na pierwszej pozycji.
-    std::vector<char> getOrderedAlphabet() const;
-    /// Aktualizuje wszystkie write comboboxy w całej tabeli które mają stary symbol pustego na nowy.
-    void updateAllWriteCombosForBlankSymbolChange(char oldBlank, char newBlank);
-    /// Czyści pomocniczą pamięć podręczną wskaźników do kontrolek tabeli.
-    void clearTableCache();
-    /// Ustawia domyślne wartości dla pojedynczej komórki tabeli przejść.
-    void setCellDefaults(int row, int col, QComboBox *writeCombo, QComboBox *moveCombo, QComboBox *toStateCombo);
     /// Synchronizuje mapę przejść z aktualną zawartością tabeli.
     void populateTransitionMapWithDefaults();
     /// Zapisuje aktualną definicję maszyny do wskazanej ścieżki.
@@ -173,12 +161,12 @@ private:
     /// Bufor etykiet pojedynczych komórek taśmy używanych przy odświeżaniu widoku.
     std::vector<QLabel *> tapeCells;
 
-    // Cache for combo boxes to speed up lookup
-    std::map<std::pair<int, int>, std::tuple<QComboBox *, QComboBox *, QComboBox *>> comboCache;
-
     QString untitledTitle;
     QString currentFilePath;
     bool startWithExample;
     int highlightedTransitionRow;
     int highlightedTransitionCol;
+public:
+    std::vector<char> getOrderedAlphabet() const;
+    const std::vector<std::string>& getStatesList() const { return states; }
 };
