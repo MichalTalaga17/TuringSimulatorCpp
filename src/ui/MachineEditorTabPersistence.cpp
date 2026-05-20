@@ -32,9 +32,10 @@ void MachineEditorTab::rebuildTransitionsTable()
     }
     transitionsTable->setVerticalHeaderLabels(stateLabels);
 
-    // Set horizontal headers (alphabet symbols)
+    // Set horizontal headers (alphabet symbols) - with blank symbol always first
     QStringList alphabetLabels;
-    for (char symbol : alphabet)
+    std::vector<char> orderedAlpha = getOrderedAlphabet();
+    for (char symbol : orderedAlpha)
     {
         alphabetLabels << QString(symbol);
     }
@@ -56,6 +57,52 @@ void MachineEditorTab::rebuildTransitionsTable()
     populateTransitionMapWithDefaults();
 }
 
+std::vector<char> MachineEditorTab::getOrderedAlphabet() const
+{
+    // Return alphabet with blank symbol always first
+    std::vector<char> result;
+    result.push_back(blankSymbol);
+    for (char c : alphabet)
+    {
+        if (c != blankSymbol)
+        {
+            result.push_back(c);
+        }
+    }
+    return result;
+}
+
+void MachineEditorTab::updateAllWriteCombosForBlankSymbolChange(char oldBlank, char newBlank)
+{
+    // Iterate through all cells in the table and update write combos that have oldBlank selected
+    for (int row = 0; row < transitionsTable->rowCount(); ++row)
+    {
+        for (int col = 0; col < transitionsTable->columnCount(); ++col)
+        {
+            QWidget *cellWidget = transitionsTable->cellWidget(row, col);
+            if (!cellWidget)
+                continue;
+
+            QComboBox *writeCombo = cellWidget->findChild<QComboBox *>(QString("write_%1_%2").arg(row).arg(col));
+            if (writeCombo)
+            {
+                // Check if this combo has the old blank symbol selected
+                if (writeCombo->currentText() == QString(oldBlank))
+                {
+                    writeCombo->blockSignals(true);
+                    // Find and select the new blank symbol
+                    int newIdx = writeCombo->findText(QString(newBlank));
+                    if (newIdx >= 0)
+                    {
+                        writeCombo->setCurrentIndex(newIdx);
+                    }
+                    writeCombo->blockSignals(false);
+                }
+            }
+        }
+    }
+}
+
 void MachineEditorTab::populateTransitionMapWithDefaults()
 {
     // Populate the transition map with default values for all cells
@@ -63,8 +110,9 @@ void MachineEditorTab::populateTransitionMapWithDefaults()
 
     transitionMap.clear();
 
+    std::vector<char> orderedAlpha = getOrderedAlphabet();
     int colIdx = 0;
-    for (char readSymbol : alphabet)
+    for (char readSymbol : orderedAlpha)
     {
         for (int row = 0; row < static_cast<int>(states.size()); ++row)
         {
@@ -110,17 +158,12 @@ void MachineEditorTab::setCellDefaults(int row, int col, QComboBox *writeCombo, 
     moveCombo->blockSignals(true);
     toStateCombo->blockSignals(true);
 
-    // Get the read symbol for this column
+    // Get the read symbol for this column using ordered alphabet
     char readSymbol = '0';
-    int idx = 0;
-    for (char s : alphabet)
+    std::vector<char> orderedAlpha = getOrderedAlphabet();
+    if (col < static_cast<int>(orderedAlpha.size()))
     {
-        if (idx == col)
-        {
-            readSymbol = s;
-            break;
-        }
-        idx++;
+        readSymbol = orderedAlpha[col];
     }
 
     // Set write combo to read symbol (default: write = read)
@@ -151,6 +194,81 @@ void MachineEditorTab::setCellDefaults(int row, int col, QComboBox *writeCombo, 
     writeCombo->blockSignals(false);
     moveCombo->blockSignals(false);
     toStateCombo->blockSignals(false);
+}
+
+void MachineEditorTab::changeColumnSymbol(int col, char oldSymbol, char newSymbol)
+{
+    // Find the column index for the old blank symbol
+    int colIdx = 0;
+    for (char s : alphabet)
+    {
+        if (s == oldSymbol && colIdx == col)
+        {
+            // Update the horizontal header label
+            transitionsTable->horizontalHeaderItem(col)->setText(QString(newSymbol));
+
+            // Update all write combos in this column
+            updateWriteComboForColumn(col, newSymbol);
+
+            return;
+        }
+        colIdx++;
+    }
+}
+
+void MachineEditorTab::updateWriteComboForColumn(int col, char newSymbol)
+{
+    // Iterate through all rows and update the write combo for this column
+    std::vector<char> orderedAlpha = getOrderedAlphabet();
+
+    for (int row = 0; row < transitionsTable->rowCount(); ++row)
+    {
+        QWidget *cellWidget = transitionsTable->cellWidget(row, col);
+        if (!cellWidget)
+            continue;
+
+        QComboBox *writeCombo = cellWidget->findChild<QComboBox *>(QString("write_%1_%2").arg(row).arg(col));
+        if (writeCombo)
+        {
+            writeCombo->blockSignals(true);
+
+            // Store current index
+            int currentIdx = writeCombo->currentIndex();
+            QString currentText = writeCombo->currentText();
+
+            // Clear and rebuild the write combo with updated alphabet
+            writeCombo->clear();
+            for (char c : orderedAlpha)
+            {
+                writeCombo->addItem(QString(c));
+            }
+
+            // Restore the selection if the old symbol isn't the new blank
+            // or select the new blank symbol if it was selected before
+            int newIdx = -1;
+            if (currentText == QString(newSymbol))
+            {
+                // Old selection was the old blank symbol, update to new blank
+                newIdx = writeCombo->findText(QString(newSymbol));
+            }
+            else
+            {
+                // Keep the same text if it still exists
+                newIdx = writeCombo->findText(currentText);
+                if (newIdx < 0 && currentIdx >= 0 && currentIdx < writeCombo->count())
+                {
+                    newIdx = currentIdx;
+                }
+            }
+
+            if (newIdx >= 0)
+            {
+                writeCombo->setCurrentIndex(newIdx);
+            }
+
+            writeCombo->blockSignals(false);
+        }
+    }
 }
 
 // === FILE I/O ===

@@ -76,46 +76,17 @@ namespace
     void applyCompactLogicComboStyle(QComboBox *combo, int popupMinimumWidth = 64)
     {
         combo->setStyleSheet(compactLogicComboStyle());
-
-        QListView *popupView = new QListView(combo);
-        popupView->setMinimumWidth(popupMinimumWidth);
-        popupView->setTextElideMode(Qt::ElideNone);
-        popupView->setFrameShape(QFrame::NoFrame);
-        popupView->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
-        popupView->setAttribute(Qt::WA_TranslucentBackground);
-        popupView->setAutoFillBackground(false);
-        popupView->viewport()->setAttribute(Qt::WA_TranslucentBackground);
-        popupView->viewport()->setAutoFillBackground(false);
-        popupView->setStyleSheet(R"(
-        QListView {
-            border: 1px solid #d0d0d0;
-            border-radius: 6px;
-            background-color: #ffffff;
-            color: #202020;
-            outline: 0;
-            padding: 2px;
-        }
-        QListView::item {
-            min-height: 24px;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-        QListView::item:hover,
-        QListView::item:selected {
-            background-color: #eaf4ff;
-            color: #005a9e;
-        }
-    )");
-        combo->setView(popupView);
+        // Use a simple default view instead of creating a custom one
+        // The stylesheet handles the appearance, so we don't need a custom QListView
+        // This significantly improves performance on tab creation
     }
 
 } // namespace
 
 MachineEditorTab::MachineEditorTab(const QString &untitledTitle, bool startWithExample, QWidget *parent)
-    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample), highlightedTransitionRow(-1), highlightedTransitionCol(-1)
+    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), previousBlankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample), highlightedTransitionRow(-1), highlightedTransitionCol(-1)
 {
     setupUI();
-    applyModernStyle();
 
     // Connect timer for execution
     connect(executionTimer.get(), &QTimer::timeout, this, &MachineEditorTab::onExecutionTimer);
@@ -826,7 +797,8 @@ QWidget *MachineEditorTab::createTransitionCell(int row, int col)
     writeCombo->setMinimumHeight(24);
     writeCombo->setMaximumHeight(24);
     writeCombo->setFixedWidth(36);
-    for (char c : alphabet)
+    std::vector<char> orderedAlpha = getOrderedAlphabet();
+    for (char c : orderedAlpha)
     {
         writeCombo->addItem(QString(c));
     }

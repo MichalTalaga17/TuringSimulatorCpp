@@ -85,6 +85,35 @@ void MachineEditorTab::onNumStatesChanged(int value)
         }
         transitionsTable->setVerticalHeaderLabels(stateLabels);
 
+        // Update ALL existing rows with new state list (this is key for fixing the dropdown issue)
+        for (int row = 0; row < oldRowCount && row < newRowCount; ++row)
+        {
+            transitionsTable->setRowHeight(row, 38);
+            for (int col = 0; col < transitionsTable->columnCount(); ++col)
+            {
+                QWidget *cellWidget = transitionsTable->cellWidget(row, col);
+                if (!cellWidget)
+                    continue;
+
+                QComboBox *toStateCombo = cellWidget->findChild<QComboBox *>(QString("tostate_%1_%2").arg(row).arg(col));
+                if (toStateCombo)
+                {
+                    toStateCombo->blockSignals(true);
+                    int currentIdx = toStateCombo->currentIndex();
+                    toStateCombo->clear();
+                    for (const auto &state : states)
+                    {
+                        toStateCombo->addItem(QString::fromStdString(state));
+                    }
+                    if (currentIdx >= 0 && currentIdx < toStateCombo->count())
+                    {
+                        toStateCombo->setCurrentIndex(currentIdx);
+                    }
+                    toStateCombo->blockSignals(false);
+                }
+            }
+        }
+
         // If rows were added, create cells for new rows
         if (newRowCount > oldRowCount)
         {
@@ -94,37 +123,6 @@ void MachineEditorTab::onNumStatesChanged(int value)
                 for (int col = 0; col < transitionsTable->columnCount(); ++col)
                 {
                     transitionsTable->setCellWidget(row, col, createTransitionCell(row, col));
-                }
-            }
-        }
-        else
-        {
-            // Rows were removed or stayed same, update all existing rows
-            for (int row = 0; row < newRowCount; ++row)
-            {
-                transitionsTable->setRowHeight(row, 38);
-                for (int col = 0; col < transitionsTable->columnCount(); ++col)
-                {
-                    QWidget *cellWidget = transitionsTable->cellWidget(row, col);
-                    if (!cellWidget)
-                        continue;
-
-                    QComboBox *toStateCombo = cellWidget->findChild<QComboBox *>(QString("tostate_%1_%2").arg(row).arg(col));
-                    if (toStateCombo)
-                    {
-                        toStateCombo->blockSignals(true);
-                        int currentIdx = toStateCombo->currentIndex();
-                        toStateCombo->clear();
-                        for (const auto &state : states)
-                        {
-                            toStateCombo->addItem(QString::fromStdString(state));
-                        }
-                        if (currentIdx >= 0 && currentIdx < toStateCombo->count())
-                        {
-                            toStateCombo->setCurrentIndex(currentIdx);
-                        }
-                        toStateCombo->blockSignals(false);
-                    }
                 }
             }
         }
@@ -189,20 +187,36 @@ void MachineEditorTab::onBlankSymbolChanged()
     QString blankStr = blankSymbolField->text();
     char newBlank = blankStr.isEmpty() || blankStr.length() != 1 ? '_' : blankStr[0].toLatin1();
 
-    // Check if blank symbol is already in alphabet
-    bool blankInAlphabet = alphabet.find(newBlank) != alphabet.end();
-
-    if (!blankInAlphabet && !alphabet.empty())
+    // If blank symbol hasn't changed, do nothing
+    if (newBlank == blankSymbol)
     {
-        // Blank symbol changed and it's not in the current alphabet, rebuild table
-        std::set<char> newAlphabet = alphabet;
-
-        // Add new blank symbol
-        newAlphabet.insert(newBlank);
-
-        alphabet = newAlphabet;
-        rebuildTransitionsTable();
+        return;
     }
+
+    // Store the old blank symbol before changing it
+    char oldBlank = blankSymbol;
+
+    // Update the blank symbol immediately
+    previousBlankSymbol = blankSymbol;
+    blankSymbol = newBlank;
+
+    // If the table exists and has columns, update the blank symbol column in place
+    if (transitionsTable->rowCount() > 0 && transitionsTable->columnCount() > 0)
+    {
+        // The blank symbol should always be at column 0 due to getOrderedAlphabet()
+        // Just update the header and write combos
+        transitionsTable->horizontalHeaderItem(0)->setText(QString(newBlank));
+        updateWriteComboForColumn(0, newBlank);
+
+        // Update all write combos throughout the table that have the old blank symbol selected
+        updateAllWriteCombosForBlankSymbolChange(oldBlank, newBlank);
+    }
+
+    // Update the alphabet set
+    std::set<char> newAlphabet = alphabet;
+    newAlphabet.erase(oldBlank);
+    newAlphabet.insert(newBlank);
+    alphabet = newAlphabet;
 
     const bool rebuilt = rebuildMachineFromEditor();
     if (statusLabel)
@@ -270,18 +284,13 @@ void MachineEditorTab::onCellComboChanged()
 
     if (!write.isEmpty() && !move.isEmpty() && !toState.isEmpty())
     {
-        // Get the symbol for this column by index
+        // Get the symbol for this column by index using ordered alphabet
         std::string state = states[row];
         char symbol = '0';
-        int idx = 0;
-        for (char s : alphabet)
+        std::vector<char> orderedAlpha = getOrderedAlphabet();
+        if (col < static_cast<int>(orderedAlpha.size()))
         {
-            if (idx == col)
-            {
-                symbol = s;
-                break;
-            }
-            idx++;
+            symbol = orderedAlpha[col];
         }
 
         // Store in map
@@ -294,15 +303,10 @@ void MachineEditorTab::onCellComboChanged()
         {
             std::string state = states[row];
             char symbol = '0';
-            int idx = 0;
-            for (char s : alphabet)
+            std::vector<char> orderedAlpha = getOrderedAlphabet();
+            if (col < static_cast<int>(orderedAlpha.size()))
             {
-                if (idx == col)
-                {
-                    symbol = s;
-                    break;
-                }
-                idx++;
+                symbol = orderedAlpha[col];
             }
             transitionMap.erase({state, symbol});
         }
@@ -773,7 +777,8 @@ void MachineEditorTab::applyDefaultExample()
     auto findColumnForSymbol = [this](char symbol) -> int
     {
         int columnIndex = 0;
-        for (char alphabetSymbol : alphabet)
+        std::vector<char> orderedAlpha = getOrderedAlphabet();
+        for (char alphabetSymbol : orderedAlpha)
         {
             if (alphabetSymbol == symbol)
             {
