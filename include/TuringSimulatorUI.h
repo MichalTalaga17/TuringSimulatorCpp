@@ -3,8 +3,10 @@
 #include <QAction>
 #include <QMainWindow>
 #include <QTabWidget>
+#include <memory>
 
 #include "MachineEditorTab.h"
+#include "ThemeManager.h"
 
 class QPushButton;
 class QResizeEvent;
@@ -37,6 +39,7 @@ private slots:
     void selectNextTab();
     void updateMenuState();
     void showAboutDialog();
+    void toggleTheme();
 
 private:
     void setupUI();
@@ -58,5 +61,7 @@ private:
     QAction *resetAction;
     QAction *previousTabAction;
     QAction *nextTabAction;
+    QAction *toggleThemeAction;
     int untitledTabCounter;
+    std::unique_ptr<ThemeManager> themeManager;
 };

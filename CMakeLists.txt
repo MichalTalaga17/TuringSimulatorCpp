@@ -41,8 +41,10 @@ add_executable(TuringSimulatorCpp
     src/ui/MachineEditorTabPersistence.cpp
     src/ui/MachineEditorTabView.cpp
     src/ui/TuringSimulatorUI.cpp
+    src/ThemeManager.cpp
     include/MachineEditorTab.h
     include/TuringSimulatorUI.h
+    include/ThemeManager.h
     include/ui.h
     include/storage.h
     storage.cpp

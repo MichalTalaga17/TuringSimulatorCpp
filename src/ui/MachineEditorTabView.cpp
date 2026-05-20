@@ -292,11 +292,11 @@ QWidget *MachineEditorTab::setupExecutorTab()
 
         QLabel *titleLabel = new QLabel(title, metricWidget);
         titleLabel->setAlignment(Qt::AlignLeft);
-        titleLabel->setStyleSheet("color: #7a7a7a; font-size: 9px; font-weight: 700;");
+        titleLabel->setStyleSheet("font-size: 9px; font-weight: 700;");
 
         valueLabel = new QLabel(value, metricWidget);
         valueLabel->setAlignment(Qt::AlignLeft);
-        valueLabel->setStyleSheet("color: #202020; font-size: 18px; font-weight: 500;");
+        valueLabel->setStyleSheet("font-size: 18px; font-weight: 500;");
 
         metricLayout->addWidget(titleLabel);
         metricLayout->addWidget(valueLabel);
@@ -315,43 +315,15 @@ QWidget *MachineEditorTab::setupExecutorTab()
     statusControlLayout->setContentsMargins(8, 4, 8, 4);
     statusControlLayout->setSpacing(6);
 
-    stepButton = new QPushButton("Step");
+     stepButton = new QPushButton("Step");
     runButton = new QPushButton("Run");
     resetButton = new QPushButton("Reset");
 
-    const QString machineControlButtonStyle = R"(
-        QPushButton {
-            background-color: #ffffff;
-            color: #202020;
-            border: 1px solid #d0d0d0;
-            border-radius: 8px;
-            padding: 4px 10px;
-            font-size: 11px;
-            font-weight: 700;
-            min-width: 58px;
-            min-height: 28px;
-        }
-        QPushButton:hover {
-            background-color: #eaf4ff;
-            border-color: #0078d4;
-            color: #005a9e;
-        }
-        QPushButton:pressed {
-            background-color: #d8ecff;
-            border-color: #005a9e;
-        }
-        QPushButton:disabled {
-            background-color: #f0f0f0;
-            border-color: #dddddd;
-            color: #888888;
-        }
-    )";
-    stepButton->setStyleSheet(machineControlButtonStyle);
-    runButton->setStyleSheet(machineControlButtonStyle);
-    resetButton->setStyleSheet(machineControlButtonStyle);
+    // Don't set hardcoded styles - use theme defaults
+    // Theme stylesheets handle all button styling
 
     speedLabel = new QLabel("Speed:");
-    speedLabel->setStyleSheet("font-size: 11px; font-weight: 600; color: #505050;");
+    speedLabel->setStyleSheet("font-size: 11px; font-weight: 600;");
     speedSlider = new QSlider(Qt::Horizontal);
     speedSlider->setMinimum(100);
     speedSlider->setMaximum(2000);
