@@ -1,10 +1,10 @@
 #include "MachineEditorTab.h"
 #include "storage.h"
-
 #include <QComboBox>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTableWidget>
+#include <QInputDialog>
 
 void MachineEditorTab::rebuildTransitionsTable()
 {
@@ -319,4 +319,130 @@ bool MachineEditorTab::loadFromFile(const QString &filePath)
     currentFilePath = filePath;
     emit titleChanged(tabTitle());
     return true;
+}
+
+bool MachineEditorTab::saveToDatabase()
+{
+    if (!rebuildMachineFromEditor()) return false;
+
+    // Zakładka SAMA pyta o nazwę, jeśli to konieczne
+    QString machineName = tabTitle();
+    bool ok;
+    machineName = QInputDialog::getText(this, "Zapisz do bazy", "Podaj nazwę dla tej maszyny:", QLineEdit::Normal, machineName, &ok);
+
+    // Jeśli użytkownik anulował
+    if (!ok || machineName.isEmpty()) return false;
+
+    const QString currentInitialState = initialStateCombo->currentText();
+    const char currentBlank = blankSymbolField->text().isEmpty() ? '_' : blankSymbolField->text()[0].toLatin1();
+
+    if (!saveMachineToDatabase(*machine, machineName, currentInitialState, currentBlank, states.size(), alphabet)) {
+        QMessageBox::warning(this, "Błąd", "Wystąpił problem z zapisem do bazy danych.");
+        return false;
+    }
+
+    statusLabel->setText("Zapisano w bazie");
+    emit titleChanged(machineName); // Aktualizujemy nazwę na karcie
+    QMessageBox::information(this, "Sukces", "Zapisano maszynę w bazie danych!");
+    return true;
+}
+
+bool MachineEditorTab::loadFromDatabase(const QString &machineName)
+{
+    // 1. Pobieramy surowe dane z bazy danych przez warstwę Storage
+    MachineData data = loadMachineFromDatabase(machineName);
+
+    // 2. Jeśli coś poszło nie tak (np. baza nie istnieje), informujemy użytkownika
+    if (!data.success) {
+        QMessageBox::warning(this, "Błąd", data.errorMessage);
+        return false;
+    }
+
+    // 3. Używamy Twojej funkcji pomocniczej, która ustawia UI
+    // (blokuje sygnały, czyści tabelę, wypełnia ComboBoxy itp.)
+    applyMachineData(data);
+
+    // 4. Przebudowujemy logikę maszyny (rebuild), żeby symulator wiedział co uruchomić
+    if (rebuildMachineFromEditor() && statusLabel) {
+        statusLabel->setText("Wczytano z bazy: " + machineName);
+    }
+
+    // 5. Aktualizujemy nazwę karty na tę wczytaną z bazy
+    emit titleChanged(machineName);
+
+    return true;
+}
+
+// Funkcja pomocnicza odwalająca brudną robotę w interfejsie
+void MachineEditorTab::applyMachineData(const MachineData& data)
+{
+    numStatesSpinBox->blockSignals(true);
+    alphabetInputField->blockSignals(true);
+    blankSymbolField->blockSignals(true);
+    initialStateCombo->blockSignals(true);
+
+    blankSymbolField->setText(QString(QChar(data.blankSymbol)));
+    numStatesSpinBox->setValue(data.numStates);
+
+    QString newAlphabetStr = "";
+    for (char c : data.alphabet) {
+        if (c != data.blankSymbol) newAlphabetStr += c;
+    }
+    alphabetInputField->setText(newAlphabetStr);
+
+    states.clear();
+    for (int i = 0; i < data.numStates; ++i) {
+        states.push_back("q" + std::to_string(i));
+    }
+    alphabet = data.alphabet;
+
+    initialStateCombo->clear();
+    for (const auto &state : states) {
+        initialStateCombo->addItem(QString::fromStdString(state));
+    }
+    if (!data.initialState.empty()) {
+        initialStateCombo->setCurrentText(QString::fromStdString(data.initialState));
+    }
+
+    rebuildTransitionsTable();
+
+    numStatesSpinBox->blockSignals(false);
+    alphabetInputField->blockSignals(false);
+    blankSymbolField->blockSignals(false);
+    initialStateCombo->blockSignals(false);
+
+    for (const auto &transition : data.transitions) {
+        std::string currentState = std::get<0>(transition);
+        char readSymbol = std::get<1>(transition);
+        std::string nextState = std::get<2>(transition);
+        char writeSymbol = std::get<3>(transition);
+        std::string move = std::get<4>(transition);
+
+        QString uiMove = "Stay";
+        if (move == "L") uiMove = "L";
+        else if (move == "P" || move == "R") uiMove = "R";
+        else if (move == "_") uiMove = "Stay";
+        else if (move == "STOP") uiMove = "Stop";
+
+        int row = -1;
+        for (size_t s = 0; s < states.size(); ++s) {
+            if (states[s] == currentState) { row = static_cast<int>(s); break; }
+        }
+
+        int col = -1;
+        int colIdx = 0;
+        for (char a : alphabet) {
+            if (a == readSymbol) { col = colIdx; break; }
+            colIdx++;
+        }
+
+        if (row != -1 && col != -1) {
+            auto cacheIt = comboCache.find({row, col});
+            if (cacheIt != comboCache.end()) {
+                std::get<0>(cacheIt->second)->setCurrentText(QString(writeSymbol));
+                std::get<1>(cacheIt->second)->setCurrentText(uiMove);
+                std::get<2>(cacheIt->second)->setCurrentText(QString::fromStdString(nextState));
+            }
+        }
+    }
 }

@@ -16,7 +16,7 @@
 #include <set>
 #include <tuple>
 #include <vector>
-
+#include "storage.h"
 #include "TuringMachine.h"
 
 /// Pojedyncza karta edycji i uruchamiania maszyny Turinga.
@@ -40,6 +40,10 @@ public:
     bool validateMachine();
     /// Przywraca przykład startowy w bieżącej karcie.
     void resetToDefaultExample();
+    /// Zapisuje do bazy danych.
+    bool saveToDatabase();
+    /// Wczytuje z bazy danych.
+    bool loadFromDatabase(const QString &machineName);
 
 signals:
     void titleChanged(const QString &title);
@@ -116,6 +120,7 @@ private:
     void populateTransitionMapWithDefaults();
     /// Zapisuje aktualną definicję maszyny do wskazanej ścieżki.
     bool saveMachineToPath(const QString &filePath);
+    void applyMachineData(const MachineData& data);
 
     // Builder Components
     QSpinBox *numStatesSpinBox;
