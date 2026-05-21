@@ -24,6 +24,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
+    void showStartPage();
     void createNewMachineTab();
     void createExampleMachineTab();
     void openMachineInNewTab();
@@ -48,9 +49,14 @@ private:
     void setupUI();
     void setupMenu();
     MachineEditorTab *currentMachineTab() const;
-    void addMachineTab(MachineEditorTab *tab);
+    QWidget *createStartPage();
+    bool isStartPage(QWidget *widget) const;
+    int addClosableTab(QWidget *tab, const QString &title, int insertIndex = -1);
+    void addMachineTab(MachineEditorTab *tab, int insertIndex = -1);
+    void addMachineTabFromStartPage(MachineEditorTab *tab);
+    void openMachineFromDatabaseName(const QString &machineName);
+    void closeTabAt(int index);
     void updateNewTabButtonPosition();
-    void showNewTabMenu();
 
     QTabWidget *machineTabs;
     QPushButton *newTabButton;
