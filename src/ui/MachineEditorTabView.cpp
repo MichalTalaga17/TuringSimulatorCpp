@@ -112,7 +112,10 @@ namespace
             if (!editor) return;
 
             QString text = index.data(Qt::DisplayRole).toString();
-            QStringList parts = text.split(", ");
+            QStringList parts = text.split(",");
+            for (QString &part : parts) {
+                part = part.trimmed();
+            }
             if (parts.size() == 3) {
                 editor->writeCombo->setCurrentText(parts[0]);
                 editor->moveCombo->setCurrentText(parts[1]);

@@ -6,15 +6,61 @@
 #include <QTableWidget>
 #include <QInputDialog>
 
+#include <algorithm>
+
+namespace {
+
+QStringList splitTransitionText(const QString &text)
+{
+    QStringList parts = text.split(",");
+    for (QString &part : parts)
+    {
+        part = part.trimmed();
+    }
+    return parts;
+}
+
+QString moveToUiText(const std::string &move)
+{
+    if (move == "L")
+    {
+        return "L";
+    }
+    if (move == "P" || move == "R")
+    {
+        return "R";
+    }
+    if (move == "STOP" || move == "Stop")
+    {
+        return "Stop";
+    }
+    return "Stay";
+}
+
+int columnForSymbol(const std::vector<char> &orderedAlphabet, char symbol)
+{
+    for (int col = 0; col < static_cast<int>(orderedAlphabet.size()); ++col)
+    {
+        if (orderedAlphabet[col] == symbol)
+        {
+            return col;
+        }
+    }
+    return -1;
+}
+
+} // namespace
+
 void MachineEditorTab::rebuildTransitionsTable()
 {
-    transitionsTable->blockSignals(true);
+    const bool wasBlocked = transitionsTable->blockSignals(true);
     clearActiveTransitionHighlight();
     transitionsTable->clear();
 
     if (states.empty() || alphabet.empty())
     {
-        transitionsTable->blockSignals(false);
+        transitionMap.clear();
+        transitionsTable->blockSignals(wasBlocked);
         return;
     }
 
@@ -59,7 +105,7 @@ void MachineEditorTab::rebuildTransitionsTable()
         }
     }
 
-    transitionsTable->blockSignals(false);
+    transitionsTable->blockSignals(wasBlocked);
 
     // Populate transition map with default values
     populateTransitionMapWithDefaults();
@@ -94,8 +140,8 @@ void MachineEditorTab::populateTransitionMapWithDefaults()
             if (!item) continue;
 
             QString text = item->text();
-            QStringList parts = text.split(", ");
-            if (parts.size() == 3)
+            QStringList parts = splitTransitionText(text);
+            if (parts.size() == 3 && !parts[0].isEmpty() && !parts[1].isEmpty() && !parts[2].isEmpty())
             {
                 transitionMap[{states[row], readSymbol}] = {
                     parts[0][0].toLatin1(),
@@ -163,109 +209,7 @@ bool MachineEditorTab::loadFromFile(const QString &filePath)
         return false;
     }
 
-    // ==========================================================
-    // BLOKUJEMY SYGNAŁY UI
-    // ==========================================================
-    numStatesSpinBox->blockSignals(true);
-    alphabetInputField->blockSignals(true);
-    blankSymbolField->blockSignals(true);
-    initialStateCombo->blockSignals(true);
-
-    blankSymbolField->setText(QString(QChar(data.blankSymbol)));
-    numStatesSpinBox->setValue(data.numStates);
-
-    QString newAlphabetStr = "";
-    for (char c : data.alphabet)
-    {
-        if (c != data.blankSymbol)
-        {
-            newAlphabetStr += c;
-        }
-    }
-    alphabetInputField->setText(newAlphabetStr);
-
-    states.clear();
-    for (int i = 0; i < data.numStates; ++i)
-    {
-        states.push_back("q" + std::to_string(i));
-    }
-    alphabet = data.alphabet;
-
-    initialStateCombo->clear();
-    for (const auto &state : states)
-    {
-        initialStateCombo->addItem(QString::fromStdString(state));
-    }
-    if (!data.initialState.empty())
-    {
-        initialStateCombo->setCurrentText(QString::fromStdString(data.initialState));
-    }
-
-    // 4. Budujemy idealnie dopasowaną tabelę JEDEN RAZ
-    rebuildTransitionsTable();
-
-    // ==========================================================
-    // ODBLOKUJEMY SYGNAŁY UI
-    // ==========================================================
-    numStatesSpinBox->blockSignals(false);
-    alphabetInputField->blockSignals(false);
-    blankSymbolField->blockSignals(false);
-    initialStateCombo->blockSignals(false);
-
-    // 5. Uzupełniamy komórki gotowej tabeli
-    for (const auto &transition : data.transitions)
-    {
-        std::string currentState = std::get<0>(transition);
-        char readSymbol = std::get<1>(transition);
-        std::string nextState = std::get<2>(transition);
-        char writeSymbol = std::get<3>(transition);
-        std::string move = std::get<4>(transition);
-
-        QString uiMove = "Stay";
-        if (move == "L")
-            uiMove = "L";
-        else if (move == "P" || move == "R")
-            uiMove = "R";
-        else if (move == "_")
-            uiMove = "Stay";
-        else if (move == "STOP")
-            uiMove = "Stop";
-
-        int row = -1;
-        for (size_t s = 0; s < states.size(); ++s)
-        {
-            if (states[s] == currentState)
-            {
-                row = static_cast<int>(s);
-                break;
-            }
-        }
-
-        int col = -1;
-        int colIdx = 0;
-        for (char a : alphabet)
-        {
-            if (a == readSymbol)
-            {
-                col = colIdx;
-                break;
-            }
-            colIdx++;
-        }
-
-        if (row != -1 && col != -1)
-        {
-            QTableWidgetItem *item = transitionsTable->item(row, col);
-            if (item)
-            {
-                QString transitionText = QString("%1, %2, %3")
-                    .arg(writeSymbol)
-                    .arg(uiMove == "Stay" ? "L" : uiMove)
-                    .arg(QString::fromStdString(nextState));
-                item->setText(transitionText);
-            }
-        }
-    }
+    applyMachineData(data);
 
     if (rebuildMachineFromEditor() && statusLabel)
     {
@@ -336,9 +280,14 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
     alphabetInputField->blockSignals(true);
     blankSymbolField->blockSignals(true);
     initialStateCombo->blockSignals(true);
+    transitionsTable->blockSignals(true);
+
+    blankSymbol = data.blankSymbol;
+    previousBlankSymbol = data.blankSymbol;
+    const int stateCount = std::max(1, data.numStates);
 
     blankSymbolField->setText(QString(QChar(data.blankSymbol)));
-    numStatesSpinBox->setValue(data.numStates);
+    numStatesSpinBox->setValue(stateCount);
 
     QString newAlphabetStr = "";
     for (char c : data.alphabet) {
@@ -347,25 +296,26 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
     alphabetInputField->setText(newAlphabetStr);
 
     states.clear();
-    for (int i = 0; i < data.numStates; ++i) {
+    for (int i = 0; i < stateCount; ++i) {
         states.push_back("q" + std::to_string(i));
     }
     alphabet = data.alphabet;
+    alphabet.insert(blankSymbol);
 
     initialStateCombo->clear();
     for (const auto &state : states) {
         initialStateCombo->addItem(QString::fromStdString(state));
     }
-    if (!data.initialState.empty()) {
-        initialStateCombo->setCurrentText(QString::fromStdString(data.initialState));
+    initialState = data.initialState;
+    if (std::find(states.begin(), states.end(), initialState) == states.end() && !states.empty()) {
+        initialState = states.front();
+    }
+    if (!initialState.empty()) {
+        initialStateCombo->setCurrentText(QString::fromStdString(initialState));
     }
 
     rebuildTransitionsTable();
-
-    numStatesSpinBox->blockSignals(false);
-    alphabetInputField->blockSignals(false);
-    blankSymbolField->blockSignals(false);
-    initialStateCombo->blockSignals(false);
+    const std::vector<char> orderedAlpha = getOrderedAlphabet();
 
     for (const auto &transition : data.transitions) {
         std::string currentState = std::get<0>(transition);
@@ -374,23 +324,12 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
         char writeSymbol = std::get<3>(transition);
         std::string move = std::get<4>(transition);
 
-        QString uiMove = "Stay";
-        if (move == "L") uiMove = "L";
-        else if (move == "P" || move == "R") uiMove = "R";
-        else if (move == "_") uiMove = "Stay";
-        else if (move == "STOP") uiMove = "Stop";
-
         int row = -1;
         for (size_t s = 0; s < states.size(); ++s) {
             if (states[s] == currentState) { row = static_cast<int>(s); break; }
         }
 
-        int col = -1;
-        int colIdx = 0;
-        for (char a : alphabet) {
-            if (a == readSymbol) { col = colIdx; break; }
-            colIdx++;
-        }
+        int col = columnForSymbol(orderedAlpha, readSymbol);
 
         if (row != -1 && col != -1) {
             QTableWidgetItem *item = transitionsTable->item(row, col);
@@ -398,10 +337,18 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
             {
                 QString transitionText = QString("%1, %2, %3")
                     .arg(writeSymbol)
-                    .arg(uiMove)
+                    .arg(moveToUiText(move))
                     .arg(QString::fromStdString(nextState));
                 item->setText(transitionText);
             }
         }
     }
+
+    populateTransitionMapWithDefaults();
+
+    transitionsTable->blockSignals(false);
+    numStatesSpinBox->blockSignals(false);
+    alphabetInputField->blockSignals(false);
+    blankSymbolField->blockSignals(false);
+    initialStateCombo->blockSignals(false);
 }

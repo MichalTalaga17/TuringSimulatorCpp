@@ -108,6 +108,8 @@ private:
     void applyBlankMachine();
     /// Przebudowuje maszynę z edytora i wczytuje aktualną zawartość pola taśmy.
     bool rebuildMachineFromEditor();
+    /// Wykonuje jeden krok i spójnie kończy/pauzuje UI, jeśli maszyna się zatrzyma.
+    bool executeMachineStep();
     /// Buduje maszynę z aktualnej konfiguracji formularza i opcjonalnie pokazuje komunikat sukcesu.
     bool buildMachineFromCurrentConfiguration(bool showSuccessDialog);
     /// Przebudowuje tabelę przejść po zmianie liczby stanów lub alfabetu.

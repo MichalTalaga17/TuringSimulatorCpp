@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include <QMessageBox>
 #include <QScrollBar>
+#include <QSignalBlocker>
 
 #include <algorithm>
 
@@ -200,13 +201,18 @@ void MachineEditorTab::onTableItemChanged(QTableWidgetItem *item)
     if (row < 0 || col < 0 || row >= static_cast<int>(states.size())) return;
 
     QString text = item->text();
-    QStringList parts = text.split(", ");
+    QStringList parts = text.split(",");
 
     std::string state = states[row];
     std::vector<char> orderedAlpha = getOrderedAlphabet();
     
     if (col >= static_cast<int>(orderedAlpha.size())) return;
     char symbol = orderedAlpha[col];
+
+    for (QString &part : parts)
+    {
+        part = part.trimmed();
+    }
 
     if (parts.size() == 3 && !parts[0].isEmpty() && !parts[1].isEmpty() && !parts[2].isEmpty())
     {
@@ -235,6 +241,22 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
         }
     };
 
+    if (initialStateCombo && !initialStateCombo->currentText().isEmpty())
+    {
+        initialState = initialStateCombo->currentText().toStdString();
+    }
+
+    QString blankStr = blankSymbolField->text();
+    if (blankStr.isEmpty() || blankStr.length() != 1)
+    {
+        blankSymbol = '_';
+    }
+    else
+    {
+        blankSymbol = blankStr[0].toLatin1();
+    }
+    alphabet.insert(blankSymbol);
+
     // Validation
     if (states.empty())
     {
@@ -260,17 +282,6 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
         return false;
     }
 
-    // Extract blank symbol
-    QString blankStr = blankSymbolField->text();
-    if (blankStr.isEmpty() || blankStr.length() != 1)
-    {
-        blankSymbol = '_';
-    }
-    else
-    {
-        blankSymbol = blankStr[0].toLatin1();
-    }
-
     // Build machine
     machine = std::make_unique<TuringMachine>(blankSymbol);
     machine->setInitialState(initialState);
@@ -288,9 +299,9 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
         HeadMove move = HeadMove::Stay;
         if (moveStr == "L")
             move = HeadMove::L;
-        else if (moveStr == "R")
+        else if (moveStr == "R" || moveStr == "P")
             move = HeadMove::R;
-        else if (moveStr == "Stop")
+        else if (moveStr == "Stop" || moveStr == "STOP")
             move = HeadMove::STOP;
 
         machine->addTransition(fromState, readSymbol, {writeSymbol, move, toState});
@@ -300,6 +311,29 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
     {
         statusLabel->setText("Built");
         QMessageBox::information(this, "Success", "Machine built successfully! You can run it above.");
+    }
+
+    return true;
+}
+
+bool MachineEditorTab::executeMachineStep()
+{
+    if (!machine)
+    {
+        return false;
+    }
+
+    const bool executedStep = machine->step();
+    updateDisplay();
+
+    if (!executedStep || machine->isHalted())
+    {
+        isRunning = false;
+        runButton->setText("Run");
+        stepButton->setEnabled(true);
+        executionTimer->stop();
+        statusLabel->setText(machine->isAccepted() ? "Accepted" : "Halted");
+        return false;
     }
 
     return true;
@@ -366,15 +400,7 @@ void MachineEditorTab::onStepClicked()
 
     checkTapeForUndefinedSymbols();
 
-    if (machine->step())
-    {
-        updateDisplay();
-    }
-    else
-    {
-        updateDisplay();
-        statusLabel->setText(machine->isAccepted() ? "Accepted" : "Halted");
-    }
+    executeMachineStep();
 }
 
 void MachineEditorTab::onRunClicked()
@@ -397,7 +423,10 @@ void MachineEditorTab::onRunClicked()
     if (isRunning)
     {
         statusLabel->setText("Running");
-        executionTimer->start(2001 - executionSpeed);
+        if (executeMachineStep())
+        {
+            executionTimer->start(2001 - executionSpeed);
+        }
     }
     else
     {
@@ -437,15 +466,7 @@ void MachineEditorTab::onExecutionTimer()
 {
     if (machine && isRunning)
     {
-        if (!machine->step())
-        {
-            isRunning = false;
-            runButton->setText("Run");
-            stepButton->setEnabled(true);
-            executionTimer->stop();
-            statusLabel->setText(machine->isAccepted() ? "Accepted" : "Halted");
-        }
-        updateDisplay();
+        executeMachineStep();
     }
 }
 
@@ -485,7 +506,7 @@ void MachineEditorTab::updateActiveTransitionHighlight()
     const int row = static_cast<int>(std::distance(states.begin(), stateIt));
     int col = 0;
     bool symbolFound = false;
-    for (char alphabetSymbol : alphabet)
+    for (char alphabetSymbol : getOrderedAlphabet())
     {
         if (alphabetSymbol == readSymbol)
         {
@@ -537,6 +558,7 @@ void MachineEditorTab::setTransitionCellHighlighted(int row, int col, bool highl
         return;
     }
 
+    QSignalBlocker blockTableSignals(transitionsTable);
     if (highlighted)
     {
         // Pomaluj delikatnie tło na niebiesko aby wskazać wykonywany krok 
