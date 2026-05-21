@@ -82,6 +82,8 @@ private:
     void updateDisplay();
     /// Podświetla komórkę tabeli przejść odpowiadająca aktualnie wykonywanej instrukcji.
     void updateActiveTransitionHighlight();
+    /// Podświetla wskazaną instrukcję przejścia.
+    void highlightTransition(const std::string &state, char readSymbol);
     /// Czyści podświetlenie komórki przejścia.
     void clearActiveTransitionHighlight();
     /// Sprawdza, czy taśma zawiera niezdefiniowane symbole.
