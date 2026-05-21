@@ -41,6 +41,7 @@ private slots:
     void selectNextTab();
     void updateMenuState();
     void showAboutDialog();
+    void showAboutAuthorsDialog();
     void toggleTheme();
 
 private:

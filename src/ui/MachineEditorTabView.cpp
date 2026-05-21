@@ -16,6 +16,7 @@
 #include <QTableWidget>
 #include <QVBoxLayout>
 #include <QStyledItemDelegate>
+#include <QRegularExpressionValidator>
 
 #include <tuple>
 
@@ -225,12 +226,16 @@ QWidget *MachineEditorTab::setupBuilderTab()
     configFieldsLayout->addWidget(new QLabel("Alphabet:"));
     alphabetInputField = new QLineEdit();
     alphabetInputField->setPlaceholderText("0,1");
+    // Restrict to standard printable ASCII characters (32 to 126)
+    alphabetInputField->setValidator(new QRegularExpressionValidator(QRegularExpression("[ -~]*"), this));
     alphabetInputField->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     configFieldsLayout->addWidget(alphabetInputField, 1);
 
     configFieldsLayout->addWidget(new QLabel("Blank:"));
     blankSymbolField = new QLineEdit();
     blankSymbolField->setText("_");
+    // Restrict to one standard printable ASCII character, excluding space
+    blankSymbolField->setValidator(new QRegularExpressionValidator(QRegularExpression("[!-~]"), this));
     blankSymbolField->setMaximumWidth(60);
     configFieldsLayout->addWidget(blankSymbolField);
 
@@ -400,11 +405,22 @@ QWidget *MachineEditorTab::setupExecutorTab()
 
     // --- Tape Input Section ---
     QGroupBox *inputGroup = new QGroupBox("Input Tape", executorWidget);
-    QHBoxLayout *inputLayout = new QHBoxLayout(inputGroup);
+    QVBoxLayout *inputGroupLayout = new QVBoxLayout(inputGroup);
+
+    QHBoxLayout *inputLayout = new QHBoxLayout();
     inputLayout->addWidget(new QLabel("Tape:"));
     tapeInputField = new QLineEdit();
+    tapeInputField->setValidator(new QRegularExpressionValidator(QRegularExpression("[ -~]*"), this));
     tapeInputField->setPlaceholderText("e.g., 1001");
     inputLayout->addWidget(tapeInputField);
+
+    inputGroupLayout->addLayout(inputLayout);
+
+    tapeWarningLabel = new QLabel("Tape contains undefined symbols! Proceeding will halt the machine.", inputGroup);
+    tapeWarningLabel->setStyleSheet("color: red; font-weight: bold;");
+    tapeWarningLabel->hide(); // hidden by default
+    inputGroupLayout->addWidget(tapeWarningLabel);
+
     executorLayout->addWidget(inputGroup);
 
     // --- Tape Display ---

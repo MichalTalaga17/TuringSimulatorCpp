@@ -99,7 +99,7 @@ void TuringSimulatorUI::setupMenu()
     QAction *exampleTabAction = fileMenu->addAction("Zacznij od przykładu");
     connect(exampleTabAction, &QAction::triggered, this, &TuringSimulatorUI::createExampleMachineTab);
 
-    QAction *openAction = fileMenu->addAction("Otwórz w nowej karcie...");
+    QAction *openAction = fileMenu->addAction("Wczytaj maszynę z pliku .json");
     bindShortcut(openAction, QKeySequence(QKeySequence::Open));
     connect(openAction, &QAction::triggered, this, &TuringSimulatorUI::openMachineInNewTab);
 
@@ -173,6 +173,9 @@ void TuringSimulatorUI::setupMenu()
     QMenu *helpMenu = menuBar()->addMenu("Pomoc");
     QAction *aboutAction = helpMenu->addAction("O programie");
     connect(aboutAction, &QAction::triggered, this, &TuringSimulatorUI::showAboutDialog);
+
+    QAction* aboutAuthorsAction = helpMenu->addAction("O autorach");
+    connect(aboutAuthorsAction, &QAction::triggered, this, &TuringSimulatorUI::showAboutAuthorsDialog);
 }
 
 MachineEditorTab *TuringSimulatorUI::currentMachineTab() const
@@ -461,6 +464,14 @@ void TuringSimulatorUI::showAboutDialog()
         "i uruchamiaj symulację bez przełączania okien.");
 }
 
+
+void TuringSimulatorUI::showAboutAuthorsDialog()
+{
+    QMessageBox::about(
+        this,
+        "O autorach",
+        "Program został stworzony przez studentów Politechniki Śląskiej z wydziału matematyki stosowanej\n\nRadosław Kadela, Michał Talaga, Jonatan Turski");
+}
 void TuringSimulatorUI::openMachineFromDatabase()
 {
     // 1. Pobieramy listę dostępnych nazw maszyn z bazy

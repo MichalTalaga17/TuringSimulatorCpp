@@ -51,8 +51,8 @@ void MachineEditorTab::rebuildTransitionsTable()
             
             QTableWidgetItem *item = new QTableWidgetItem();
             item->setTextAlignment(Qt::AlignCenter);
-            // Default rule: write = read, move = L, state = current
-            QString defaultText = QString("%1, L, %2").arg(readSymbol).arg(defaultState);
+            // Default rule: write = read, move = R, state = current
+            QString defaultText = QString("%1, R, %2").arg(readSymbol).arg(defaultState);
             item->setText(defaultText);
             
             transitionsTable->setItem(row, col, item);
@@ -398,7 +398,7 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
             {
                 QString transitionText = QString("%1, %2, %3")
                     .arg(writeSymbol)
-                    .arg(uiMove == "Stay" ? "L" : uiMove)
+                    .arg(uiMove)
                     .arg(QString::fromStdString(nextState));
                 item->setText(transitionText);
             }

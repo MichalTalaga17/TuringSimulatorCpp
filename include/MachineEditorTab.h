@@ -84,6 +84,8 @@ private:
     void updateActiveTransitionHighlight();
     /// Czyści podświetlenie komórki przejścia.
     void clearActiveTransitionHighlight();
+    /// Sprawdza, czy taśma zawiera niezdefiniowane symbole.
+    void checkTapeForUndefinedSymbols();
     /// Ustawia wizualny stan pojedynczej komórki tabeli przejść.
     void setTransitionCellHighlighted(int row, int col, bool highlighted);
     /// Aktualizuje etykiety stanu sterowania i licznika kroków.
@@ -133,6 +135,7 @@ private:
     /// Kontener z widocznymi komórkami reprezentującymi wycinek taśmy.
     QWidget *tapeDisplay;
     QLineEdit *tapeInputField;
+    QLabel *tapeWarningLabel;
     QPushButton *stepButton;
     QPushButton *runButton;
     QPushButton *resetButton;

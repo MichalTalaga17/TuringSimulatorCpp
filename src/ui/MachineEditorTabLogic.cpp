@@ -85,14 +85,33 @@ void MachineEditorTab::onAlphabetChanged()
     QString blankStr = blankSymbolField->text();
     char currentBlank = blankStr.isEmpty() || blankStr.length() != 1 ? '_' : blankStr[0].toLatin1();
 
+    QString filteredAlphaStr;
+    bool modified = false;
+
     // Parse alphabet (comma or space separated, or just chars)
     for (int i = 0; i < alphaStr.length(); ++i)
     {
         char c = alphaStr[i].toLatin1();
+        if (c == currentBlank)
+        {
+            modified = true;
+            continue;
+        }
+        filteredAlphaStr += alphaStr[i];
+
         if (c != ',' && c != ' ' && c != 0)
         {
             newAlphabet.insert(c);
         }
+    }
+
+    if (modified)
+    {
+        alphabetInputField->blockSignals(true);
+        int cursor = alphabetInputField->cursorPosition();
+        alphabetInputField->setText(filteredAlphaStr);
+        alphabetInputField->setCursorPosition(std::max(0, cursor - 1));
+        alphabetInputField->blockSignals(false);
     }
 
     // Always add the blank symbol as first column (if not already in alphabet)
@@ -124,6 +143,18 @@ void MachineEditorTab::onBlankSymbolChanged()
         return;
     }
 
+    // Remove the new blank symbol from the alphabet text field
+    QString alphaStr = alphabetInputField->text();
+    bool alphabetModified = false;
+    if (alphaStr.contains(QChar(newBlank)))
+    {
+        alphabetInputField->blockSignals(true);
+        alphaStr.remove(QChar(newBlank));
+        alphabetInputField->setText(alphaStr);
+        alphabetInputField->blockSignals(false);
+        alphabetModified = true;
+    }
+
     // Store the old blank symbol before changing it
     char oldBlank = blankSymbol;
 
@@ -131,19 +162,26 @@ void MachineEditorTab::onBlankSymbolChanged()
     previousBlankSymbol = blankSymbol;
     blankSymbol = newBlank;
 
-    // If the table exists and has columns, update the blank symbol column in place
-    if (transitionsTable->rowCount() > 0 && transitionsTable->columnCount() > 0)
-    {
-        // The blank symbol should always be at column 0 due to getOrderedAlphabet()
-        // Just update the header
-        transitionsTable->horizontalHeaderItem(0)->setText(QString(newBlank));
-    }
-
     // Update the alphabet set
     std::set<char> newAlphabet = alphabet;
     newAlphabet.erase(oldBlank);
     newAlphabet.insert(newBlank);
-    alphabet = newAlphabet;
+
+    if (alphabetModified)
+    {
+        alphabet = newAlphabet;
+        rebuildTransitionsTable();
+    }
+    else 
+    {
+        alphabet = newAlphabet;
+        // If only the blank symbol character changed without affecting the rest of the alphabet, update in place
+        if (transitionsTable->rowCount() > 0 && transitionsTable->columnCount() > 0)
+        {
+            // The blank symbol should always be at column 0 due to getOrderedAlphabet()
+            transitionsTable->horizontalHeaderItem(0)->setText(QString(newBlank));
+        }
+    }
 
     const bool rebuilt = rebuildMachineFromEditor();
     if (statusLabel)
@@ -291,9 +329,30 @@ bool MachineEditorTab::rebuildMachineFromEditor()
 
 void MachineEditorTab::onTapeInputChanged()
 {
+    if (tapeWarningLabel) {
+        tapeWarningLabel->hide();
+    }
+
     if (rebuildMachineFromEditor() && statusLabel)
     {
         statusLabel->setText("Rebuilt");
+    }
+}
+
+void MachineEditorTab::checkTapeForUndefinedSymbols()
+{
+    QString tapeText = tapeInputField->text().trimmed();
+    bool hasUndefined = false;
+    for (int i = 0; i < tapeText.length(); ++i) {
+        char c = tapeText[i].toLatin1();
+        if (alphabet.find(c) == alphabet.end() && c != blankSymbol) {
+            hasUndefined = true;
+            break;
+        }
+    }
+
+    if (tapeWarningLabel) {
+        tapeWarningLabel->setVisible(hasUndefined);
     }
 }
 
@@ -304,6 +363,8 @@ void MachineEditorTab::onStepClicked()
         QMessageBox::warning(this, "Error", "Please build a machine first");
         return;
     }
+
+    checkTapeForUndefinedSymbols();
 
     if (machine->step())
     {
@@ -324,6 +385,11 @@ void MachineEditorTab::onRunClicked()
         return;
     }
 
+    if (!isRunning)
+    {
+        checkTapeForUndefinedSymbols();
+    }
+
     isRunning = !isRunning;
     runButton->setText(isRunning ? "Stop" : "Run");
     stepButton->setEnabled(!isRunning);
@@ -342,6 +408,10 @@ void MachineEditorTab::onRunClicked()
 
 void MachineEditorTab::onResetClicked()
 {
+    if (tapeWarningLabel) {
+        tapeWarningLabel->hide();
+    }
+
     if (machine)
     {
         machine->reset();
