@@ -80,16 +80,15 @@ void MachineEditorTab::onNumStatesChanged(int value)
 void MachineEditorTab::onAlphabetChanged()
 {
     QString alphaStr = alphabetInputField->text();
-    std::set<char> newAlphabet;
+    std::vector<char> newAlphabet;
 
-    // Get current blank symbol
     QString blankStr = blankSymbolField->text();
     char currentBlank = blankStr.isEmpty() || blankStr.length() != 1 ? '_' : blankStr[0].toLatin1();
+    newAlphabet.push_back(currentBlank);
 
     QString filteredAlphaStr;
     bool modified = false;
 
-    // Parse alphabet (comma or space separated, or just chars)
     for (int i = 0; i < alphaStr.length(); ++i)
     {
         char c = alphaStr[i].toLatin1();
@@ -100,9 +99,11 @@ void MachineEditorTab::onAlphabetChanged()
         }
         filteredAlphaStr += alphaStr[i];
 
-        if (c != ',' && c != ' ' && c != 0)
+        if (c != ',' && c != ' ' && c != 0 && c != currentBlank)
         {
-            newAlphabet.insert(c);
+            if (std::find(newAlphabet.begin(), newAlphabet.end(), c) == newAlphabet.end()) {
+                newAlphabet.push_back(c);
+            }
         }
     }
 
@@ -115,15 +116,10 @@ void MachineEditorTab::onAlphabetChanged()
         alphabetInputField->blockSignals(false);
     }
 
-    // Always add the blank symbol as first column (if not already in alphabet)
-    newAlphabet.insert(currentBlank);
-
-    // Only rebuild if alphabet changed
     if (newAlphabet != alphabet)
     {
         alphabet = newAlphabet;
         rebuildTransitionsTable();
-        // Note: transitionMap is populated by rebuildTransitionsTable() via populateTransitionMapWithDefaults()
     }
 
     const bool rebuilt = rebuildMachineFromEditor();
@@ -138,51 +134,36 @@ void MachineEditorTab::onBlankSymbolChanged()
     QString blankStr = blankSymbolField->text();
     char newBlank = blankStr.isEmpty() || blankStr.length() != 1 ? '_' : blankStr[0].toLatin1();
 
-    // If blank symbol hasn't changed, do nothing
     if (newBlank == blankSymbol)
     {
         return;
     }
 
-    // Remove the new blank symbol from the alphabet text field
     QString alphaStr = alphabetInputField->text();
-    bool alphabetModified = false;
     if (alphaStr.contains(QChar(newBlank)))
     {
         alphabetInputField->blockSignals(true);
         alphaStr.remove(QChar(newBlank));
         alphabetInputField->setText(alphaStr);
         alphabetInputField->blockSignals(false);
-        alphabetModified = true;
     }
 
-    // Store the old blank symbol before changing it
     char oldBlank = blankSymbol;
-
-    // Update the blank symbol immediately
     previousBlankSymbol = blankSymbol;
     blankSymbol = newBlank;
 
-    // Update the alphabet set
-    std::set<char> newAlphabet = alphabet;
-    newAlphabet.erase(oldBlank);
-    newAlphabet.insert(newBlank);
-
-    if (alphabetModified)
+    std::vector<char> newAlphabet;
+    newAlphabet.push_back(newBlank);
+    for (char symbol : alphabet)
     {
-        alphabet = newAlphabet;
-        rebuildTransitionsTable();
-    }
-    else 
-    {
-        alphabet = newAlphabet;
-        // If only the blank symbol character changed without affecting the rest of the alphabet, update in place
-        if (transitionsTable->rowCount() > 0 && transitionsTable->columnCount() > 0)
+        if (symbol != oldBlank && symbol != newBlank &&
+            std::find(newAlphabet.begin(), newAlphabet.end(), symbol) == newAlphabet.end())
         {
-            // The blank symbol should always be at column 0 due to getOrderedAlphabet()
-            transitionsTable->horizontalHeaderItem(0)->setText(QString(newBlank));
+            newAlphabet.push_back(symbol);
         }
     }
+    alphabet = newAlphabet;
+    rebuildTransitionsTable();
 
     const bool rebuilt = rebuildMachineFromEditor();
     if (statusLabel)
@@ -255,7 +236,8 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
     {
         blankSymbol = blankStr[0].toLatin1();
     }
-    alphabet.insert(blankSymbol);
+    alphabet.erase(std::remove(alphabet.begin(), alphabet.end(), blankSymbol), alphabet.end());
+    alphabet.insert(alphabet.begin(), blankSymbol);
 
     // Validation
     if (states.empty())
@@ -379,7 +361,7 @@ void MachineEditorTab::checkTapeForUndefinedSymbols()
     bool hasUndefined = false;
     for (int i = 0; i < tapeText.length(); ++i) {
         char c = tapeText[i].toLatin1();
-        if (alphabet.find(c) == alphabet.end() && c != blankSymbol) {
+        if (std::find(alphabet.begin(), alphabet.end(), c) == alphabet.end() && c != blankSymbol) {
             hasUndefined = true;
             break;
         }

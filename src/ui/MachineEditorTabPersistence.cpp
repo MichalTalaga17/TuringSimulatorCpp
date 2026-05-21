@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QTableWidget>
 #include <QInputDialog>
+#include <QDebug>
 
 #include <algorithm>
 
@@ -286,12 +287,12 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
     previousBlankSymbol = data.blankSymbol;
     const int stateCount = std::max(1, data.numStates);
 
-    blankSymbolField->setText(QString(QChar(data.blankSymbol)));
+    blankSymbolField->setText(QString(QChar(blankSymbol)));
     numStatesSpinBox->setValue(stateCount);
 
     QString newAlphabetStr = "";
     for (char c : data.alphabet) {
-        if (c != data.blankSymbol) newAlphabetStr += c;
+        if (c != blankSymbol) newAlphabetStr += c;
     }
     alphabetInputField->setText(newAlphabetStr);
 
@@ -299,8 +300,17 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
     for (int i = 0; i < stateCount; ++i) {
         states.push_back("q" + std::to_string(i));
     }
-    alphabet = data.alphabet;
-    alphabet.insert(blankSymbol);
+
+    alphabet.clear();
+    alphabet.push_back(blankSymbol);
+    for (char symbol : data.alphabet)
+    {
+        if (symbol != blankSymbol &&
+            std::find(alphabet.begin(), alphabet.end(), symbol) == alphabet.end())
+        {
+            alphabet.push_back(symbol);
+        }
+    }
 
     initialStateCombo->clear();
     for (const auto &state : states) {
@@ -325,8 +335,10 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
         std::string move = std::get<4>(transition);
 
         int row = -1;
-        for (size_t s = 0; s < states.size(); ++s) {
-            if (states[s] == currentState) { row = static_cast<int>(s); break; }
+        for (int r = 0; r < transitionsTable->rowCount(); ++r) {
+            if (transitionsTable->verticalHeaderItem(r)->text().toStdString() == currentState) {
+                row = r; break;
+            }
         }
 
         int col = columnForSymbol(orderedAlpha, readSymbol);
