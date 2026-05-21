@@ -13,6 +13,7 @@ namespace
 {
     constexpr int minimumTapeCellCount = 41;
     constexpr int tapeInputTailPadding = 4;
+    constexpr int activeTransitionRole = Qt::UserRole + 1;
 } // namespace
 
 QString MachineEditorTab::tabTitle() const
@@ -305,8 +306,20 @@ bool MachineEditorTab::executeMachineStep()
         return false;
     }
 
+    const std::string executedState = machine->currentState();
+    const char executedSymbol = machine->tape().read();
     const bool executedStep = machine->step();
-    updateDisplay();
+    updateStateDisplay();
+    updateTapeDisplay();
+
+    if (executedStep)
+    {
+        highlightTransition(executedState, executedSymbol);
+    }
+    else
+    {
+        clearActiveTransitionHighlight();
+    }
 
     if (!executedStep || machine->isHalted())
     {
@@ -469,16 +482,24 @@ void MachineEditorTab::updateActiveTransitionHighlight()
         return;
     }
 
-    const std::string &currentState = machine->currentState();
-    const auto stateIt = std::find(states.begin(), states.end(), currentState);
+    highlightTransition(machine->currentState(), machine->tape().read());
+}
+
+void MachineEditorTab::highlightTransition(const std::string &state, char readSymbol)
+{
+    if (!transitionsTable)
+    {
+        return;
+    }
+
+    const auto stateIt = std::find(states.begin(), states.end(), state);
     if (stateIt == states.end())
     {
         clearActiveTransitionHighlight();
         return;
     }
 
-    const char readSymbol = machine->tape().read();
-    const auto transitionIt = transitionMap.find({currentState, readSymbol});
+    const auto transitionIt = transitionMap.find({state, readSymbol});
     if (transitionIt == transitionMap.end())
     {
         clearActiveTransitionHighlight();
@@ -541,16 +562,8 @@ void MachineEditorTab::setTransitionCellHighlighted(int row, int col, bool highl
     }
 
     QSignalBlocker blockTableSignals(transitionsTable);
-    if (highlighted)
-    {
-        // Pomaluj delikatnie tło na niebiesko aby wskazać wykonywany krok 
-        // a przy zgaszeniu cofnij by zajął się tym menedżer motywu
-        item->setBackground(QColor(63, 116, 216, 80));
-    }
-    else
-    {
-        item->setBackground(QBrush());
-    }
+    item->setData(activeTransitionRole, highlighted);
+    transitionsTable->viewport()->update(transitionsTable->visualItemRect(item));
 }
 
 void MachineEditorTab::updateStateDisplay()

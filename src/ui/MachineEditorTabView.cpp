@@ -17,11 +17,15 @@
 #include <QVBoxLayout>
 #include <QStyledItemDelegate>
 #include <QRegularExpressionValidator>
+#include <QPainter>
+#include <QSignalBlocker>
 
 #include <tuple>
 
 namespace
 {
+    constexpr int activeTransitionRole = Qt::UserRole + 1;
+
     class TransitionEditor : public QWidget
     {
         Q_OBJECT
@@ -77,6 +81,26 @@ namespace
     public:
         TransitionDelegate(MachineEditorTab *tab, QObject *parent = nullptr) : QStyledItemDelegate(parent), m_tab(tab) {}
 
+        void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override
+        {
+            QStyledItemDelegate::paint(painter, option, index);
+
+            if (!index.data(activeTransitionRole).toBool())
+            {
+                return;
+            }
+
+            painter->save();
+            painter->setRenderHint(QPainter::Antialiasing, true);
+
+            const QRectF highlightRect = option.rect.adjusted(4, 4, -4, -4);
+            painter->setBrush(QColor(63, 116, 216, 70));
+            painter->setPen(QPen(QColor(63, 116, 216), 2));
+            painter->drawRoundedRect(highlightRect, 6, 6);
+
+            painter->restore();
+        }
+
         QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override
         {
             TransitionEditor *editor = new TransitionEditor(parent);
@@ -99,9 +123,9 @@ namespace
                 emit self->commitData(editor);
             };
 
-            connect(editor->writeCombo, &QComboBox::currentTextChanged, editor, commitChanges);
-            connect(editor->moveCombo, &QComboBox::currentTextChanged, editor, commitChanges);
-            connect(editor->stateCombo, &QComboBox::currentTextChanged, editor, commitChanges);
+            connect(editor->writeCombo, QOverload<int>::of(&QComboBox::activated), editor, commitChanges);
+            connect(editor->moveCombo, QOverload<int>::of(&QComboBox::activated), editor, commitChanges);
+            connect(editor->stateCombo, QOverload<int>::of(&QComboBox::activated), editor, commitChanges);
 
             return editor;
         }
@@ -110,6 +134,10 @@ namespace
         {
             TransitionEditor *editor = qobject_cast<TransitionEditor *>(widget);
             if (!editor) return;
+
+            QSignalBlocker blockWrite(editor->writeCombo);
+            QSignalBlocker blockMove(editor->moveCombo);
+            QSignalBlocker blockState(editor->stateCombo);
 
             QString text = index.data(Qt::DisplayRole).toString();
             QStringList parts = text.split(",");
