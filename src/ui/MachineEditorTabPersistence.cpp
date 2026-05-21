@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QTableWidget>
 #include <QInputDialog>
+#include <QDebug>
 
 void MachineEditorTab::rebuildTransitionsTable()
 {
@@ -154,6 +155,129 @@ bool MachineEditorTab::saveMachineToPath(const QString &filePath)
     return true;
 }
 
+// bool MachineEditorTab::loadFromFile(const QString &filePath)
+// {
+//     MachineData data = loadInstructionsFromFile(filePath);
+//     if (!data.success)
+//     {
+//         QMessageBox::warning(this, "Błąd", data.errorMessage);
+//         return false;
+//     }
+
+//     // ==========================================================
+//     // BLOKUJEMY SYGNAŁY UI
+//     // ==========================================================
+//     numStatesSpinBox->blockSignals(true);
+//     alphabetInputField->blockSignals(true);
+//     blankSymbolField->blockSignals(true);
+//     initialStateCombo->blockSignals(true);
+
+//     blankSymbolField->setText(QString(QChar(data.blankSymbol)));
+//     numStatesSpinBox->setValue(data.numStates);
+
+//     QString newAlphabetStr = "";
+//     for (char c : data.alphabet)
+//     {
+//         if (c != data.blankSymbol)
+//         {
+//             newAlphabetStr += c;
+//         }
+//     }
+//     alphabetInputField->setText(newAlphabetStr);
+
+//     states.clear();
+//     for (int i = 0; i < data.numStates; ++i)
+//     {
+//         states.push_back("q" + std::to_string(i));
+//     }
+//     alphabet = data.alphabet;
+
+//     initialStateCombo->clear();
+//     for (const auto &state : states)
+//     {
+//         initialStateCombo->addItem(QString::fromStdString(state));
+//     }
+//     if (!data.initialState.empty())
+//     {
+//         initialStateCombo->setCurrentText(QString::fromStdString(data.initialState));
+//     }
+
+//     // 4. Budujemy idealnie dopasowaną tabelę JEDEN RAZ
+//     rebuildTransitionsTable();
+
+//     // ==========================================================
+//     // ODBLOKUJEMY SYGNAŁY UI
+//     // ==========================================================
+//     numStatesSpinBox->blockSignals(false);
+//     alphabetInputField->blockSignals(false);
+//     blankSymbolField->blockSignals(false);
+//     initialStateCombo->blockSignals(false);
+
+//     // 5. Uzupełniamy komórki gotowej tabeli
+//     for (const auto &transition : data.transitions)
+//     {
+//         std::string currentState = std::get<0>(transition);
+//         char readSymbol = std::get<1>(transition);
+//         std::string nextState = std::get<2>(transition);
+//         char writeSymbol = std::get<3>(transition);
+//         std::string move = std::get<4>(transition);
+
+//         QString uiMove = "Stay";
+//         if (move == "L")
+//             uiMove = "L";
+//         else if (move == "P" || move == "R")
+//             uiMove = "R";
+//         else if (move == "_")
+//             uiMove = "Stay";
+//         else if (move == "STOP")
+//             uiMove = "Stop";
+
+//         int row = -1;
+//         for (size_t s = 0; s < states.size(); ++s)
+//         {
+//             if (states[s] == currentState)
+//             {
+//                 row = static_cast<int>(s);
+//                 break;
+//             }
+//         }
+
+//         int col = -1;
+//         int colIdx = 0;
+//         for (char a : alphabet)
+//         {
+//             if (a == readSymbol)
+//             {
+//                 col = colIdx;
+//                 break;
+//             }
+//             colIdx++;
+//         }
+
+//         if (row != -1 && col != -1)
+//         {
+//             QTableWidgetItem *item = transitionsTable->item(row, col);
+//             if (item)
+//             {
+//                 QString transitionText = QString("%1, %2, %3")
+//                     .arg(writeSymbol)
+//                     .arg(uiMove == "Stay" ? "L" : uiMove)
+//                     .arg(QString::fromStdString(nextState));
+//                 item->setText(transitionText);
+//             }
+//         }
+//     }
+
+//     if (rebuildMachineFromEditor() && statusLabel)
+//     {
+//         statusLabel->setText("Wczytano z pliku");
+//     }
+
+//     currentFilePath = filePath;
+//     emit titleChanged(tabTitle());
+//     return true;
+// }
+
 bool MachineEditorTab::loadFromFile(const QString &filePath)
 {
     MachineData data = loadInstructionsFromFile(filePath);
@@ -163,9 +287,7 @@ bool MachineEditorTab::loadFromFile(const QString &filePath)
         return false;
     }
 
-    // ==========================================================
-    // BLOKUJEMY SYGNAŁY UI
-    // ==========================================================
+    // 1. Ustawienie UI (SpinBoxy, Inputy, ComboBoxy)
     numStatesSpinBox->blockSignals(true);
     alphabetInputField->blockSignals(true);
     blankSymbolField->blockSignals(true);
@@ -177,10 +299,7 @@ bool MachineEditorTab::loadFromFile(const QString &filePath)
     QString newAlphabetStr = "";
     for (char c : data.alphabet)
     {
-        if (c != data.blankSymbol)
-        {
-            newAlphabetStr += c;
-        }
+        if (c != data.blankSymbol) newAlphabetStr += c;
     }
     alphabetInputField->setText(newAlphabetStr);
 
@@ -201,71 +320,13 @@ bool MachineEditorTab::loadFromFile(const QString &filePath)
         initialStateCombo->setCurrentText(QString::fromStdString(data.initialState));
     }
 
-    // 4. Budujemy idealnie dopasowaną tabelę JEDEN RAZ
-    rebuildTransitionsTable();
+    // 2. Przekazujemy dane do applyMachineData - to ona zajmie się budowaniem tabeli i wypełnianiem
+    applyMachineData(data);
 
-    // ==========================================================
-    // ODBLOKUJEMY SYGNAŁY UI
-    // ==========================================================
     numStatesSpinBox->blockSignals(false);
     alphabetInputField->blockSignals(false);
     blankSymbolField->blockSignals(false);
     initialStateCombo->blockSignals(false);
-
-    // 5. Uzupełniamy komórki gotowej tabeli
-    for (const auto &transition : data.transitions)
-    {
-        std::string currentState = std::get<0>(transition);
-        char readSymbol = std::get<1>(transition);
-        std::string nextState = std::get<2>(transition);
-        char writeSymbol = std::get<3>(transition);
-        std::string move = std::get<4>(transition);
-
-        QString uiMove = "Stay";
-        if (move == "L")
-            uiMove = "L";
-        else if (move == "P" || move == "R")
-            uiMove = "R";
-        else if (move == "_")
-            uiMove = "Stay";
-        else if (move == "STOP")
-            uiMove = "Stop";
-
-        int row = -1;
-        for (size_t s = 0; s < states.size(); ++s)
-        {
-            if (states[s] == currentState)
-            {
-                row = static_cast<int>(s);
-                break;
-            }
-        }
-
-        int col = -1;
-        int colIdx = 0;
-        for (char a : alphabet)
-        {
-            if (a == readSymbol)
-            {
-                col = colIdx;
-                break;
-            }
-            colIdx++;
-        }
-
-        if (row != -1 && col != -1)
-        {
-            QTableWidgetItem *item = transitionsTable->item(row, col);
-            if (item)
-            {
-                QString transitionText = QString("%1, %2, %3")
-                    .arg(writeSymbol)
-                    .arg(uiMove == "Stay" ? "L" : uiMove)
-                    .arg(QString::fromStdString(nextState));
-                item->setText(transitionText);
-            }
-        }
-    }
 
     if (rebuildMachineFromEditor() && statusLabel)
     {
@@ -332,41 +393,37 @@ bool MachineEditorTab::loadFromDatabase(const QString &machineName)
 // Funkcja pomocnicza odwalająca brudną robotę w interfejsie
 void MachineEditorTab::applyMachineData(const MachineData& data)
 {
+    // 1. Blokujemy sygnały, aby uniknąć zbędnych przebudowań w trakcie ustawiania
     numStatesSpinBox->blockSignals(true);
     alphabetInputField->blockSignals(true);
     blankSymbolField->blockSignals(true);
     initialStateCombo->blockSignals(true);
 
-    blankSymbolField->setText(QString(QChar(data.blankSymbol)));
+    blankSymbol = data.blankSymbol;
+    alphabet = data.alphabet; // Zakładamy, że alphabet to std::vector<char>
+
+    blankSymbolField->setText(QString(QChar(blankSymbol)));
     numStatesSpinBox->setValue(data.numStates);
 
+    // Aktualizacja pola tekstowego alfabetu
     QString newAlphabetStr = "";
     for (char c : data.alphabet) {
-        if (c != data.blankSymbol) newAlphabetStr += c;
+        if (c != blankSymbol) newAlphabetStr += c;
     }
     alphabetInputField->setText(newAlphabetStr);
 
+    // Ustawianie stanów
     states.clear();
-    for (int i = 0; i < data.numStates; ++i) {
-        states.push_back("q" + std::to_string(i));
-    }
-    alphabet = data.alphabet;
+    for (int i = 0; i < data.numStates; ++i) states.push_back("q" + std::to_string(i));
 
     initialStateCombo->clear();
-    for (const auto &state : states) {
-        initialStateCombo->addItem(QString::fromStdString(state));
-    }
-    if (!data.initialState.empty()) {
-        initialStateCombo->setCurrentText(QString::fromStdString(data.initialState));
-    }
+    for (const auto &state : states) initialStateCombo->addItem(QString::fromStdString(state));
+    initialStateCombo->setCurrentText(QString::fromStdString(data.initialState));
 
+    // Budujemy tabelę na nowo
     rebuildTransitionsTable();
 
-    numStatesSpinBox->blockSignals(false);
-    alphabetInputField->blockSignals(false);
-    blankSymbolField->blockSignals(false);
-    initialStateCombo->blockSignals(false);
-
+    // 2. Wypełniamy komórki gotowej tabeli
     for (const auto &transition : data.transitions) {
         std::string currentState = std::get<0>(transition);
         char readSymbol = std::get<1>(transition);
@@ -374,34 +431,45 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
         char writeSymbol = std::get<3>(transition);
         std::string move = std::get<4>(transition);
 
-        QString uiMove = "Stay";
-        if (move == "L") uiMove = "L";
-        else if (move == "P" || move == "R") uiMove = "R";
-        else if (move == "_") uiMove = "Stay";
-        else if (move == "STOP") uiMove = "Stop";
-
+        // Znajdź wiersz
         int row = -1;
-        for (size_t s = 0; s < states.size(); ++s) {
-            if (states[s] == currentState) { row = static_cast<int>(s); break; }
+        for (int r = 0; r < transitionsTable->rowCount(); ++r) {
+            if (transitionsTable->verticalHeaderItem(r)->text().toStdString() == currentState) {
+                row = r; break;
+            }
         }
 
+        // Znajdź kolumnę
         int col = -1;
-        int colIdx = 0;
-        for (char a : alphabet) {
-            if (a == readSymbol) { col = colIdx; break; }
-            colIdx++;
+        for (int c = 0; c < transitionsTable->columnCount(); ++c) {
+            if (transitionsTable->horizontalHeaderItem(c)->text() == QString(QChar(readSymbol))) {
+                col = c; break;
+            }
         }
 
         if (row != -1 && col != -1) {
             QTableWidgetItem *item = transitionsTable->item(row, col);
-            if (item)
-            {
-                QString transitionText = QString("%1, %2, %3")
-                    .arg(writeSymbol)
-                    .arg(uiMove == "Stay" ? "L" : uiMove)
-                    .arg(QString::fromStdString(nextState));
-                item->setText(transitionText);
+            if (item) {
+                // TŁUMACZENIE RUCHU:
+                QString rawMove = QString::fromStdString(move);
+                QString uiMove = rawMove;
+
+                if (rawMove == "_") uiMove = "Stay";
+                else if (rawMove == "STOP") uiMove = "Stop";
+
+                // Wpisujemy sformatowany tekst: "ZapiszSymbol, Ruch, NastępnyStan"
+                item->setText(QString("%1, %2, %3")
+                                  .arg(QString(QChar(writeSymbol)))
+                                  .arg(uiMove)
+                                  .arg(QString::fromStdString(nextState)));
             }
         }
     }
+
+    // Aktualizujemy silnik i odblokowujemy sygnały
+    populateTransitionMapWithDefaults();
+    numStatesSpinBox->blockSignals(false);
+    alphabetInputField->blockSignals(false);
+    blankSymbolField->blockSignals(false);
+    initialStateCombo->blockSignals(false);
 }

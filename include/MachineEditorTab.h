@@ -143,7 +143,7 @@ private:
     // Logic
     std::unique_ptr<TuringMachine> machine;
     std::vector<std::string> states; // q0, q1, q2, ...
-    std::set<char> alphabet;
+    std::vector<char> alphabet;
     std::string initialState;
     std::set<std::string> acceptingStates;
 

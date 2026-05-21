@@ -79,76 +79,26 @@ void MachineEditorTab::onNumStatesChanged(int value)
 void MachineEditorTab::onAlphabetChanged()
 {
     QString alphaStr = alphabetInputField->text();
-    std::set<char> newAlphabet;
+    std::vector<char> newAlphabet; // Zmienione na vector
 
-    // Get current blank symbol
-    QString blankStr = blankSymbolField->text();
-    char currentBlank = blankStr.isEmpty() || blankStr.length() != 1 ? '_' : blankStr[0].toLatin1();
+    char currentBlank = blankSymbolField->text().isEmpty() ? '_' : blankSymbolField->text()[0].toLatin1();
+    newAlphabet.push_back(currentBlank); // Blank na początek
 
-    // Parse alphabet (comma or space separated, or just chars)
     for (int i = 0; i < alphaStr.length(); ++i)
     {
         char c = alphaStr[i].toLatin1();
-        if (c != ',' && c != ' ' && c != 0)
+        if (c != ',' && c != ' ' && c != 0 && c != currentBlank)
         {
-            newAlphabet.insert(c);
+            // Dodaj tylko jeśli jeszcze go nie ma (zamiast set.insert)
+            if (std::find(newAlphabet.begin(), newAlphabet.end(), c) == newAlphabet.end()) {
+                newAlphabet.push_back(c);
+            }
         }
     }
 
-    // Always add the blank symbol as first column (if not already in alphabet)
-    newAlphabet.insert(currentBlank);
-
-    // Only rebuild if alphabet changed
-    if (newAlphabet != alphabet)
-    {
+    if (newAlphabet != alphabet) {
         alphabet = newAlphabet;
         rebuildTransitionsTable();
-        // Note: transitionMap is populated by rebuildTransitionsTable() via populateTransitionMapWithDefaults()
-    }
-
-    const bool rebuilt = rebuildMachineFromEditor();
-    if (statusLabel)
-    {
-        statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
-    }
-}
-
-void MachineEditorTab::onBlankSymbolChanged()
-{
-    QString blankStr = blankSymbolField->text();
-    char newBlank = blankStr.isEmpty() || blankStr.length() != 1 ? '_' : blankStr[0].toLatin1();
-
-    // If blank symbol hasn't changed, do nothing
-    if (newBlank == blankSymbol)
-    {
-        return;
-    }
-
-    // Store the old blank symbol before changing it
-    char oldBlank = blankSymbol;
-
-    // Update the blank symbol immediately
-    previousBlankSymbol = blankSymbol;
-    blankSymbol = newBlank;
-
-    // If the table exists and has columns, update the blank symbol column in place
-    if (transitionsTable->rowCount() > 0 && transitionsTable->columnCount() > 0)
-    {
-        // The blank symbol should always be at column 0 due to getOrderedAlphabet()
-        // Just update the header
-        transitionsTable->horizontalHeaderItem(0)->setText(QString(newBlank));
-    }
-
-    // Update the alphabet set
-    std::set<char> newAlphabet = alphabet;
-    newAlphabet.erase(oldBlank);
-    newAlphabet.insert(newBlank);
-    alphabet = newAlphabet;
-
-    const bool rebuilt = rebuildMachineFromEditor();
-    if (statusLabel)
-    {
-        statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
     }
 }
 
@@ -184,6 +134,41 @@ void MachineEditorTab::onTableItemChanged(QTableWidgetItem *item)
     if (rebuildMachineFromEditor() && statusLabel)
     {
         statusLabel->setText("Rebuilt");
+    }
+}
+
+void MachineEditorTab::onBlankSymbolChanged()
+{
+    QString blankStr = blankSymbolField->text();
+    // Jeśli użytkownik wyczyścił pole, używamy domyślnego '_'
+    char newBlank = blankStr.isEmpty() ? '_' : blankStr[0].toLatin1();
+
+    // Jeśli symbol jest taki sam, nie robimy nic
+    if (newBlank == blankSymbol)
+    {
+        return;
+    }
+
+    // Zaktualizuj blank symbol w klasie
+    blankSymbol = newBlank;
+
+    // Zaktualizuj wszystkie wystąpienia starego blanka w alfabecie na nowy blank
+    // Zakładając, że previousBlankSymbol przechowuje poprzednią wartość
+    for (char &c : alphabet)
+    {
+        if (c == previousBlankSymbol)
+        {
+            c = newBlank;
+        }
+    }
+    previousBlankSymbol = newBlank;
+
+    // Odśwież UI
+    rebuildTransitionsTable();
+    rebuildMachineFromEditor();
+
+    if (statusLabel) {
+        statusLabel->setText("Blank symbol updated");
     }
 }
 
