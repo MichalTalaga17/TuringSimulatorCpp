@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Dokumentacja pliku storage.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('storage_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Dokumentacja pliku storage.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>API zapisu i odczytu definicji maszyn z plików JSON oraz SQLite.  
+<a href="#details">Więcej...</a></p>
+<div class="textblock"><code>#include &lt;QStringList&gt;</code><br />
+<code>#include &lt;QString&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;tuple&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+</div>
+<p><a href="storage_8h_source.html">Idź do kodu źródłowego tego pliku.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Komponenty</h2></td></tr>
+<tr class="memitem:MachineData" id="r_MachineData"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_machine_data.html">MachineData</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dane definicji maszyny odczytane z trwałego nośnika.  <a href="struct_machine_data.html#details">Więcej...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funkcje</h2></td></tr>
+<tr class="memitem:a9bac9e921b771f571aa9f11c35729596" id="r_a9bac9e921b771f571aa9f11c35729596"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a9bac9e921b771f571aa9f11c35729596">saveInstructionsToFile</a> (const <a class="el" href="class_turing_machine.html">TuringMachine</a> &amp;machine, const QString &amp;filePath, const QString &amp;initialState, char blankSymbol, int numStates, const std::vector&lt; char &gt; &amp;alphabet)</td></tr>
+<tr class="memdesc:a9bac9e921b771f571aa9f11c35729596"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje definicję maszyny do pliku JSON.  <br /></td></tr>
+<tr class="memitem:a7a39f380e2fad15eca9c554c8c1bb1dc" id="r_a7a39f380e2fad15eca9c554c8c1bb1dc"><td class="memItemLeft"><a class="el" href="struct_machine_data.html">MachineData</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7a39f380e2fad15eca9c554c8c1bb1dc">loadInstructionsFromFile</a> (const QString &amp;filePath)</td></tr>
+<tr class="memdesc:a7a39f380e2fad15eca9c554c8c1bb1dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wczytuje definicję maszyny z pliku JSON.  <br /></td></tr>
+<tr class="memitem:aa1805c8a8ea576e37c23a8e8b0c231c9" id="r_aa1805c8a8ea576e37c23a8e8b0c231c9"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aa1805c8a8ea576e37c23a8e8b0c231c9">saveMachineToDatabase</a> (const <a class="el" href="class_turing_machine.html">TuringMachine</a> &amp;machine, const QString &amp;machineName, const QString &amp;initialState, char blankSymbol, int numStates, const std::vector&lt; char &gt; &amp;alphabet)</td></tr>
+<tr class="memdesc:aa1805c8a8ea576e37c23a8e8b0c231c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje definicję maszyny w lokalnej bazie SQLite.  <br /></td></tr>
+<tr class="memitem:a7a43cbe54596f6a5cd322c702dbdcec6" id="r_a7a43cbe54596f6a5cd322c702dbdcec6"><td class="memItemLeft"><a class="el" href="struct_machine_data.html">MachineData</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7a43cbe54596f6a5cd322c702dbdcec6">loadMachineFromDatabase</a> (const QString &amp;machineName)</td></tr>
+<tr class="memdesc:a7a43cbe54596f6a5cd322c702dbdcec6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wczytuje definicję maszyny z lokalnej bazy SQLite.  <br /></td></tr>
+<tr class="memitem:adb956e02aa82fa5f9fc92428ccf3c824" id="r_adb956e02aa82fa5f9fc92428ccf3c824"><td class="memItemLeft">QStringList&#160;</td><td class="memItemRight"><a class="el" href="#adb956e02aa82fa5f9fc92428ccf3c824">getMachineNamesFromDatabase</a> ()</td></tr>
+<tr class="memdesc:adb956e02aa82fa5f9fc92428ccf3c824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zwraca listę nazw maszyn zapisanych w bazie SQLite.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Opis szczegółowy</h2>
+<div class="textblock"><p>API zapisu i odczytu definicji maszyn z plików JSON oraz SQLite. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Dokumentacja funkcji</h2>
+<a id="adb956e02aa82fa5f9fc92428ccf3c824" name="adb956e02aa82fa5f9fc92428ccf3c824"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb956e02aa82fa5f9fc92428ccf3c824">&#9670;&#160;</a></span>getMachineNamesFromDatabase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList getMachineNamesFromDatabase </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zwraca listę nazw maszyn zapisanych w bazie SQLite. </p>
+<dl class="section return"><dt>Zwraca</dt><dd>Posortowana lista nazw maszyn. </dd></dl>
+
+</div>
+</div>
+<a id="a7a39f380e2fad15eca9c554c8c1bb1dc" name="a7a39f380e2fad15eca9c554c8c1bb1dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a39f380e2fad15eca9c554c8c1bb1dc">&#9670;&#160;</a></span>loadInstructionsFromFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_machine_data.html">MachineData</a> loadInstructionsFromFile </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>filePath</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wczytuje definicję maszyny z pliku JSON. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>Ścieżka pliku do odczytu. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd><a class="el" href="struct_machine_data.html" title="Dane definicji maszyny odczytane z trwałego nośnika.">MachineData</a> z ustawionym <span class="tt">success</span> oraz ewentualnym <span class="tt">errorMessage</span>. </dd></dl>
+
+</div>
+</div>
+<a id="a7a43cbe54596f6a5cd322c702dbdcec6" name="a7a43cbe54596f6a5cd322c702dbdcec6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a43cbe54596f6a5cd322c702dbdcec6">&#9670;&#160;</a></span>loadMachineFromDatabase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_machine_data.html">MachineData</a> loadMachineFromDatabase </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>machineName</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wczytuje definicję maszyny z lokalnej bazy SQLite. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">machineName</td><td>Nazwa maszyny do odczytu. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd><a class="el" href="struct_machine_data.html" title="Dane definicji maszyny odczytane z trwałego nośnika.">MachineData</a> z ustawionym <span class="tt">success</span> oraz ewentualnym <span class="tt">errorMessage</span>. </dd></dl>
+
+</div>
+</div>
+<a id="a9bac9e921b771f571aa9f11c35729596" name="a9bac9e921b771f571aa9f11c35729596"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bac9e921b771f571aa9f11c35729596">&#9670;&#160;</a></span>saveInstructionsToFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool saveInstructionsToFile </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_turing_machine.html">TuringMachine</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>machine</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>filePath</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>initialState</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>blankSymbol</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>numStates</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; char &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>alphabet</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zapisuje definicję maszyny do pliku JSON. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">machine</td><td>Zbudowana maszyna zawierająca przejścia. </td></tr>
+    <tr><td class="paramname">filePath</td><td>Ścieżka docelowego pliku <span class="tt">.json</span>. </td></tr>
+    <tr><td class="paramname">initialState</td><td>Stan początkowy wybrany w edytorze. </td></tr>
+    <tr><td class="paramname">blankSymbol</td><td>Symbol pusty taśmy. </td></tr>
+    <tr><td class="paramname">numStates</td><td>Liczba stanów widocznych w UI. </td></tr>
+    <tr><td class="paramname">alphabet</td><td>Alfabet maszyny. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd><span class="tt">true</span>, jeśli zapis do pliku się powiódł. </dd></dl>
+
+</div>
+</div>
+<a id="aa1805c8a8ea576e37c23a8e8b0c231c9" name="aa1805c8a8ea576e37c23a8e8b0c231c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1805c8a8ea576e37c23a8e8b0c231c9">&#9670;&#160;</a></span>saveMachineToDatabase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool saveMachineToDatabase </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_turing_machine.html">TuringMachine</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>machine</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>machineName</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>initialState</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>blankSymbol</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>numStates</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; char &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>alphabet</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zapisuje definicję maszyny w lokalnej bazie SQLite. </p>
+<p>Jeśli maszyna o tej nazwie istnieje, jej rekord zostaje zastąpiony nową definicją razem z kompletem przejść.</p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">machine</td><td>Zbudowana maszyna zawierająca przejścia. </td></tr>
+    <tr><td class="paramname">machineName</td><td>Nazwa rekordu w bazie. </td></tr>
+    <tr><td class="paramname">initialState</td><td>Stan początkowy wybrany w edytorze. </td></tr>
+    <tr><td class="paramname">blankSymbol</td><td>Symbol pusty taśmy. </td></tr>
+    <tr><td class="paramname">numStates</td><td>Liczba stanów widocznych w UI. </td></tr>
+    <tr><td class="paramname">alphabet</td><td>Alfabet maszyny. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd><span class="tt">true</span>, jeśli transakcja zapisu zakończyła się powodzeniem. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>include</b></li><li class="navelem"><a href="storage_8h.html">storage.h</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+var class_turing_machine =
+[
+    [ "TransitionKey", "class_turing_machine.html#afc6296a2d300f1e5db7b275e1a6aba50", null ],
+    [ "TransitionMap", "class_turing_machine.html#a68b9cfa4ba236ccc887d130fd23ab743", null ],
+    [ "TuringMachine", "class_turing_machine.html#ab9a0bc22bca5d8a6c0c286b19e556b41", null ],
+    [ "addAcceptingState", "class_turing_machine.html#a246171ac3f473cc5bc07ca3e75b4ea7e", null ],
+    [ "addTransition", "class_turing_machine.html#af91a3cbf038ffdf64604c5a334e57e8c", null ],
+    [ "currentState", "class_turing_machine.html#a90c4391b431adc7d22ac9801f558079d", null ],
+    [ "getTransitions", "class_turing_machine.html#ab941da53f1b375342fc4ccbd1eefa969", null ],
+    [ "isAccepted", "class_turing_machine.html#acd11829e66cd39748d0bbe07472f7a14", null ],
+    [ "isHalted", "class_turing_machine.html#ae0d941458859797a82db541a78ada165", null ],
+    [ "loadTape", "class_turing_machine.html#af29ea827bd0b9a923ff46e0960ae3c56", null ],
+    [ "reset", "class_turing_machine.html#a96128d8afd6e556fc2cf8c1904ea8762", null ],
+    [ "setInitialState", "class_turing_machine.html#a6cdf57e6aec2baa17fd5657a17e5b5ec", null ],
+    [ "step", "class_turing_machine.html#a5abd5fff93c1ff762615dbdb94a67dda", null ],
+    [ "stepCount", "class_turing_machine.html#a7cee5d25aa49c79866c347b17eacab44", null ],
+    [ "tape", "class_turing_machine.html#a2fcd6e524687fbbe73dd84ed8e1eb176", null ],
+    [ "updateHaltedForCurrentState", "class_turing_machine.html#a75c013da454ee7c93cf59a337795310e", null ],
+    [ "acceptingStates_", "class_turing_machine.html#a864b4a6960fcdec2ce1c9a472320b74b", null ],
+    [ "currentState_", "class_turing_machine.html#a5745aa602b2fb4e94c6249d49d50f01c", null ],
+    [ "halted_", "class_turing_machine.html#a8e89a305f62c45a1c2eb2df652ae2861", null ],
+    [ "initialState_", "class_turing_machine.html#acdb394357c864872ece40e540544bcf8", null ],
+    [ "initialTapeInput_", "class_turing_machine.html#a814902ea06bf76071191bcd437c27142", null ],
+    [ "stepCount_", "class_turing_machine.html#a4de9b50c5b4c1d8c1aca104f897257e2", null ],
+    [ "tape_", "class_turing_machine.html#a8e9e53577b76ceb052074f2dce3b0042", null ],
+    [ "transitions_", "class_turing_machine.html#af24d461f40da90b907cfcef1f32196ff", null ]
+];

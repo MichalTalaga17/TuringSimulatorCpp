@@ -81,6 +81,16 @@ target_link_libraries(TuringSimulatorCpp PRIVATE
     Qt6::Sql
 )
 
+find_package(Doxygen QUIET)
+if(DOXYGEN_FOUND)
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating Doxygen documentation"
+        VERBATIM
+    )
+endif()
+
 # Copy Qt runtime DLLs to build directory for Windows
 if(WIN32)
     set(QT_BIN_DIR "C:/Qt/6.11.1/msvc2022_64/bin")

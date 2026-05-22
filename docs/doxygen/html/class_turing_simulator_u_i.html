@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Dokumentacja klasy TuringSimulatorUI</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('class_turing_simulator_u_i.html','','class_turing_simulator_u_i-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Dokumentacja klasy TuringSimulatorUI</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Główne okno symulatora z kartami dokumentów i paskiem menu.  
+ <a href="#details">Więcej...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_turing_simulator_u_i_8h_source.html">TuringSimulatorUI.h</a>&gt;</code></p>
+<div class="dynheader">
+Diagram dziedziczenia dla TuringSimulatorUI</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_turing_simulator_u_i.png" alt=""/>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Metody publiczne</h2></td></tr>
+<tr class="memitem:a267892be8b12a6c93836bb60d1a70d37" id="r_a267892be8b12a6c93836bb60d1a70d37"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a267892be8b12a6c93836bb60d1a70d37">TuringSimulatorUI</a> (QWidget *parent=nullptr)</td></tr>
+<tr class="memdesc:a267892be8b12a6c93836bb60d1a70d37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy główne okno aplikacji i inicjalizuje menu, karty oraz motyw.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Metody chronione</h2></td></tr>
+<tr class="memitem:ad04f1df0dc19079a6abf417a7c41377a" id="r_ad04f1df0dc19079a6abf417a7c41377a"><td class="memItemLeft"><a id="ad04f1df0dc19079a6abf417a7c41377a" name="ad04f1df0dc19079a6abf417a7c41377a"></a>
+void&#160;</td><td class="memItemRight"><b>resizeEvent</b> (QResizeEvent *event) override</td></tr>
+<tr class="memdesc:ad04f1df0dc19079a6abf417a7c41377a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aktualizuje elementy zależne od rozmiaru okna. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-slots" class="groupheader"><a id="pri-slots" name="pri-slots"></a>
+Sloty prywatne</h2></td></tr>
+<tr class="memitem:a1f91f5b6dcbb27b2910fec0099a0af83" id="r_a1f91f5b6dcbb27b2910fec0099a0af83"><td class="memItemLeft"><a id="a1f91f5b6dcbb27b2910fec0099a0af83" name="a1f91f5b6dcbb27b2910fec0099a0af83"></a>
+void&#160;</td><td class="memItemRight"><b>showStartPage</b> ()</td></tr>
+<tr class="memdesc:a1f91f5b6dcbb27b2910fec0099a0af83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pokazuje lub tworzy stronę startową. <br /></td></tr>
+<tr class="memitem:ab858a8264d5b7ec3505204fbf0d63e18" id="r_ab858a8264d5b7ec3505204fbf0d63e18"><td class="memItemLeft"><a id="ab858a8264d5b7ec3505204fbf0d63e18" name="ab858a8264d5b7ec3505204fbf0d63e18"></a>
+void&#160;</td><td class="memItemRight"><b>createNewMachineTab</b> ()</td></tr>
+<tr class="memdesc:ab858a8264d5b7ec3505204fbf0d63e18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy nową pustą kartę maszyny. <br /></td></tr>
+<tr class="memitem:af7fac24aa34c16ab9378a2a05448a0a6" id="r_af7fac24aa34c16ab9378a2a05448a0a6"><td class="memItemLeft"><a id="af7fac24aa34c16ab9378a2a05448a0a6" name="af7fac24aa34c16ab9378a2a05448a0a6"></a>
+void&#160;</td><td class="memItemRight"><b>createExampleMachineTab</b> ()</td></tr>
+<tr class="memdesc:af7fac24aa34c16ab9378a2a05448a0a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy nową kartę z przykładową maszyną. <br /></td></tr>
+<tr class="memitem:a5e94e0163dd5938da92c61ff4c42d93c" id="r_a5e94e0163dd5938da92c61ff4c42d93c"><td class="memItemLeft"><a id="a5e94e0163dd5938da92c61ff4c42d93c" name="a5e94e0163dd5938da92c61ff4c42d93c"></a>
+void&#160;</td><td class="memItemRight"><b>openMachineInNewTab</b> ()</td></tr>
+<tr class="memdesc:a5e94e0163dd5938da92c61ff4c42d93c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Otwiera maszynę z pliku JSON w nowej karcie. <br /></td></tr>
+<tr class="memitem:acb8d364522f683ad569356e2c553a400" id="r_acb8d364522f683ad569356e2c553a400"><td class="memItemLeft"><a id="acb8d364522f683ad569356e2c553a400" name="acb8d364522f683ad569356e2c553a400"></a>
+void&#160;</td><td class="memItemRight"><b>saveCurrentMachine</b> ()</td></tr>
+<tr class="memdesc:acb8d364522f683ad569356e2c553a400"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje bieżącą kartę do znanej ścieżki albo uruchamia "Zapisz jako". <br /></td></tr>
+<tr class="memitem:a43dc474c1667448889bf9bdc43914a88" id="r_a43dc474c1667448889bf9bdc43914a88"><td class="memItemLeft"><a id="a43dc474c1667448889bf9bdc43914a88" name="a43dc474c1667448889bf9bdc43914a88"></a>
+void&#160;</td><td class="memItemRight"><b>saveCurrentMachineAs</b> ()</td></tr>
+<tr class="memdesc:a43dc474c1667448889bf9bdc43914a88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje bieżącą kartę po wskazaniu ścieżki. <br /></td></tr>
+<tr class="memitem:a1aba5ab3cc32d8a722daa98fee55c99a" id="r_a1aba5ab3cc32d8a722daa98fee55c99a"><td class="memItemLeft"><a id="a1aba5ab3cc32d8a722daa98fee55c99a" name="a1aba5ab3cc32d8a722daa98fee55c99a"></a>
+void&#160;</td><td class="memItemRight"><b>openMachineFromDatabase</b> ()</td></tr>
+<tr class="memdesc:a1aba5ab3cc32d8a722daa98fee55c99a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pokazuje dialog wyboru maszyny z bazy danych. <br /></td></tr>
+<tr class="memitem:a6c7acd92ffa87fc628bb841bd084a8d1" id="r_a6c7acd92ffa87fc628bb841bd084a8d1"><td class="memItemLeft"><a id="a6c7acd92ffa87fc628bb841bd084a8d1" name="a6c7acd92ffa87fc628bb841bd084a8d1"></a>
+void&#160;</td><td class="memItemRight"><b>saveCurrentMachineToDatabase</b> ()</td></tr>
+<tr class="memdesc:a6c7acd92ffa87fc628bb841bd084a8d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje bieżącą maszynę w bazie danych. <br /></td></tr>
+<tr class="memitem:a20a0d788cdc3a02e736d5525ee3b1973" id="r_a20a0d788cdc3a02e736d5525ee3b1973"><td class="memItemLeft"><a id="a20a0d788cdc3a02e736d5525ee3b1973" name="a20a0d788cdc3a02e736d5525ee3b1973"></a>
+void&#160;</td><td class="memItemRight"><b>closeCurrentMachineTab</b> ()</td></tr>
+<tr class="memdesc:a20a0d788cdc3a02e736d5525ee3b1973"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zamyka aktualnie aktywną kartę. <br /></td></tr>
+<tr class="memitem:ac33f567ac40225a3f92c9e8ba40fda9d" id="r_ac33f567ac40225a3f92c9e8ba40fda9d"><td class="memItemLeft"><a id="ac33f567ac40225a3f92c9e8ba40fda9d" name="ac33f567ac40225a3f92c9e8ba40fda9d"></a>
+void&#160;</td><td class="memItemRight"><b>validateCurrentMachine</b> ()</td></tr>
+<tr class="memdesc:ac33f567ac40225a3f92c9e8ba40fda9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Waliduje i przebudowuje bieżącą maszynę. <br /></td></tr>
+<tr class="memitem:a063f7b2f26a79b23a5a4a1675d6f7912" id="r_a063f7b2f26a79b23a5a4a1675d6f7912"><td class="memItemLeft"><a id="a063f7b2f26a79b23a5a4a1675d6f7912" name="a063f7b2f26a79b23a5a4a1675d6f7912"></a>
+void&#160;</td><td class="memItemRight"><b>resetCurrentMachineToExample</b> ()</td></tr>
+<tr class="memdesc:a063f7b2f26a79b23a5a4a1675d6f7912"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przywraca przykład startowy w bieżącej karcie. <br /></td></tr>
+<tr class="memitem:ab99e0b8992eeab8d0211d3e317875e05" id="r_ab99e0b8992eeab8d0211d3e317875e05"><td class="memItemLeft"><a id="ab99e0b8992eeab8d0211d3e317875e05" name="ab99e0b8992eeab8d0211d3e317875e05"></a>
+void&#160;</td><td class="memItemRight"><b>stepCurrentMachine</b> ()</td></tr>
+<tr class="memdesc:ab99e0b8992eeab8d0211d3e317875e05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wykonuje pojedynczy krok bieżącej maszyny. <br /></td></tr>
+<tr class="memitem:a8b3c3a281e689324830d922511dd9d02" id="r_a8b3c3a281e689324830d922511dd9d02"><td class="memItemLeft"><a id="a8b3c3a281e689324830d922511dd9d02" name="a8b3c3a281e689324830d922511dd9d02"></a>
+void&#160;</td><td class="memItemRight"><b>toggleCurrentMachineRun</b> ()</td></tr>
+<tr class="memdesc:a8b3c3a281e689324830d922511dd9d02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przełącza tryb run/pause bieżącej maszyny. <br /></td></tr>
+<tr class="memitem:a5716bc8057d4f1e64ce5b0d0bd107aba" id="r_a5716bc8057d4f1e64ce5b0d0bd107aba"><td class="memItemLeft"><a id="a5716bc8057d4f1e64ce5b0d0bd107aba" name="a5716bc8057d4f1e64ce5b0d0bd107aba"></a>
+void&#160;</td><td class="memItemRight"><b>resetCurrentMachine</b> ()</td></tr>
+<tr class="memdesc:a5716bc8057d4f1e64ce5b0d0bd107aba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resetuje bieżącą maszynę. <br /></td></tr>
+<tr class="memitem:ae0d58a92afbc717f83cfb3617cf9ab12" id="r_ae0d58a92afbc717f83cfb3617cf9ab12"><td class="memItemLeft"><a id="ae0d58a92afbc717f83cfb3617cf9ab12" name="ae0d58a92afbc717f83cfb3617cf9ab12"></a>
+void&#160;</td><td class="memItemRight"><b>selectPreviousTab</b> ()</td></tr>
+<tr class="memdesc:ae0d58a92afbc717f83cfb3617cf9ab12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aktywuje poprzednią kartę. <br /></td></tr>
+<tr class="memitem:ad16e692374209e6d8959c2aeb491c27a" id="r_ad16e692374209e6d8959c2aeb491c27a"><td class="memItemLeft"><a id="ad16e692374209e6d8959c2aeb491c27a" name="ad16e692374209e6d8959c2aeb491c27a"></a>
+void&#160;</td><td class="memItemRight"><b>selectNextTab</b> ()</td></tr>
+<tr class="memdesc:ad16e692374209e6d8959c2aeb491c27a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aktywuje następną kartę. <br /></td></tr>
+<tr class="memitem:ad9213981b5eae59153fa0f1c9d9a41f0" id="r_ad9213981b5eae59153fa0f1c9d9a41f0"><td class="memItemLeft"><a id="ad9213981b5eae59153fa0f1c9d9a41f0" name="ad9213981b5eae59153fa0f1c9d9a41f0"></a>
+void&#160;</td><td class="memItemRight"><b>updateMenuState</b> ()</td></tr>
+<tr class="memdesc:ad9213981b5eae59153fa0f1c9d9a41f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Odświeża dostępność akcji menu i tytuł okna. <br /></td></tr>
+<tr class="memitem:a0b96ad29e7887f3e4ffd62fb0e3b3007" id="r_a0b96ad29e7887f3e4ffd62fb0e3b3007"><td class="memItemLeft"><a id="a0b96ad29e7887f3e4ffd62fb0e3b3007" name="a0b96ad29e7887f3e4ffd62fb0e3b3007"></a>
+void&#160;</td><td class="memItemRight"><b>showAboutDialog</b> ()</td></tr>
+<tr class="memdesc:a0b96ad29e7887f3e4ffd62fb0e3b3007"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pokazuje okno informacji o programie. <br /></td></tr>
+<tr class="memitem:a3dc2d1302a1e849dcb6f7291609a7064" id="r_a3dc2d1302a1e849dcb6f7291609a7064"><td class="memItemLeft"><a id="a3dc2d1302a1e849dcb6f7291609a7064" name="a3dc2d1302a1e849dcb6f7291609a7064"></a>
+void&#160;</td><td class="memItemRight"><b>showAboutAuthorsDialog</b> ()</td></tr>
+<tr class="memdesc:a3dc2d1302a1e849dcb6f7291609a7064"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pokazuje okno informacji o autorach. <br /></td></tr>
+<tr class="memitem:a244930d57a6576035982149a9feeab09" id="r_a244930d57a6576035982149a9feeab09"><td class="memItemLeft"><a id="a244930d57a6576035982149a9feeab09" name="a244930d57a6576035982149a9feeab09"></a>
+void&#160;</td><td class="memItemRight"><b>toggleTheme</b> ()</td></tr>
+<tr class="memdesc:a244930d57a6576035982149a9feeab09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przełącza jasny i ciemny motyw aplikacji. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Metody prywatne</h2></td></tr>
+<tr class="memitem:aa729e73925255154112e68c715b4d93f" id="r_aa729e73925255154112e68c715b4d93f"><td class="memItemLeft"><a id="aa729e73925255154112e68c715b4d93f" name="aa729e73925255154112e68c715b4d93f"></a>
+void&#160;</td><td class="memItemRight"><b>setupUI</b> ()</td></tr>
+<tr class="memdesc:aa729e73925255154112e68c715b4d93f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buduje główny QTabWidget i przycisk dodawania kart. <br /></td></tr>
+<tr class="memitem:af2f087a8d20a6eb8fb3dcfbc92149be0" id="r_af2f087a8d20a6eb8fb3dcfbc92149be0"><td class="memItemLeft"><a id="af2f087a8d20a6eb8fb3dcfbc92149be0" name="af2f087a8d20a6eb8fb3dcfbc92149be0"></a>
+void&#160;</td><td class="memItemRight"><b>setupMenu</b> ()</td></tr>
+<tr class="memdesc:af2f087a8d20a6eb8fb3dcfbc92149be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy menu aplikacji i podpina skróty klawiaturowe. <br /></td></tr>
+<tr class="memitem:ab42567931160ff82b8e968d36358ff8b" id="r_ab42567931160ff82b8e968d36358ff8b"><td class="memItemLeft"><a id="ab42567931160ff82b8e968d36358ff8b" name="ab42567931160ff82b8e968d36358ff8b"></a>
+<a class="el" href="class_machine_editor_tab.html">MachineEditorTab</a> *&#160;</td><td class="memItemRight"><b>currentMachineTab</b> () const</td></tr>
+<tr class="memdesc:ab42567931160ff82b8e968d36358ff8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zwraca aktualną kartę maszyny albo <span class="tt">nullptr</span>, jeśli aktywna jest strona startowa. <br /></td></tr>
+<tr class="memitem:adf8633ed220e8bada1ff92fd34eb92a0" id="r_adf8633ed220e8bada1ff92fd34eb92a0"><td class="memItemLeft"><a id="adf8633ed220e8bada1ff92fd34eb92a0" name="adf8633ed220e8bada1ff92fd34eb92a0"></a>
+QWidget *&#160;</td><td class="memItemRight"><b>createStartPage</b> ()</td></tr>
+<tr class="memdesc:adf8633ed220e8bada1ff92fd34eb92a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy widżet strony startowej. <br /></td></tr>
+<tr class="memitem:a067c63c216311936416238f50aa83746" id="r_a067c63c216311936416238f50aa83746"><td class="memItemLeft"><a id="a067c63c216311936416238f50aa83746" name="a067c63c216311936416238f50aa83746"></a>
+bool&#160;</td><td class="memItemRight"><b>isStartPage</b> (QWidget *widget) const</td></tr>
+<tr class="memdesc:a067c63c216311936416238f50aa83746"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sprawdza, czy widżet jest stroną startową. <br /></td></tr>
+<tr class="memitem:a88220d61886db3b89b5b3f56a954a56d" id="r_a88220d61886db3b89b5b3f56a954a56d"><td class="memItemLeft"><a id="a88220d61886db3b89b5b3f56a954a56d" name="a88220d61886db3b89b5b3f56a954a56d"></a>
+int&#160;</td><td class="memItemRight"><b>addClosableTab</b> (QWidget *tab, const QString &amp;title, int insertIndex=-1)</td></tr>
+<tr class="memdesc:a88220d61886db3b89b5b3f56a954a56d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dodaje kartę z własnym przyciskiem zamykania. <br /></td></tr>
+<tr class="memitem:ac5b09d6688dbb6b134ac7df3eda2ffd9" id="r_ac5b09d6688dbb6b134ac7df3eda2ffd9"><td class="memItemLeft"><a id="ac5b09d6688dbb6b134ac7df3eda2ffd9" name="ac5b09d6688dbb6b134ac7df3eda2ffd9"></a>
+void&#160;</td><td class="memItemRight"><b>addMachineTab</b> (<a class="el" href="class_machine_editor_tab.html">MachineEditorTab</a> *tab, int insertIndex=-1)</td></tr>
+<tr class="memdesc:ac5b09d6688dbb6b134ac7df3eda2ffd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dodaje kartę maszyny i podłącza sygnał zmiany tytułu. <br /></td></tr>
+<tr class="memitem:a49e4db7635af9f041bbb44d068932cd6" id="r_a49e4db7635af9f041bbb44d068932cd6"><td class="memItemLeft"><a id="a49e4db7635af9f041bbb44d068932cd6" name="a49e4db7635af9f041bbb44d068932cd6"></a>
+void&#160;</td><td class="memItemRight"><b>addMachineTabFromStartPage</b> (<a class="el" href="class_machine_editor_tab.html">MachineEditorTab</a> *tab)</td></tr>
+<tr class="memdesc:a49e4db7635af9f041bbb44d068932cd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dodaje kartę maszyny, zastępując stronę startową, jeśli była aktywna. <br /></td></tr>
+<tr class="memitem:a70a44f3c4bcae182f9cdefe0dbcbbf93" id="r_a70a44f3c4bcae182f9cdefe0dbcbbf93"><td class="memItemLeft"><a id="a70a44f3c4bcae182f9cdefe0dbcbbf93" name="a70a44f3c4bcae182f9cdefe0dbcbbf93"></a>
+void&#160;</td><td class="memItemRight"><b>openMachineFromDatabaseName</b> (const QString &amp;machineName)</td></tr>
+<tr class="memdesc:a70a44f3c4bcae182f9cdefe0dbcbbf93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Otwiera wskazaną maszynę z bazy w nowej karcie. <br /></td></tr>
+<tr class="memitem:acd114f03ba31764a97c43dce23890fba" id="r_acd114f03ba31764a97c43dce23890fba"><td class="memItemLeft"><a id="acd114f03ba31764a97c43dce23890fba" name="acd114f03ba31764a97c43dce23890fba"></a>
+void&#160;</td><td class="memItemRight"><b>closeTabAt</b> (int index)</td></tr>
+<tr class="memdesc:acd114f03ba31764a97c43dce23890fba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zamyka kartę o podanym indeksie. <br /></td></tr>
+<tr class="memitem:a4bb3f66014a4d26eb2d810cc42b1af38" id="r_a4bb3f66014a4d26eb2d810cc42b1af38"><td class="memItemLeft"><a id="a4bb3f66014a4d26eb2d810cc42b1af38" name="a4bb3f66014a4d26eb2d810cc42b1af38"></a>
+void&#160;</td><td class="memItemRight"><b>updateNewTabButtonPosition</b> ()</td></tr>
+<tr class="memdesc:a4bb3f66014a4d26eb2d810cc42b1af38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utrzymuje przycisk nowej karty nad paskiem kart. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Atrybuty prywatne</h2></td></tr>
+<tr class="memitem:a91e6fb49b7a1a5b43586def3165b4353" id="r_a91e6fb49b7a1a5b43586def3165b4353"><td class="memItemLeft"><a id="a91e6fb49b7a1a5b43586def3165b4353" name="a91e6fb49b7a1a5b43586def3165b4353"></a>
+QTabWidget *&#160;</td><td class="memItemRight"><b>machineTabs</b></td></tr>
+<tr class="memdesc:a91e6fb49b7a1a5b43586def3165b4353"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kontener kart maszyn i strony startowej. <br /></td></tr>
+<tr class="memitem:adf41bf39c5c1d34ada626884e232463c" id="r_adf41bf39c5c1d34ada626884e232463c"><td class="memItemLeft"><a id="adf41bf39c5c1d34ada626884e232463c" name="adf41bf39c5c1d34ada626884e232463c"></a>
+QPushButton *&#160;</td><td class="memItemRight"><b>newTabButton</b></td></tr>
+<tr class="memdesc:adf41bf39c5c1d34ada626884e232463c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przycisk <span class="tt">+</span> tworzący lub pokazujący stronę startową. <br /></td></tr>
+<tr class="memitem:a14cccaf835a537bf6ddeffd73ca99a05" id="r_a14cccaf835a537bf6ddeffd73ca99a05"><td class="memItemLeft"><a id="a14cccaf835a537bf6ddeffd73ca99a05" name="a14cccaf835a537bf6ddeffd73ca99a05"></a>
+int&#160;</td><td class="memItemRight"><b>untitledTabCounter</b></td></tr>
+<tr class="memdesc:a14cccaf835a537bf6ddeffd73ca99a05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Licznik tytułów nowych, niezapisanych kart. <br /></td></tr>
+<tr class="memitem:ab104fc760e14061bc7a24b3b6dc03a56" id="r_ab104fc760e14061bc7a24b3b6dc03a56"><td class="memItemLeft"><a id="ab104fc760e14061bc7a24b3b6dc03a56" name="ab104fc760e14061bc7a24b3b6dc03a56"></a>
+std::unique_ptr&lt; <a class="el" href="class_theme_manager.html">ThemeManager</a> &gt;&#160;</td><td class="memItemRight"><b>themeManager</b></td></tr>
+<tr class="memdesc:ab104fc760e14061bc7a24b3b6dc03a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manager globalnego motywu aplikacji. <br /></td></tr>
+<tr id="pri-attribs-0" class="groupHeader"><td colspan="2"><div class="groupHeader">Akcje menu zależne od aktywnej karty</div></td></tr>
+<tr class="memitem:a1660cda46fe0bfcb6c12c218b9d00948" id="r_a1660cda46fe0bfcb6c12c218b9d00948"><td class="memItemLeft"><a id="a1660cda46fe0bfcb6c12c218b9d00948" name="a1660cda46fe0bfcb6c12c218b9d00948"></a>
+QAction *&#160;</td><td class="memItemRight"><b>saveAction</b></td></tr>
+<tr class="memitem:a76525ed43128267dc07ae1fc4296c9e7" id="r_a76525ed43128267dc07ae1fc4296c9e7"><td class="memItemLeft"><a id="a76525ed43128267dc07ae1fc4296c9e7" name="a76525ed43128267dc07ae1fc4296c9e7"></a>
+QAction *&#160;</td><td class="memItemRight"><b>saveAsAction</b></td></tr>
+<tr class="memitem:a90c395c9aa64c67afc74d089a39c1c52" id="r_a90c395c9aa64c67afc74d089a39c1c52"><td class="memItemLeft"><a id="a90c395c9aa64c67afc74d089a39c1c52" name="a90c395c9aa64c67afc74d089a39c1c52"></a>
+QAction *&#160;</td><td class="memItemRight"><b>closeTabAction</b></td></tr>
+<tr class="memitem:af018e12179186ef16f6b02d8762e8dff" id="r_af018e12179186ef16f6b02d8762e8dff"><td class="memItemLeft"><a id="af018e12179186ef16f6b02d8762e8dff" name="af018e12179186ef16f6b02d8762e8dff"></a>
+QAction *&#160;</td><td class="memItemRight"><b>validateAction</b></td></tr>
+<tr class="memitem:aaf88dc81f41d655f9aafd52cb76cd496" id="r_aaf88dc81f41d655f9aafd52cb76cd496"><td class="memItemLeft"><a id="aaf88dc81f41d655f9aafd52cb76cd496" name="aaf88dc81f41d655f9aafd52cb76cd496"></a>
+QAction *&#160;</td><td class="memItemRight"><b>resetExampleAction</b></td></tr>
+<tr class="memitem:a9d5310cdc8a886a07db5b48183daa05a" id="r_a9d5310cdc8a886a07db5b48183daa05a"><td class="memItemLeft"><a id="a9d5310cdc8a886a07db5b48183daa05a" name="a9d5310cdc8a886a07db5b48183daa05a"></a>
+QAction *&#160;</td><td class="memItemRight"><b>stepAction</b></td></tr>
+<tr class="memitem:aa8ab787fd34135852541f53e4b866353" id="r_aa8ab787fd34135852541f53e4b866353"><td class="memItemLeft"><a id="aa8ab787fd34135852541f53e4b866353" name="aa8ab787fd34135852541f53e4b866353"></a>
+QAction *&#160;</td><td class="memItemRight"><b>runAction</b></td></tr>
+<tr class="memitem:a6fcea1b692708de82ec62ff146cdf640" id="r_a6fcea1b692708de82ec62ff146cdf640"><td class="memItemLeft"><a id="a6fcea1b692708de82ec62ff146cdf640" name="a6fcea1b692708de82ec62ff146cdf640"></a>
+QAction *&#160;</td><td class="memItemRight"><b>resetAction</b></td></tr>
+<tr class="memitem:af2d274e460e730d4442c3cb130bec911" id="r_af2d274e460e730d4442c3cb130bec911"><td class="memItemLeft"><a id="af2d274e460e730d4442c3cb130bec911" name="af2d274e460e730d4442c3cb130bec911"></a>
+QAction *&#160;</td><td class="memItemRight"><b>previousTabAction</b></td></tr>
+<tr class="memitem:acd9b66dc34a8db11490bc9bab1bc05ee" id="r_acd9b66dc34a8db11490bc9bab1bc05ee"><td class="memItemLeft"><a id="acd9b66dc34a8db11490bc9bab1bc05ee" name="acd9b66dc34a8db11490bc9bab1bc05ee"></a>
+QAction *&#160;</td><td class="memItemRight"><b>nextTabAction</b></td></tr>
+<tr class="memitem:ac6c82479a2ab5da5365787aee994bcfb" id="r_ac6c82479a2ab5da5365787aee994bcfb"><td class="memItemLeft"><a id="ac6c82479a2ab5da5365787aee994bcfb" name="ac6c82479a2ab5da5365787aee994bcfb"></a>
+QAction *&#160;</td><td class="memItemRight"><b>toggleThemeAction</b></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Opis szczegółowy</h2>
+<div class="textblock"><p>Główne okno symulatora z kartami dokumentów i paskiem menu. </p>
+<p>Odpowiada za tworzenie kart <a class="el" href="class_machine_editor_tab.html" title="Pojedyncza karta edycji i uruchamiania maszyny Turinga.">MachineEditorTab</a>, stronę startową, akcje menu, przełączanie motywu oraz operacje wysokiego poziomu delegowane do bieżącej karty maszyny. </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Dokumentacja konstruktora i destruktora</h2>
+<a id="a267892be8b12a6c93836bb60d1a70d37" name="a267892be8b12a6c93836bb60d1a70d37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a267892be8b12a6c93836bb60d1a70d37">&#9670;&#160;</a></span>TuringSimulatorUI()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">TuringSimulatorUI::TuringSimulatorUI </td>
+          <td>(</td>
+          <td class="paramtype">QWidget *</td>          <td class="paramname"><span class="paramname"><em>parent</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tworzy główne okno aplikacji i inicjalizuje menu, karty oraz motyw. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>Opcjonalny rodzic Qt. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>Dokumentacja dla tej klasy została wygenerowana z plików:<ul>
+<li><a class="el" href="_turing_simulator_u_i_8h_source.html">TuringSimulatorUI.h</a></li>
+<li><b>TuringSimulatorUI.cpp</b></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="class_turing_simulator_u_i.html">TuringSimulatorUI</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

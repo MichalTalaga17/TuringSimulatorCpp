@@ -1,0 +1,507 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Dokumentacja klasy ThemeManager</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('class_theme_manager.html','','class_theme_manager-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Dokumentacja klasy ThemeManager</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Zarządza globalnym motywem aplikacji.  
+ <a href="#details">Więcej...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_theme_manager_8h_source.html">ThemeManager.h</a>&gt;</code></p>
+<div class="dynheader">
+Diagram dziedziczenia dla ThemeManager</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_theme_manager.png" alt=""/>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Typy publiczne</h2></td></tr>
+<tr class="memitem:a553e6ecb7306fe4187042ad899de5a5d" id="r_a553e6ecb7306fe4187042ad899de5a5d"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> { <a class="el" href="#a553e6ecb7306fe4187042ad899de5a5da9914a0ce04a7b7b6a8e39bec55064b82">Light</a>
+, <a class="el" href="#a553e6ecb7306fe4187042ad899de5a5daa18366b217ebf811ad1886e4f4f865b2">Dark</a>
+ }</td></tr>
+<tr class="memdesc:a553e6ecb7306fe4187042ad899de5a5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dostępne warianty kolorystyczne aplikacji.  <a href="#a553e6ecb7306fe4187042ad899de5a5d">Więcej...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-signals" class="groupheader"><a id="signals" name="signals"></a>
+Sygnały</h2></td></tr>
+<tr class="memitem:acbc83855a4367695db6e856c982e9c8e" id="r_acbc83855a4367695db6e856c982e9c8e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#acbc83855a4367695db6e856c982e9c8e">themeChanged</a> (<a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme)</td></tr>
+<tr class="memdesc:acbc83855a4367695db6e856c982e9c8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitowany po zmianie motywu przez <a class="el" href="#a97603db8b41806d489d8380973d0af05" title="Ustawia i aplikuje wskazany motyw.">setTheme()</a>.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Metody publiczne</h2></td></tr>
+<tr class="memitem:af600542d18b306e40ce06f04c83008ed" id="r_af600542d18b306e40ce06f04c83008ed"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#af600542d18b306e40ce06f04c83008ed">ThemeManager</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:af600542d18b306e40ce06f04c83008ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy manager i aplikuje zapamiętaną preferencję motywu.  <br /></td></tr>
+<tr class="memitem:adc04b0d4c602ea2fa9ba6486cc519e95" id="r_adc04b0d4c602ea2fa9ba6486cc519e95"><td class="memItemLeft"><a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a>&#160;</td><td class="memItemRight"><a class="el" href="#adc04b0d4c602ea2fa9ba6486cc519e95">currentTheme</a> () const</td></tr>
+<tr class="memdesc:adc04b0d4c602ea2fa9ba6486cc519e95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zwraca aktualnie aktywny motyw.  <br /></td></tr>
+<tr class="memitem:a97603db8b41806d489d8380973d0af05" id="r_a97603db8b41806d489d8380973d0af05"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a97603db8b41806d489d8380973d0af05">setTheme</a> (<a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme)</td></tr>
+<tr class="memdesc:a97603db8b41806d489d8380973d0af05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ustawia i aplikuje wskazany motyw.  <br /></td></tr>
+<tr class="memitem:abb96252dd6401c8d8eb2bd4cb98d9695" id="r_abb96252dd6401c8d8eb2bd4cb98d9695"><td class="memItemLeft"><a id="abb96252dd6401c8d8eb2bd4cb98d9695" name="abb96252dd6401c8d8eb2bd4cb98d9695"></a>
+void&#160;</td><td class="memItemRight"><b>toggleTheme</b> ()</td></tr>
+<tr class="memdesc:abb96252dd6401c8d8eb2bd4cb98d9695"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przełącza aplikację między jasnym i ciemnym motywem. <br /></td></tr>
+<tr class="memitem:afa8e269ad17718c8fff690b32c4f1830" id="r_afa8e269ad17718c8fff690b32c4f1830"><td class="memItemLeft">QString&#160;</td><td class="memItemRight"><a class="el" href="#afa8e269ad17718c8fff690b32c4f1830">getCurrentStylesheet</a> () const</td></tr>
+<tr class="memdesc:afa8e269ad17718c8fff690b32c4f1830"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pobiera arkusz stylów dla aktualnego motywu.  <br /></td></tr>
+<tr class="memitem:ab9bdec56f3d52e5ffd8be69a7d312db9" id="r_ab9bdec56f3d52e5ffd8be69a7d312db9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab9bdec56f3d52e5ffd8be69a7d312db9">applyTheme</a> (<a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme)</td></tr>
+<tr class="memdesc:ab9bdec56f3d52e5ffd8be69a7d312db9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aplikuje motyw bez sprawdzania, czy jest już aktywny.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Statyczne metody publiczne</h2></td></tr>
+<tr class="memitem:a7da7ce30d1002aed629688a4c350e428" id="r_a7da7ce30d1002aed629688a4c350e428"><td class="memItemLeft">static QString&#160;</td><td class="memItemRight"><a class="el" href="#a7da7ce30d1002aed629688a4c350e428">getStylesheet</a> (<a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme)</td></tr>
+<tr class="memdesc:a7da7ce30d1002aed629688a4c350e428"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pobiera arkusz stylów dla wskazanego motywu.  <br /></td></tr>
+<tr class="memitem:a0967548e14d0cc5e5c6d589a80ca4d4f" id="r_a0967548e14d0cc5e5c6d589a80ca4d4f"><td class="memItemLeft">static QPalette&#160;</td><td class="memItemRight"><a class="el" href="#a0967548e14d0cc5e5c6d589a80ca4d4f">getPalette</a> (<a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme)</td></tr>
+<tr class="memdesc:a0967548e14d0cc5e5c6d589a80ca4d4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buduje paletę Qt dla wskazanego motywu.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Metody prywatne</h2></td></tr>
+<tr class="memitem:a56b79c063d9f8998660cefd2ce9eaeed" id="r_a56b79c063d9f8998660cefd2ce9eaeed"><td class="memItemLeft"><a id="a56b79c063d9f8998660cefd2ce9eaeed" name="a56b79c063d9f8998660cefd2ce9eaeed"></a>
+void&#160;</td><td class="memItemRight"><b>loadThemePreference</b> ()</td></tr>
+<tr class="memdesc:a56b79c063d9f8998660cefd2ce9eaeed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wczytuje zapamiętaną preferencję motywu z QSettings. <br /></td></tr>
+<tr class="memitem:a1cd145848053ca8c88c68c46d61c6f20" id="r_a1cd145848053ca8c88c68c46d61c6f20"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1cd145848053ca8c88c68c46d61c6f20">saveThemePreference</a> (<a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme)</td></tr>
+<tr class="memdesc:a1cd145848053ca8c88c68c46d61c6f20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje preferencję motywu w QSettings.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Atrybuty prywatne</h2></td></tr>
+<tr class="memitem:a4b2833cc57d7ca40532e3ba332054513" id="r_a4b2833cc57d7ca40532e3ba332054513"><td class="memItemLeft"><a id="a4b2833cc57d7ca40532e3ba332054513" name="a4b2833cc57d7ca40532e3ba332054513"></a>
+<a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a>&#160;</td><td class="memItemRight"><b>m_currentTheme</b></td></tr>
+<tr class="memdesc:a4b2833cc57d7ca40532e3ba332054513"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aktualny motyw aplikacji. <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Opis szczegółowy</h2>
+<div class="textblock"><p>Zarządza globalnym motywem aplikacji. </p>
+<p>Klasa wczytuje preferencję użytkownika z QSettings, aplikuje paletę i arkusz stylów do QApplication oraz emituje sygnał po zmianie motywu. </p>
+</div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Dokumentacja składowych wyliczanych</h2>
+<a id="a553e6ecb7306fe4187042ad899de5a5d" name="a553e6ecb7306fe4187042ad899de5a5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a553e6ecb7306fe4187042ad899de5a5d">&#9670;&#160;</a></span>Theme</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">ThemeManager::Theme</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Dostępne warianty kolorystyczne aplikacji. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Wartości wyliczeń</th></tr><tr><td class="fieldname"><a id="a553e6ecb7306fe4187042ad899de5a5da9914a0ce04a7b7b6a8e39bec55064b82" name="a553e6ecb7306fe4187042ad899de5a5da9914a0ce04a7b7b6a8e39bec55064b82"></a>Light&#160;</td><td class="fielddoc"><p>Jasny motyw interfejsu. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a553e6ecb7306fe4187042ad899de5a5daa18366b217ebf811ad1886e4f4f865b2" name="a553e6ecb7306fe4187042ad899de5a5daa18366b217ebf811ad1886e4f4f865b2"></a>Dark&#160;</td><td class="fielddoc"><p>Ciemny motyw interfejsu. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Dokumentacja konstruktora i destruktora</h2>
+<a id="af600542d18b306e40ce06f04c83008ed" name="af600542d18b306e40ce06f04c83008ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af600542d18b306e40ce06f04c83008ed">&#9670;&#160;</a></span>ThemeManager()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ThemeManager::ThemeManager </td>
+          <td>(</td>
+          <td class="paramtype">QObject *</td>          <td class="paramname"><span class="paramname"><em>parent</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tworzy manager i aplikuje zapamiętaną preferencję motywu. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>Opcjonalny rodzic obiektu Qt. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Dokumentacja funkcji składowych</h2>
+<a id="ab9bdec56f3d52e5ffd8be69a7d312db9" name="ab9bdec56f3d52e5ffd8be69a7d312db9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9bdec56f3d52e5ffd8be69a7d312db9">&#9670;&#160;</a></span>applyTheme()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ThemeManager::applyTheme </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a></td>          <td class="paramname"><span class="paramname"><em>theme</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Aplikuje motyw bez sprawdzania, czy jest już aktywny. </p>
+<p>Używane podczas inicjalizacji, gdy aplikacja musi otrzymać arkusz stylów nawet wtedy, gdy zapisany motyw to domyślny wariant jasny.</p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">theme</td><td>Motyw do natychmiastowego zastosowania. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adc04b0d4c602ea2fa9ba6486cc519e95" name="adc04b0d4c602ea2fa9ba6486cc519e95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc04b0d4c602ea2fa9ba6486cc519e95">&#9670;&#160;</a></span>currentTheme()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> ThemeManager::currentTheme </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Zwraca aktualnie aktywny motyw. </p>
+<dl class="section return"><dt>Zwraca</dt><dd>Bieżący wariant <a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d" title="Dostępne warianty kolorystyczne aplikacji.">Theme</a>. </dd></dl>
+
+</div>
+</div>
+<a id="afa8e269ad17718c8fff690b32c4f1830" name="afa8e269ad17718c8fff690b32c4f1830"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa8e269ad17718c8fff690b32c4f1830">&#9670;&#160;</a></span>getCurrentStylesheet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString ThemeManager::getCurrentStylesheet </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pobiera arkusz stylów dla aktualnego motywu. </p>
+<dl class="section return"><dt>Zwraca</dt><dd>Qt stylesheet gotowy do ustawienia w QApplication. </dd></dl>
+
+</div>
+</div>
+<a id="a0967548e14d0cc5e5c6d589a80ca4d4f" name="a0967548e14d0cc5e5c6d589a80ca4d4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0967548e14d0cc5e5c6d589a80ca4d4f">&#9670;&#160;</a></span>getPalette()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPalette ThemeManager::getPalette </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a></td>          <td class="paramname"><span class="paramname"><em>theme</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Buduje paletę Qt dla wskazanego motywu. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">theme</td><td>Motyw, dla którego ma zostać zwrócona paleta. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd>Paleta kolorów używana przez aplikację. </dd></dl>
+
+</div>
+</div>
+<a id="a7da7ce30d1002aed629688a4c350e428" name="a7da7ce30d1002aed629688a4c350e428"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7da7ce30d1002aed629688a4c350e428">&#9670;&#160;</a></span>getStylesheet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString ThemeManager::getStylesheet </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a></td>          <td class="paramname"><span class="paramname"><em>theme</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pobiera arkusz stylów dla wskazanego motywu. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">theme</td><td>Motyw, dla którego ma zostać zwrócony stylesheet. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd>Qt stylesheet zawierający style aplikacji. </dd></dl>
+
+</div>
+</div>
+<a id="a1cd145848053ca8c88c68c46d61c6f20" name="a1cd145848053ca8c88c68c46d61c6f20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cd145848053ca8c88c68c46d61c6f20">&#9670;&#160;</a></span>saveThemePreference()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ThemeManager::saveThemePreference </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a></td>          <td class="paramname"><span class="paramname"><em>theme</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Zapisuje preferencję motywu w QSettings. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">theme</td><td>Motyw do zapamiętania. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a97603db8b41806d489d8380973d0af05" name="a97603db8b41806d489d8380973d0af05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97603db8b41806d489d8380973d0af05">&#9670;&#160;</a></span>setTheme()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ThemeManager::setTheme </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a></td>          <td class="paramname"><span class="paramname"><em>theme</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ustawia i aplikuje wskazany motyw. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">theme</td><td>Motyw, który ma zostać użyty globalnie. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acbc83855a4367695db6e856c982e9c8e" name="acbc83855a4367695db6e856c982e9c8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbc83855a4367695db6e856c982e9c8e">&#9670;&#160;</a></span>themeChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ThemeManager::themeChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a553e6ecb7306fe4187042ad899de5a5d">Theme</a></td>          <td class="paramname"><span class="paramname"><em>theme</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel signal">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Emitowany po zmianie motywu przez <a class="el" href="#a97603db8b41806d489d8380973d0af05" title="Ustawia i aplikuje wskazany motyw.">setTheme()</a>. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">theme</td><td>Nowy aktywny motyw. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>Dokumentacja dla tej klasy została wygenerowana z plików:<ul>
+<li><a class="el" href="_theme_manager_8h_source.html">ThemeManager.h</a></li>
+<li><b>ThemeManager.cpp</b></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="class_theme_manager.html">ThemeManager</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -4,7 +4,9 @@ Prosty symulator jednotaśmowej deterministycznej maszyny Turinga napisany w C++
 
 Aktualnie projekt zawiera:
 - rdzeń symulacji w czystym C++,
-- przykładową maszynę uruchamianą w konsoli,
+- graficzny interfejs Qt Widgets z kartami edytora,
+- zapis i odczyt maszyn z plików JSON,
+- zapis i odczyt maszyn z lokalnej bazy SQLite,
 - notację stanów w stylu `q0`, `q1`, `q2` itd.,
 - notację ruchów głowicy widoczną dla użytkownika: `L`, `P`, `_`, `STOP`.
 
@@ -14,6 +16,7 @@ Do uruchomienia projektu na innym komputerze potrzebne są:
 - `git`
 - `cmake` w wersji 3.20 lub nowszej
 - kompilator obsługujący C++17
+- Qt 6 z modułami `Core`, `Gui`, `Widgets` i `Sql`
 
 Przykłady:
 - macOS: `clang++` z Xcode Command Line Tools
@@ -75,6 +78,34 @@ cmake -S . -B build
 cmake --build build
 ```
 
+## Testy
+
+```bash
+ctest --test-dir build --output-on-failure
+```
+
+## Dokumentacja Doxygen
+
+Projekt zawiera konfigurację `Doxyfile` oraz stronę główną dokumentacji w `docs/mainpage.dox`.
+
+Generowanie bezpośrednio przez Doxygen:
+
+```bash
+doxygen Doxyfile
+```
+
+Jeśli CMake znajdzie program `doxygen`, dostępny jest też target:
+
+```bash
+cmake --build build --target docs
+```
+
+Wynik pojawi się w katalogu:
+
+```text
+docs/doxygen/html
+```
+
 ## Uruchamianie
 
 ### macOS i Linux
@@ -97,13 +128,13 @@ albo:
 .\build\Release\TuringSimulatorCpp.exe
 ```
 
-## Aktualny przykład działania
+## Przykład startowy
 
 Domyślny przykład:
 - startuje w stanie `q0`,
-- przesuwa głowicę w prawo po kolejnych symbolach `1`,
-- po napotkaniu symbolu pustego dopisuje `1`,
-- przechodzi do stanu `q1`,
+- zamienia kolejne symbole `0` na `1` i `1` na `0`,
+- przesuwa głowicę w prawo,
+- po napotkaniu symbolu pustego wykonuje `STOP`,
 - kończy działanie ruchem `STOP`.
 
 ## Znaczenie ruchów głowicy
@@ -118,10 +149,9 @@ Domyślny przykład:
 Najważniejsze pliki:
 - `include/Tape.h` - model taśmy
 - `include/TuringMachine.h` - logika maszyny Turinga
-- `src/Tape.cpp` - implementacja taśmy
-- `src/TuringMachine.cpp` - implementacja maszyny
-- `main.cpp` - prosty przykład uruchamiany w konsoli
-
-## Uwagi
-
-Na tym etapie projekt nie używa jeszcze Qt. Interfejs graficzny można dodać później, już na bazie istniejącego rdzenia symulacji.
+- `include/MachineEditorTab.h` - karta edycji i symulacji maszyny
+- `include/TuringSimulatorUI.h` - główne okno aplikacji
+- `include/storage.h` - API zapisu do JSON i SQLite
+- `src/ui/` - implementacja interfejsu Qt
+- `src/storage/` - implementacja zapisu i odczytu
+- `tests/` - testy rdzenia symulacji

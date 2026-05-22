@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Plik źródłowy ThemeManager.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('_theme_manager_8h_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">ThemeManager.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_theme_manager_8h.html">Idź do dokumentacji tego pliku.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;QObject&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span></div>
+<div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="class_theme_manager.html">   17</a></span><span class="keyword">class </span><a class="code hl_function" href="class_theme_manager.html#af600542d18b306e40ce06f04c83008ed">ThemeManager</a> : <span class="keyword">public</span> QObject</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>{</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    Q_OBJECT</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">public</span>:</div>
+<div class="foldopen" id="foldopen00025" data-start="{" data-end="};">
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">   25</a></span>    <span class="keyword">enum class</span> <a class="code hl_enumeration" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">Theme</a></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5da9914a0ce04a7b7b6a8e39bec55064b82">   28</a></span>        <a class="code hl_enumvalue" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5da9914a0ce04a7b7b6a8e39bec55064b82">Light</a>,</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5daa18366b217ebf811ad1886e4f4f865b2">   30</a></span>        <a class="code hl_enumvalue" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5daa18366b217ebf811ad1886e4f4f865b2">Dark</a></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    };</div>
+</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keyword">explicit</span> <a class="code hl_function" href="class_theme_manager.html#af600542d18b306e40ce06f04c83008ed">ThemeManager</a>(QObject *parent = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <a class="code hl_class" href="class_theme_manager.html">~ThemeManager</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="class_theme_manager.html#adc04b0d4c602ea2fa9ba6486cc519e95">   44</a></span>    <a class="code hl_enumeration" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> <a class="code hl_function" href="class_theme_manager.html#adc04b0d4c602ea2fa9ba6486cc519e95">currentTheme</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="class_theme_manager.html#a4b2833cc57d7ca40532e3ba332054513">m_currentTheme</a>; }</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_theme_manager.html#a97603db8b41806d489d8380973d0af05">setTheme</a>(<a class="code hl_enumeration" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="class_theme_manager.html#abb96252dd6401c8d8eb2bd4cb98d9695">   55</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_theme_manager.html#abb96252dd6401c8d8eb2bd4cb98d9695">toggleTheme</a>() { <a class="code hl_function" href="class_theme_manager.html#a97603db8b41806d489d8380973d0af05">setTheme</a>(<a class="code hl_variable" href="class_theme_manager.html#a4b2833cc57d7ca40532e3ba332054513">m_currentTheme</a> == <a class="code hl_enumvalue" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5da9914a0ce04a7b7b6a8e39bec55064b82">Theme::Light</a> ? <a class="code hl_enumvalue" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5daa18366b217ebf811ad1886e4f4f865b2">Theme::Dark</a> : <a class="code hl_enumvalue" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5da9914a0ce04a7b7b6a8e39bec55064b82">Theme::Light</a>); }</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    QString <a class="code hl_function" href="class_theme_manager.html#afa8e269ad17718c8fff690b32c4f1830">getCurrentStylesheet</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keyword">static</span> QString <a class="code hl_function" href="class_theme_manager.html#a7da7ce30d1002aed629688a4c350e428">getStylesheet</a>(<a class="code hl_enumeration" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keyword">static</span> QPalette <a class="code hl_function" href="class_theme_manager.html#a0967548e14d0cc5e5c6d589a80ca4d4f">getPalette</a>(<a class="code hl_enumeration" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_theme_manager.html#ab9bdec56f3d52e5ffd8be69a7d312db9">applyTheme</a>(<a class="code hl_enumeration" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>signals:</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="class_theme_manager.html#acbc83855a4367695db6e856c982e9c8e">   92</a></span>    <span class="keywordtype">void</span> <a class="code hl_signal" href="class_theme_manager.html#acbc83855a4367695db6e856c982e9c8e">themeChanged</a>(<a class="code hl_enumeration" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_theme_manager.html#a56b79c063d9f8998660cefd2ce9eaeed">loadThemePreference</a>();</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_theme_manager.html#a1cd145848053ca8c88c68c46d61c6f20">saveThemePreference</a>(<a class="code hl_enumeration" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> theme);</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="class_theme_manager.html#a4b2833cc57d7ca40532e3ba332054513">  107</a></span>    <a class="code hl_enumeration" href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">Theme</a> <a class="code hl_variable" href="class_theme_manager.html#a4b2833cc57d7ca40532e3ba332054513">m_currentTheme</a>;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>};</div>
+</div>
+<div class="ttc" id="aclass_theme_manager_html"><div class="ttname"><a href="class_theme_manager.html">ThemeManager</a></div><div class="ttdoc">Zarządza globalnym motywem aplikacji.</div><div class="ttdef"><b>Definicja</b> ThemeManager.h:18</div></div>
+<div class="ttc" id="aclass_theme_manager_html_a0967548e14d0cc5e5c6d589a80ca4d4f"><div class="ttname"><a href="class_theme_manager.html#a0967548e14d0cc5e5c6d589a80ca4d4f">ThemeManager::getPalette</a></div><div class="ttdeci">static QPalette getPalette(Theme theme)</div><div class="ttdoc">Buduje paletę Qt dla wskazanego motywu.</div><div class="ttdef"><b>Definicja</b> ThemeManager.cpp:58</div></div>
+<div class="ttc" id="aclass_theme_manager_html_a1cd145848053ca8c88c68c46d61c6f20"><div class="ttname"><a href="class_theme_manager.html#a1cd145848053ca8c88c68c46d61c6f20">ThemeManager::saveThemePreference</a></div><div class="ttdeci">void saveThemePreference(Theme theme)</div><div class="ttdoc">Zapisuje preferencję motywu w QSettings.</div><div class="ttdef"><b>Definicja</b> ThemeManager.cpp:105</div></div>
+<div class="ttc" id="aclass_theme_manager_html_a4b2833cc57d7ca40532e3ba332054513"><div class="ttname"><a href="class_theme_manager.html#a4b2833cc57d7ca40532e3ba332054513">ThemeManager::m_currentTheme</a></div><div class="ttdeci">Theme m_currentTheme</div><div class="ttdoc">Aktualny motyw aplikacji.</div><div class="ttdef"><b>Definicja</b> ThemeManager.h:107</div></div>
+<div class="ttc" id="aclass_theme_manager_html_a553e6ecb7306fe4187042ad899de5a5d"><div class="ttname"><a href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5d">ThemeManager::Theme</a></div><div class="ttdeci">Theme</div><div class="ttdoc">Dostępne warianty kolorystyczne aplikacji.</div><div class="ttdef"><b>Definicja</b> ThemeManager.h:26</div></div>
+<div class="ttc" id="aclass_theme_manager_html_a553e6ecb7306fe4187042ad899de5a5da9914a0ce04a7b7b6a8e39bec55064b82"><div class="ttname"><a href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5da9914a0ce04a7b7b6a8e39bec55064b82">ThemeManager::Theme::Light</a></div><div class="ttdeci">@ Light</div><div class="ttdoc">Jasny motyw interfejsu.</div><div class="ttdef"><b>Definicja</b> ThemeManager.h:28</div></div>
+<div class="ttc" id="aclass_theme_manager_html_a553e6ecb7306fe4187042ad899de5a5daa18366b217ebf811ad1886e4f4f865b2"><div class="ttname"><a href="class_theme_manager.html#a553e6ecb7306fe4187042ad899de5a5daa18366b217ebf811ad1886e4f4f865b2">ThemeManager::Theme::Dark</a></div><div class="ttdeci">@ Dark</div><div class="ttdoc">Ciemny motyw interfejsu.</div><div class="ttdef"><b>Definicja</b> ThemeManager.h:30</div></div>
+<div class="ttc" id="aclass_theme_manager_html_a56b79c063d9f8998660cefd2ce9eaeed"><div class="ttname"><a href="class_theme_manager.html#a56b79c063d9f8998660cefd2ce9eaeed">ThemeManager::loadThemePreference</a></div><div class="ttdeci">void loadThemePreference()</div><div class="ttdoc">Wczytuje zapamiętaną preferencję motywu z QSettings.</div><div class="ttdef"><b>Definicja</b> ThemeManager.cpp:98</div></div>
+<div class="ttc" id="aclass_theme_manager_html_a7da7ce30d1002aed629688a4c350e428"><div class="ttname"><a href="class_theme_manager.html#a7da7ce30d1002aed629688a4c350e428">ThemeManager::getStylesheet</a></div><div class="ttdeci">static QString getStylesheet(Theme theme)</div><div class="ttdoc">Pobiera arkusz stylów dla wskazanego motywu.</div><div class="ttdef"><b>Definicja</b> ThemeManager.cpp:44</div></div>
+<div class="ttc" id="aclass_theme_manager_html_a97603db8b41806d489d8380973d0af05"><div class="ttname"><a href="class_theme_manager.html#a97603db8b41806d489d8380973d0af05">ThemeManager::setTheme</a></div><div class="ttdeci">void setTheme(Theme theme)</div><div class="ttdoc">Ustawia i aplikuje wskazany motyw.</div><div class="ttdef"><b>Definicja</b> ThemeManager.cpp:25</div></div>
+<div class="ttc" id="aclass_theme_manager_html_ab9bdec56f3d52e5ffd8be69a7d312db9"><div class="ttname"><a href="class_theme_manager.html#ab9bdec56f3d52e5ffd8be69a7d312db9">ThemeManager::applyTheme</a></div><div class="ttdeci">void applyTheme(Theme theme)</div><div class="ttdoc">Aplikuje motyw bez sprawdzania, czy jest już aktywny.</div><div class="ttdef"><b>Definicja</b> ThemeManager.cpp:16</div></div>
+<div class="ttc" id="aclass_theme_manager_html_abb96252dd6401c8d8eb2bd4cb98d9695"><div class="ttname"><a href="class_theme_manager.html#abb96252dd6401c8d8eb2bd4cb98d9695">ThemeManager::toggleTheme</a></div><div class="ttdeci">void toggleTheme()</div><div class="ttdoc">Przełącza aplikację między jasnym i ciemnym motywem.</div><div class="ttdef"><b>Definicja</b> ThemeManager.h:55</div></div>
+<div class="ttc" id="aclass_theme_manager_html_acbc83855a4367695db6e856c982e9c8e"><div class="ttname"><a href="class_theme_manager.html#acbc83855a4367695db6e856c982e9c8e">ThemeManager::themeChanged</a></div><div class="ttdeci">void themeChanged(Theme theme)</div><div class="ttdoc">Emitowany po zmianie motywu przez setTheme().</div></div>
+<div class="ttc" id="aclass_theme_manager_html_adc04b0d4c602ea2fa9ba6486cc519e95"><div class="ttname"><a href="class_theme_manager.html#adc04b0d4c602ea2fa9ba6486cc519e95">ThemeManager::currentTheme</a></div><div class="ttdeci">Theme currentTheme() const</div><div class="ttdoc">Zwraca aktualnie aktywny motyw.</div><div class="ttdef"><b>Definicja</b> ThemeManager.h:44</div></div>
+<div class="ttc" id="aclass_theme_manager_html_af600542d18b306e40ce06f04c83008ed"><div class="ttname"><a href="class_theme_manager.html#af600542d18b306e40ce06f04c83008ed">ThemeManager::ThemeManager</a></div><div class="ttdeci">ThemeManager(QObject *parent=nullptr)</div><div class="ttdoc">Tworzy manager i aplikuje zapamiętaną preferencję motywu.</div><div class="ttdef"><b>Definicja</b> ThemeManager.cpp:8</div></div>
+<div class="ttc" id="aclass_theme_manager_html_afa8e269ad17718c8fff690b32c4f1830"><div class="ttname"><a href="class_theme_manager.html#afa8e269ad17718c8fff690b32c4f1830">ThemeManager::getCurrentStylesheet</a></div><div class="ttdeci">QString getCurrentStylesheet() const</div><div class="ttdoc">Pobiera arkusz stylów dla aktualnego motywu.</div><div class="ttdef"><b>Definicja</b> ThemeManager.cpp:39</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>include</b></li><li class="navelem"><a href="_theme_manager_8h.html">ThemeManager.h</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

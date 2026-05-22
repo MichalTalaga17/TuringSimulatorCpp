@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Składowe klas - Funkcje</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_func.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="contents">
+<div class="textblock">Tutaj jest lista wszystkich udokumentowanych funkcji związanych z dokumentacją każdej składowej klasy:</div><br/>
+<div class="qindex"><a class="qindex" href="#index_a">A</a><div class="alphasepar"></div><a class="qindex" href="#index_b">B</a><div class="alphasepar"></div><a class="qindex" href="#index_c">C</a><div class="alphasepar"></div><a class="qindex" href="#index_e">E</a><div class="alphasepar"></div><a class="qindex" href="#index_g">G</a><div class="alphasepar"></div><a class="qindex" href="#index_h">H</a><div class="alphasepar"></div><a class="qindex" href="#index_i">I</a><div class="alphasepar"></div><a class="qindex" href="#index_l">L</a><div class="alphasepar"></div><a class="qindex" href="#index_m">M</a><div class="alphasepar"></div><a class="qindex" href="#index_o">O</a><div class="alphasepar"></div><a class="qindex" href="#index_p">P</a><div class="alphasepar"></div><a class="qindex" href="#index_r">R</a><div class="alphasepar"></div><a class="qindex" href="#index_s">S</a><div class="alphasepar"></div><a class="qindex" href="#index_t">T</a><div class="alphasepar"></div><a class="qindex" href="#index_u">U</a><div class="alphasepar"></div><a class="qindex" href="#index_v">V</a><div class="alphasepar"></div><a class="qindex" href="#index_w">W</a></div>
+
+
+<h3 class="doxsection"><a id="index_a" name="index_a"></a>- a -</h3><ul>
+<li>addAcceptingState()&#160;:&#160;<a class="el" href="class_turing_machine.html#a246171ac3f473cc5bc07ca3e75b4ea7e">TuringMachine</a></li>
+<li>addClosableTab()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a88220d61886db3b89b5b3f56a954a56d">TuringSimulatorUI</a></li>
+<li>addMachineTab()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#ac5b09d6688dbb6b134ac7df3eda2ffd9">TuringSimulatorUI</a></li>
+<li>addMachineTabFromStartPage()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a49e4db7635af9f041bbb44d068932cd6">TuringSimulatorUI</a></li>
+<li>addTransition()&#160;:&#160;<a class="el" href="class_turing_machine.html#af91a3cbf038ffdf64604c5a334e57e8c">TuringMachine</a></li>
+<li>applyBlankMachine()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#aab957ff38ca5ceadaa05a82d595256e7">MachineEditorTab</a></li>
+<li>applyDefaultExample()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a84e683a729e4e1909597cf4df4ec5cf0">MachineEditorTab</a></li>
+<li>applyMachineData()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a70b26fc0528510ddf00ca4a5bc63dc27">MachineEditorTab</a></li>
+<li>applyModernStyle()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a943d5bce47e04f7cb41e660407b5ca2a">MachineEditorTab</a></li>
+<li>applyTapeCellStyle()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a32a86d7303a67ff6cb0d64a0871c5fc1">MachineEditorTab</a></li>
+<li>applyTheme()&#160;:&#160;<a class="el" href="class_theme_manager.html#ab9bdec56f3d52e5ffd8be69a7d312db9">ThemeManager</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_b" name="index_b"></a>- b -</h3><ul>
+<li>blank()&#160;:&#160;<a class="el" href="class_tape.html#a323b35199139fa3874d9a34149093c92">Tape</a></li>
+<li>buildMachineFromCurrentConfiguration()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a785c192b8bb1284792b93410ba883d49">MachineEditorTab</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_c" name="index_c"></a>- c -</h3><ul>
+<li>changeColumnSymbol()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a5ce027bd7519f4da8b42629c8ed52daf">MachineEditorTab</a></li>
+<li>checkTapeForUndefinedSymbols()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a6d5920c559edc5d0202f8d4b4e82bba5">MachineEditorTab</a></li>
+<li>clearActiveTransitionHighlight()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#ae003e82a83ad69b0e01a869dd099bc5f">MachineEditorTab</a></li>
+<li>closeCurrentMachineTab()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a20a0d788cdc3a02e736d5525ee3b1973">TuringSimulatorUI</a></li>
+<li>closeTabAt()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#acd114f03ba31764a97c43dce23890fba">TuringSimulatorUI</a></li>
+<li>createEditor()&#160;:&#160;<a class="el" href="class_transition_delegate.html#a9f0841fb2adaf4c8f5a17fe12f339402">TransitionDelegate</a></li>
+<li>createExampleMachineTab()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#af7fac24aa34c16ab9378a2a05448a0a6">TuringSimulatorUI</a></li>
+<li>createNewMachineTab()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#ab858a8264d5b7ec3505204fbf0d63e18">TuringSimulatorUI</a></li>
+<li>createStartPage()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#adf8633ed220e8bada1ff92fd34eb92a0">TuringSimulatorUI</a></li>
+<li>createTapeCell()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a06a180a99961e2123b673f29a44542ec">MachineEditorTab</a></li>
+<li>currentMachineTab()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#ab42567931160ff82b8e968d36358ff8b">TuringSimulatorUI</a></li>
+<li>currentState()&#160;:&#160;<a class="el" href="class_turing_machine.html#a90c4391b431adc7d22ac9801f558079d">TuringMachine</a></li>
+<li>currentTheme()&#160;:&#160;<a class="el" href="class_theme_manager.html#adc04b0d4c602ea2fa9ba6486cc519e95">ThemeManager</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_e" name="index_e"></a>- e -</h3><ul>
+<li>ensureTapeCellsFitInput()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a55dfd2a397176065a190ab4c0fd2ba49">MachineEditorTab</a></li>
+<li>executeMachineStep()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a9b8f50eb02c1a904513998dc6176b921">MachineEditorTab</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_g" name="index_g"></a>- g -</h3><ul>
+<li>getCurrentStylesheet()&#160;:&#160;<a class="el" href="class_theme_manager.html#afa8e269ad17718c8fff690b32c4f1830">ThemeManager</a></li>
+<li>getOrderedAlphabet()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a4f1ab7c6abc5b375aaca9edb83f32c44">MachineEditorTab</a></li>
+<li>getPalette()&#160;:&#160;<a class="el" href="class_theme_manager.html#a0967548e14d0cc5e5c6d589a80ca4d4f">ThemeManager</a></li>
+<li>getStatesList()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a9061af618c7c8e8d36fc74807f71a3aa">MachineEditorTab</a></li>
+<li>getStylesheet()&#160;:&#160;<a class="el" href="class_theme_manager.html#a7da7ce30d1002aed629688a4c350e428">ThemeManager</a></li>
+<li>getTransitions()&#160;:&#160;<a class="el" href="class_turing_machine.html#ab941da53f1b375342fc4ccbd1eefa969">TuringMachine</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_h" name="index_h"></a>- h -</h3><ul>
+<li>headPosition()&#160;:&#160;<a class="el" href="class_tape.html#af139b08b38ce7d170c87c97ed85e355c">Tape</a></li>
+<li>highlightTransition()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a3d3d13fdda6703cd1cb178d8eda1b130">MachineEditorTab</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_i" name="index_i"></a>- i -</h3><ul>
+<li>isAccepted()&#160;:&#160;<a class="el" href="class_turing_machine.html#acd11829e66cd39748d0bbe07472f7a14">TuringMachine</a></li>
+<li>isHalted()&#160;:&#160;<a class="el" href="class_turing_machine.html#ae0d941458859797a82db541a78ada165">TuringMachine</a></li>
+<li>isStartPage()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a067c63c216311936416238f50aa83746">TuringSimulatorUI</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_l" name="index_l"></a>- l -</h3><ul>
+<li>load()&#160;:&#160;<a class="el" href="class_tape.html#ab600ca235e8db3c04c6c5e5df508e654">Tape</a></li>
+<li>loadFromDatabase()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#abd879167ae42b80bdef7871e780e2240">MachineEditorTab</a></li>
+<li>loadFromFile()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a7cca96325215921a305c536c13e29b7e">MachineEditorTab</a></li>
+<li>loadTape()&#160;:&#160;<a class="el" href="class_turing_machine.html#af29ea827bd0b9a923ff46e0960ae3c56">TuringMachine</a></li>
+<li>loadThemePreference()&#160;:&#160;<a class="el" href="class_theme_manager.html#a56b79c063d9f8998660cefd2ce9eaeed">ThemeManager</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_m" name="index_m"></a>- m -</h3><ul>
+<li>MachineEditorTab()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a9ecd1435a970f541f797fe39149e6779">MachineEditorTab</a></li>
+<li>move()&#160;:&#160;<a class="el" href="class_tape.html#a9bea6772850138039581ede404661c1e">Tape</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_o" name="index_o"></a>- o -</h3><ul>
+<li>onAlphabetChanged()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#ac74a22b7210435e2c67d91bf9b5a0750">MachineEditorTab</a></li>
+<li>onBlankSymbolChanged()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a361b5f0b9b2e84056f52b67917d0bb77">MachineEditorTab</a></li>
+<li>onExecutionTimer()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a4d2045d79cfe54cf19adae3d405e41fc">MachineEditorTab</a></li>
+<li>onNumStatesChanged()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#af9fb9325afc40d6827f4e2376a2dc346">MachineEditorTab</a></li>
+<li>onResetClicked()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a884908d29ae26135e30d162b2e8a6be9">MachineEditorTab</a></li>
+<li>onRunClicked()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a8c3ffef402559a347f665abc91ae9bc6">MachineEditorTab</a></li>
+<li>onSpeedChanged()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a20f4595f73083723aa84b13117161b73">MachineEditorTab</a></li>
+<li>onStepClicked()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a3ad388eec1c4b6b66de892f6b49b1966">MachineEditorTab</a></li>
+<li>onTableItemChanged()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#acc85995df1ad30b691121d941c825672">MachineEditorTab</a></li>
+<li>onTapeInputChanged()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a369e828333b9eea4742c248e051f6d1c">MachineEditorTab</a></li>
+<li>openMachineFromDatabase()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a1aba5ab3cc32d8a722daa98fee55c99a">TuringSimulatorUI</a></li>
+<li>openMachineFromDatabaseName()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a70a44f3c4bcae182f9cdefe0dbcbbf93">TuringSimulatorUI</a></li>
+<li>openMachineInNewTab()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a5e94e0163dd5938da92c61ff4c42d93c">TuringSimulatorUI</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_p" name="index_p"></a>- p -</h3><ul>
+<li>paint()&#160;:&#160;<a class="el" href="class_transition_delegate.html#afba8e144c9d92519c1f7dd175fd48062">TransitionDelegate</a></li>
+<li>populateTransitionMapWithDefaults()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a0001dee57b4b7a9a722d21a6ef5d5891">MachineEditorTab</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_r" name="index_r"></a>- r -</h3><ul>
+<li>read()&#160;:&#160;<a class="el" href="class_tape.html#ab8ff70f09fd81b9c23b561ee58e9f85c">Tape</a></li>
+<li>readAt()&#160;:&#160;<a class="el" href="class_tape.html#a31c00dabc085c9725ffe99fb53b5be37">Tape</a></li>
+<li>rebuildMachineFromEditor()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a6f2079efdd2c3363b00e638dac99682d">MachineEditorTab</a></li>
+<li>rebuildTransitionsTable()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#aa5a026785b03344753ac71a5ec1d7e1e">MachineEditorTab</a></li>
+<li>reset()&#160;:&#160;<a class="el" href="class_turing_machine.html#a96128d8afd6e556fc2cf8c1904ea8762">TuringMachine</a></li>
+<li>resetCurrentMachine()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a5716bc8057d4f1e64ce5b0d0bd107aba">TuringSimulatorUI</a></li>
+<li>resetCurrentMachineToExample()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a063f7b2f26a79b23a5a4a1675d6f7912">TuringSimulatorUI</a></li>
+<li>resetToDefaultExample()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#af1eaa2624f28f318fe3e1301acbf8caf">MachineEditorTab</a></li>
+<li>resizeEvent()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#afb90a60a21649a3d8cf073f7674a6cf5">MachineEditorTab</a>, <a class="el" href="class_turing_simulator_u_i.html#ad04f1df0dc19079a6abf417a7c41377a">TuringSimulatorUI</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_s" name="index_s"></a>- s -</h3><ul>
+<li>saveCurrentMachine()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#acb8d364522f683ad569356e2c553a400">TuringSimulatorUI</a></li>
+<li>saveCurrentMachineAs()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a43dc474c1667448889bf9bdc43914a88">TuringSimulatorUI</a></li>
+<li>saveCurrentMachineToDatabase()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a6c7acd92ffa87fc628bb841bd084a8d1">TuringSimulatorUI</a></li>
+<li>saveMachineToPath()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a94178f5dc39e1351f76c6a030afd6f88">MachineEditorTab</a></li>
+<li>saveThemePreference()&#160;:&#160;<a class="el" href="class_theme_manager.html#a1cd145848053ca8c88c68c46d61c6f20">ThemeManager</a></li>
+<li>saveToDatabase()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a4c3f18f7e5e76606bcc4d7bf0fb3d30b">MachineEditorTab</a></li>
+<li>saveToFile()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a49d4c95880fbdfd8459ada8762788a27">MachineEditorTab</a></li>
+<li>saveToFileAs()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a6c04ae44495a7e4053e0ba33c63fa2f8">MachineEditorTab</a></li>
+<li>scheduleTapeDisplayRefresh()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a02cff0d7efe0e14b10ec63f1afd6a9eb">MachineEditorTab</a></li>
+<li>selectNextTab()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#ad16e692374209e6d8959c2aeb491c27a">TuringSimulatorUI</a></li>
+<li>selectPreviousTab()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#ae0d58a92afbc717f83cfb3617cf9ab12">TuringSimulatorUI</a></li>
+<li>setEditorData()&#160;:&#160;<a class="el" href="class_transition_delegate.html#ab77c80986a1b77a384401c2b8290c07d">TransitionDelegate</a></li>
+<li>setInitialState()&#160;:&#160;<a class="el" href="class_turing_machine.html#a6cdf57e6aec2baa17fd5657a17e5b5ec">TuringMachine</a></li>
+<li>setModelData()&#160;:&#160;<a class="el" href="class_transition_delegate.html#aecc56fd225a82a293cc88858580798d6">TransitionDelegate</a></li>
+<li>setTheme()&#160;:&#160;<a class="el" href="class_theme_manager.html#a97603db8b41806d489d8380973d0af05">ThemeManager</a></li>
+<li>setTransitionCellHighlighted()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#ab0d0d3b573fde7adc5c948e2b03e202e">MachineEditorTab</a></li>
+<li>setupBuilderTab()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a4a05ffc0911ecc22952d006e02358536">MachineEditorTab</a></li>
+<li>setupExecutorTab()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a5daa7ba62a98086a97e84066d046eedb">MachineEditorTab</a></li>
+<li>setupMenu()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#af2f087a8d20a6eb8fb3dcfbc92149be0">TuringSimulatorUI</a></li>
+<li>setupTapeCells()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#adf366a8284a8a0b252d84189f8af4ad0">MachineEditorTab</a></li>
+<li>setupUI()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#aadf24fca1e2f302b8adfe30acbcdac6d">MachineEditorTab</a>, <a class="el" href="class_turing_simulator_u_i.html#aa729e73925255154112e68c715b4d93f">TuringSimulatorUI</a></li>
+<li>showAboutAuthorsDialog()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a3dc2d1302a1e849dcb6f7291609a7064">TuringSimulatorUI</a></li>
+<li>showAboutDialog()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a0b96ad29e7887f3e4ffd62fb0e3b3007">TuringSimulatorUI</a></li>
+<li>showStartPage()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a1f91f5b6dcbb27b2910fec0099a0af83">TuringSimulatorUI</a></li>
+<li>snapshot()&#160;:&#160;<a class="el" href="class_tape.html#a7c6558a1f144d3db9b060921eb24930d">Tape</a></li>
+<li>step()&#160;:&#160;<a class="el" href="class_turing_machine.html#a5abd5fff93c1ff762615dbdb94a67dda">TuringMachine</a></li>
+<li>stepCount()&#160;:&#160;<a class="el" href="class_turing_machine.html#a7cee5d25aa49c79866c347b17eacab44">TuringMachine</a></li>
+<li>stepCurrentMachine()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#ab99e0b8992eeab8d0211d3e317875e05">TuringSimulatorUI</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_t" name="index_t"></a>- t -</h3><ul>
+<li>tabTitle()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a99ae1d329878c5d6eb026c891ef3cee3">MachineEditorTab</a></li>
+<li>Tape()&#160;:&#160;<a class="el" href="class_tape.html#a362717e6e4175ddaabbe9673494d2a60">Tape</a></li>
+<li>tape()&#160;:&#160;<a class="el" href="class_turing_machine.html#a2fcd6e524687fbbe73dd84ed8e1eb176">TuringMachine</a></li>
+<li>themeChanged()&#160;:&#160;<a class="el" href="class_theme_manager.html#acbc83855a4367695db6e856c982e9c8e">ThemeManager</a></li>
+<li>ThemeManager()&#160;:&#160;<a class="el" href="class_theme_manager.html#af600542d18b306e40ce06f04c83008ed">ThemeManager</a></li>
+<li>titleChanged()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a8e7f33cd363579b739f78c962f3f16cd">MachineEditorTab</a></li>
+<li>toggleCurrentMachineRun()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a8b3c3a281e689324830d922511dd9d02">TuringSimulatorUI</a></li>
+<li>toggleTheme()&#160;:&#160;<a class="el" href="class_theme_manager.html#abb96252dd6401c8d8eb2bd4cb98d9695">ThemeManager</a>, <a class="el" href="class_turing_simulator_u_i.html#a244930d57a6576035982149a9feeab09">TuringSimulatorUI</a></li>
+<li>TransitionDelegate()&#160;:&#160;<a class="el" href="class_transition_delegate.html#ac083b2e8ff17ab50d8ca0c3bf363ea6d">TransitionDelegate</a></li>
+<li>TuringMachine()&#160;:&#160;<a class="el" href="class_turing_machine.html#ab9a0bc22bca5d8a6c0c286b19e556b41">TuringMachine</a></li>
+<li>TuringSimulatorUI()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a267892be8b12a6c93836bb60d1a70d37">TuringSimulatorUI</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_u" name="index_u"></a>- u -</h3><ul>
+<li>updateActiveTransitionHighlight()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#aab9a56734967a92720d42391b88d1c39">MachineEditorTab</a></li>
+<li>updateDisplay()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a5eab2fbf8e71aa48ed6b75d3697961f7">MachineEditorTab</a></li>
+<li>updateEditorGeometry()&#160;:&#160;<a class="el" href="class_transition_delegate.html#a9b01aeedc6094e517830c013045fd28e">TransitionDelegate</a></li>
+<li>updateHaltedForCurrentState()&#160;:&#160;<a class="el" href="class_turing_machine.html#a75c013da454ee7c93cf59a337795310e">TuringMachine</a></li>
+<li>updateMenuState()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#ad9213981b5eae59153fa0f1c9d9a41f0">TuringSimulatorUI</a></li>
+<li>updateNewTabButtonPosition()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#a4bb3f66014a4d26eb2d810cc42b1af38">TuringSimulatorUI</a></li>
+<li>updateStateDisplay()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a634851cddfd596552d094e9dadd85ff7">MachineEditorTab</a></li>
+<li>updateTapeDisplay()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#ac03dbd97d8d997b1798a07b008203d49">MachineEditorTab</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_v" name="index_v"></a>- v -</h3><ul>
+<li>validateCurrentMachine()&#160;:&#160;<a class="el" href="class_turing_simulator_u_i.html#ac33f567ac40225a3f92c9e8ba40fda9d">TuringSimulatorUI</a></li>
+<li>validateMachine()&#160;:&#160;<a class="el" href="class_machine_editor_tab.html#a46c131a508001b199c357b5319b4838f">MachineEditorTab</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_w" name="index_w"></a>- w -</h3><ul>
+<li>write()&#160;:&#160;<a class="el" href="class_tape.html#a106da612b72ead6e926ff2b36fb7a80d">Tape</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>
