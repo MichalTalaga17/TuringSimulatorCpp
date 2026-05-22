@@ -14,9 +14,16 @@ endif()
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
+include(CTest)
 
-# Help CMake find Qt6 (MSVC version)
-set(Qt6_DIR "C:/Qt/6.11.1/msvc2022_64/lib/cmake/Qt6")
+# Help CMake find Qt6 on the original Windows/MSVC setup without breaking
+# other platforms that provide Qt through CMAKE_PREFIX_PATH or the system.
+if(WIN32 AND NOT DEFINED Qt6_DIR)
+    set(_QT6_MSVC_DIR "C:/Qt/6.11.1/msvc2022_64/lib/cmake/Qt6")
+    if(EXISTS "${_QT6_MSVC_DIR}/Qt6Config.cmake")
+        set(Qt6_DIR "${_QT6_MSVC_DIR}" CACHE PATH "Path to Qt6Config.cmake")
+    endif()
+endif()
 
 find_package(Qt6 REQUIRED COMPONENTS
     Core
@@ -35,20 +42,33 @@ add_library(turing_core
 
 target_include_directories(turing_core PUBLIC include)
 
+if(BUILD_TESTING)
+    add_executable(turing_core_tests
+        tests/TuringCoreTests.cpp
+    )
+    target_link_libraries(turing_core_tests PRIVATE turing_core)
+    add_test(NAME turing_core_tests COMMAND turing_core_tests)
+endif()
+
 # GUI executable
 add_executable(TuringSimulatorCpp
     main.cpp
+    src/ui/MachineEditorTabDisplay.cpp
     src/ui/MachineEditorTabLogic.cpp
     src/ui/MachineEditorTabPersistence.cpp
     src/ui/MachineEditorTabView.cpp
+    src/ui/TransitionDelegate.cpp
     src/ui/TuringSimulatorUI.cpp
     src/ThemeManager.cpp
+    include/TransitionDelegate.h
     include/MachineEditorTab.h
     include/TuringSimulatorUI.h
     include/ThemeManager.h
     include/ui.h
+    include/ui/TransitionTableRoles.h
     include/storage.h
-    storage.cpp
+    src/storage/FileStorage.cpp
+    src/storage/DatabaseStorage.cpp
 )
 
 target_include_directories(TuringSimulatorCpp PRIVATE include)

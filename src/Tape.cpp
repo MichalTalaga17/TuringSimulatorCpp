@@ -31,7 +31,11 @@ void Tape::load(const std::string& input) {
 }
 
 char Tape::read() const {
-    const auto it = cells_.find(headPosition_);
+    return readAt(headPosition_);
+}
+
+char Tape::readAt(int position) const {
+    const auto it = cells_.find(position);
     return it == cells_.end() ? blankSymbol_ : it->second;
 }
 
@@ -78,8 +82,7 @@ std::string Tape::snapshot(int from, int to) const {
     result.reserve(length);
 
     for (int position = from; position <= to; ++position) {
-        const auto it = cells_.find(position);
-        result.push_back(it == cells_.end() ? blankSymbol_ : it->second);
+        result.push_back(readAt(position));
     }
 
     return result;

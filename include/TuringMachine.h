@@ -64,4 +64,6 @@ private:
     std::optional<std::string> initialTapeInput_;
     std::size_t stepCount_ = 0;
     bool halted_ = false;
+
+    void updateHaltedForCurrentState();
 };

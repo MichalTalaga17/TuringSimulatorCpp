@@ -24,6 +24,8 @@ public:
     void load(const std::string& input);
     /// Odczytuje symbol spod aktualnej pozycji głowicy.
     char read() const;
+    /// Odczytuje symbol z dowolnej pozycji taśmy bez przesuwania głowicy.
+    char readAt(int position) const;
     /// Zapisuje symbol pod głowicą. Zapis symbolu pustego usuwa komórkę z mapy.
     void write(char symbol);
     /// Przesuwa głowicę zgodnie z kierunkiem przejścia.

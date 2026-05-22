@@ -18,10 +18,16 @@ TuringMachine::TuringMachine(char blankSymbol) : tape_(blankSymbol) {}
 void TuringMachine::setInitialState(std::string state) {
     initialState_ = std::move(state);
     currentState_ = initialState_;
+    stepCount_ = 0;
+    updateHaltedForCurrentState();
 }
 
 void TuringMachine::addAcceptingState(std::string state) {
+    const bool acceptsCurrentState = state == currentState_;
     acceptingStates_.insert(std::move(state));
+    if (acceptsCurrentState) {
+        halted_ = true;
+    }
 }
 
 void TuringMachine::addTransition(
@@ -34,14 +40,14 @@ void TuringMachine::addTransition(
 
 void TuringMachine::loadTape(const std::string& input) {
     initialTapeInput_ = input;
-    tape_.load(input);
+    reset();
 }
 
 void TuringMachine::reset() {
     currentState_ = initialState_;
     stepCount_ = 0;
-    halted_ = false;
     tape_.load(initialTapeInput_.value_or(""));
+    updateHaltedForCurrentState();
 }
 
 bool TuringMachine::step() {
@@ -63,9 +69,10 @@ bool TuringMachine::step() {
     currentState_ = transition.nextState;
     ++stepCount_;
 
-    if (transition.move == HeadMove::STOP ||
-        isAcceptingState(acceptingStates_, currentState_)) {
+    if (transition.move == HeadMove::STOP) {
         halted_ = true;
+    } else {
+        updateHaltedForCurrentState();
     }
 
     return true;
@@ -89,4 +96,8 @@ const Tape& TuringMachine::tape() const {
 
 std::size_t TuringMachine::stepCount() const {
     return stepCount_;
+}
+
+void TuringMachine::updateHaltedForCurrentState() {
+    halted_ = isAcceptingState(acceptingStates_, currentState_);
 }
