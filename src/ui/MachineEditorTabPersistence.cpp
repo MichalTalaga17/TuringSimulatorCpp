@@ -243,7 +243,9 @@ bool MachineEditorTab::saveToDatabase()
     }
 
     statusLabel->setText("Zapisano w bazie");
-    emit titleChanged(machineName); // Aktualizujemy nazwę na karcie
+    currentFilePath.clear();
+    untitledTitle = machineName;
+    emit titleChanged(tabTitle());
     QMessageBox::information(this, "Sukces", "Zapisano maszynę w bazie danych!");
     return true;
 }
@@ -269,7 +271,9 @@ bool MachineEditorTab::loadFromDatabase(const QString &machineName)
     }
 
     // 5. Aktualizujemy nazwę karty na tę wczytaną z bazy
-    emit titleChanged(machineName);
+    currentFilePath.clear();
+    untitledTitle = machineName;
+    emit titleChanged(tabTitle());
 
     return true;
 }

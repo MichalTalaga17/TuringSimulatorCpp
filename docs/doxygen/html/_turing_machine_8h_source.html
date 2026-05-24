@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Plik źródłowy TuringMachine.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('_turing_machine_8h_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">TuringMachine.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_turing_machine_8h.html">Idź do dokumentacji tego pliku.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="_tape_8h.html">Tape.h</a>&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;optional&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;set&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span></div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="};">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="struct_transition.html">   18</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_transition.html">Transition</a></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>{</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="struct_transition.html#a5947e2414c27ca6829bd074a16404396">   21</a></span>    <span class="keywordtype">char</span> <a class="code hl_variable" href="struct_transition.html#a5947e2414c27ca6829bd074a16404396">writeSymbol</a>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="struct_transition.html#accb0997622ded0166dbe0e132d870bf9">   23</a></span>    <a class="code hl_enumeration" href="_tape_8h.html#a0854d4de5316f80beeefbf341b1ca2d0">HeadMove</a> <a class="code hl_variable" href="struct_transition.html#accb0997622ded0166dbe0e132d870bf9">move</a>;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="struct_transition.html#abe7c65328aef6fe05595aa09b9620744">   25</a></span>    std::string <a class="code hl_variable" href="struct_transition.html#abe7c65328aef6fe05595aa09b9620744">nextState</a>;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>};</div>
+</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span></div>
+<div class="foldopen" id="foldopen00035" data-start="{" data-end="};">
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="class_turing_machine.html">   35</a></span><span class="keyword">class </span><a class="code hl_function" href="class_turing_machine.html#ab9a0bc22bca5d8a6c0c286b19e556b41">TuringMachine</a></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>{</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">explicit</span> <a class="code hl_function" href="class_turing_machine.html#ab9a0bc22bca5d8a6c0c286b19e556b41">TuringMachine</a>(<span class="keywordtype">char</span> blankSymbol = <span class="charliteral">&#39;_&#39;</span>);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_machine.html#a6cdf57e6aec2baa17fd5657a17e5b5ec">setInitialState</a>(std::string state);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_machine.html#a246171ac3f473cc5bc07ca3e75b4ea7e">addAcceptingState</a>(std::string state);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_machine.html#af91a3cbf038ffdf64604c5a334e57e8c">addTransition</a>(</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keyword">const</span> std::string &amp;state,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keywordtype">char</span> readSymbol,</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <a class="code hl_struct" href="struct_transition.html">Transition</a> transition);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_machine.html#af29ea827bd0b9a923ff46e0960ae3c56">loadTape</a>(<span class="keyword">const</span> std::string &amp;input);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_machine.html#a96128d8afd6e556fc2cf8c1904ea8762">reset</a>();</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_turing_machine.html#a5abd5fff93c1ff762615dbdb94a67dda">step</a>();</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_turing_machine.html#ae0d941458859797a82db541a78ada165">isHalted</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_turing_machine.html#acd11829e66cd39748d0bbe07472f7a14">isAccepted</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keyword">const</span> std::string &amp;<a class="code hl_function" href="class_turing_machine.html#a90c4391b431adc7d22ac9801f558079d">currentState</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keyword">const</span> <a class="code hl_class" href="class_tape.html">Tape</a> &amp;<a class="code hl_function" href="class_turing_machine.html#a2fcd6e524687fbbe73dd84ed8e1eb176">tape</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    std::size_t <a class="code hl_function" href="class_turing_machine.html#a7cee5d25aa49c79866c347b17eacab44">stepCount</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="class_turing_machine.html#a68b9cfa4ba236ccc887d130fd23ab743">  109</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="class_turing_machine.html#a68b9cfa4ba236ccc887d130fd23ab743">TransitionMap</a> = std::map&lt;std::pair&lt;std::string, char&gt;, <a class="code hl_struct" href="struct_transition.html">Transition</a>&gt;;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno"><a class="line" href="class_turing_machine.html#ab941da53f1b375342fc4ccbd1eefa969">  114</a></span>    <span class="keyword">const</span> <a class="code hl_typedef" href="class_turing_machine.html#a68b9cfa4ba236ccc887d130fd23ab743">TransitionMap</a> &amp;<a class="code hl_function" href="class_turing_machine.html#ab941da53f1b375342fc4ccbd1eefa969">getTransitions</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="class_turing_machine.html#af24d461f40da90b907cfcef1f32196ff">transitions_</a>; };</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="class_turing_machine.html#afc6296a2d300f1e5db7b275e1a6aba50">  118</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="class_turing_machine.html#afc6296a2d300f1e5db7b275e1a6aba50">TransitionKey</a> = std::pair&lt;std::string, char&gt;;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="class_turing_machine.html#acdb394357c864872ece40e540544bcf8">  121</a></span>    std::string <a class="code hl_variable" href="class_turing_machine.html#acdb394357c864872ece40e540544bcf8">initialState_</a>;</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno"><a class="line" href="class_turing_machine.html#a5745aa602b2fb4e94c6249d49d50f01c">  123</a></span>    std::string <a class="code hl_variable" href="class_turing_machine.html#a5745aa602b2fb4e94c6249d49d50f01c">currentState_</a>;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno"><a class="line" href="class_turing_machine.html#a8e9e53577b76ceb052074f2dce3b0042">  125</a></span>    <a class="code hl_class" href="class_tape.html">Tape</a> <a class="code hl_variable" href="class_turing_machine.html#a8e9e53577b76ceb052074f2dce3b0042">tape_</a>;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="class_turing_machine.html#af24d461f40da90b907cfcef1f32196ff">  127</a></span>    std::map&lt;TransitionKey, Transition&gt; <a class="code hl_variable" href="class_turing_machine.html#af24d461f40da90b907cfcef1f32196ff">transitions_</a>;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno"><a class="line" href="class_turing_machine.html#a864b4a6960fcdec2ce1c9a472320b74b">  129</a></span>    std::set&lt;std::string&gt; <a class="code hl_variable" href="class_turing_machine.html#a864b4a6960fcdec2ce1c9a472320b74b">acceptingStates_</a>;</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="class_turing_machine.html#a814902ea06bf76071191bcd437c27142">  131</a></span>    std::optional&lt;std::string&gt; <a class="code hl_variable" href="class_turing_machine.html#a814902ea06bf76071191bcd437c27142">initialTapeInput_</a>;</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno"><a class="line" href="class_turing_machine.html#a4de9b50c5b4c1d8c1aca104f897257e2">  133</a></span>    std::size_t <a class="code hl_variable" href="class_turing_machine.html#a4de9b50c5b4c1d8c1aca104f897257e2">stepCount_</a> = 0;</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno"><a class="line" href="class_turing_machine.html#a8e89a305f62c45a1c2eb2df652ae2861">  135</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="class_turing_machine.html#a8e89a305f62c45a1c2eb2df652ae2861">halted_</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_machine.html#a75c013da454ee7c93cf59a337795310e">updateHaltedForCurrentState</a>();</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>};</div>
+</div>
+<div class="ttc" id="a_tape_8h_html"><div class="ttname"><a href="_tape_8h.html">Tape.h</a></div><div class="ttdoc">Model rzadko zapisanej, nieskończonej taśmy maszyny Turinga.</div></div>
+<div class="ttc" id="a_tape_8h_html_a0854d4de5316f80beeefbf341b1ca2d0"><div class="ttname"><a href="_tape_8h.html#a0854d4de5316f80beeefbf341b1ca2d0">HeadMove</a></div><div class="ttdeci">HeadMove</div><div class="ttdoc">Reprezentuje ruch głowicy wykonywany po zapisaniu symbolu.</div><div class="ttdef"><b>Definicja</b> Tape.h:14</div></div>
+<div class="ttc" id="aclass_tape_html"><div class="ttname"><a href="class_tape.html">Tape</a></div><div class="ttdoc">Modeluje nieskończoną taśmę przechowywaną jako rzadka mapa komórek.</div><div class="ttdef"><b>Definicja</b> Tape.h:41</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a246171ac3f473cc5bc07ca3e75b4ea7e"><div class="ttname"><a href="class_turing_machine.html#a246171ac3f473cc5bc07ca3e75b4ea7e">TuringMachine::addAcceptingState</a></div><div class="ttdeci">void addAcceptingState(std::string state)</div><div class="ttdoc">Rejestruje stan kończący obliczenia z wynikiem akceptacji.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:25</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a2fcd6e524687fbbe73dd84ed8e1eb176"><div class="ttname"><a href="class_turing_machine.html#a2fcd6e524687fbbe73dd84ed8e1eb176">TuringMachine::tape</a></div><div class="ttdeci">const Tape &amp; tape() const</div><div class="ttdoc">Udostępnia bieżący stan taśmy tylko do odczytu.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:93</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a4de9b50c5b4c1d8c1aca104f897257e2"><div class="ttname"><a href="class_turing_machine.html#a4de9b50c5b4c1d8c1aca104f897257e2">TuringMachine::stepCount_</a></div><div class="ttdeci">std::size_t stepCount_</div><div class="ttdoc">Liczba przejść wykonanych od ostatniego resetu.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:133</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a5745aa602b2fb4e94c6249d49d50f01c"><div class="ttname"><a href="class_turing_machine.html#a5745aa602b2fb4e94c6249d49d50f01c">TuringMachine::currentState_</a></div><div class="ttdeci">std::string currentState_</div><div class="ttdoc">Aktualny stan sterowania.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:123</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a5abd5fff93c1ff762615dbdb94a67dda"><div class="ttname"><a href="class_turing_machine.html#a5abd5fff93c1ff762615dbdb94a67dda">TuringMachine::step</a></div><div class="ttdeci">bool step()</div><div class="ttdoc">Wykonuje jeden krok obliczeń.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:53</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a68b9cfa4ba236ccc887d130fd23ab743"><div class="ttname"><a href="class_turing_machine.html#a68b9cfa4ba236ccc887d130fd23ab743">TuringMachine::TransitionMap</a></div><div class="ttdeci">std::map&lt; std::pair&lt; std::string, char &gt;, Transition &gt; TransitionMap</div><div class="ttdoc">Mapa przejść indeksowana parą (stan, odczytany symbol).</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:109</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a6cdf57e6aec2baa17fd5657a17e5b5ec"><div class="ttname"><a href="class_turing_machine.html#a6cdf57e6aec2baa17fd5657a17e5b5ec">TuringMachine::setInitialState</a></div><div class="ttdeci">void setInitialState(std::string state)</div><div class="ttdoc">Ustawia stan, od którego zaczyna się każde uruchomienie lub reset.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:18</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a75c013da454ee7c93cf59a337795310e"><div class="ttname"><a href="class_turing_machine.html#a75c013da454ee7c93cf59a337795310e">TuringMachine::updateHaltedForCurrentState</a></div><div class="ttdeci">void updateHaltedForCurrentState()</div><div class="ttdoc">Aktualizuje stan zatrzymania na podstawie bieżącego stanu sterowania.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:101</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a7cee5d25aa49c79866c347b17eacab44"><div class="ttname"><a href="class_turing_machine.html#a7cee5d25aa49c79866c347b17eacab44">TuringMachine::stepCount</a></div><div class="ttdeci">std::size_t stepCount() const</div><div class="ttdoc">Zwraca liczbę wykonanych kroków od ostatniego resetu.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:97</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a814902ea06bf76071191bcd437c27142"><div class="ttname"><a href="class_turing_machine.html#a814902ea06bf76071191bcd437c27142">TuringMachine::initialTapeInput_</a></div><div class="ttdeci">std::optional&lt; std::string &gt; initialTapeInput_</div><div class="ttdoc">Wejście używane do odtworzenia taśmy podczas resetu.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:131</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a864b4a6960fcdec2ce1c9a472320b74b"><div class="ttname"><a href="class_turing_machine.html#a864b4a6960fcdec2ce1c9a472320b74b">TuringMachine::acceptingStates_</a></div><div class="ttdeci">std::set&lt; std::string &gt; acceptingStates_</div><div class="ttdoc">Stany zatrzymujące obliczenia z wynikiem akceptacji.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:129</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a8e89a305f62c45a1c2eb2df652ae2861"><div class="ttname"><a href="class_turing_machine.html#a8e89a305f62c45a1c2eb2df652ae2861">TuringMachine::halted_</a></div><div class="ttdeci">bool halted_</div><div class="ttdoc">Flaga oznaczająca, że maszyna nie wykona kolejnego kroku.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:135</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a8e9e53577b76ceb052074f2dce3b0042"><div class="ttname"><a href="class_turing_machine.html#a8e9e53577b76ceb052074f2dce3b0042">TuringMachine::tape_</a></div><div class="ttdeci">Tape tape_</div><div class="ttdoc">Taśma robocza maszyny.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:125</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a90c4391b431adc7d22ac9801f558079d"><div class="ttname"><a href="class_turing_machine.html#a90c4391b431adc7d22ac9801f558079d">TuringMachine::currentState</a></div><div class="ttdeci">const std::string &amp; currentState() const</div><div class="ttdoc">Zwraca nazwę aktualnego stanu sterowania.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:89</div></div>
+<div class="ttc" id="aclass_turing_machine_html_a96128d8afd6e556fc2cf8c1904ea8762"><div class="ttname"><a href="class_turing_machine.html#a96128d8afd6e556fc2cf8c1904ea8762">TuringMachine::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdoc">Przywraca stan początkowy, licznik kroków i startową zawartość taśmy.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:46</div></div>
+<div class="ttc" id="aclass_turing_machine_html_ab941da53f1b375342fc4ccbd1eefa969"><div class="ttname"><a href="class_turing_machine.html#ab941da53f1b375342fc4ccbd1eefa969">TuringMachine::getTransitions</a></div><div class="ttdeci">const TransitionMap &amp; getTransitions() const</div><div class="ttdoc">Udostępnia zdefiniowane przejścia do zapisu w pliku lub bazie.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:114</div></div>
+<div class="ttc" id="aclass_turing_machine_html_ab9a0bc22bca5d8a6c0c286b19e556b41"><div class="ttname"><a href="class_turing_machine.html#ab9a0bc22bca5d8a6c0c286b19e556b41">TuringMachine::TuringMachine</a></div><div class="ttdeci">TuringMachine(char blankSymbol=&#39;_&#39;)</div><div class="ttdoc">Tworzy maszynę z wybranym symbolem pustym taśmy.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:16</div></div>
+<div class="ttc" id="aclass_turing_machine_html_acd11829e66cd39748d0bbe07472f7a14"><div class="ttname"><a href="class_turing_machine.html#acd11829e66cd39748d0bbe07472f7a14">TuringMachine::isAccepted</a></div><div class="ttdeci">bool isAccepted() const</div><div class="ttdoc">Informuje, czy zatrzymanie nastąpiło w stanie akceptującym.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:85</div></div>
+<div class="ttc" id="aclass_turing_machine_html_acdb394357c864872ece40e540544bcf8"><div class="ttname"><a href="class_turing_machine.html#acdb394357c864872ece40e540544bcf8">TuringMachine::initialState_</a></div><div class="ttdeci">std::string initialState_</div><div class="ttdoc">Stan ustawiany podczas resetu maszyny.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:121</div></div>
+<div class="ttc" id="aclass_turing_machine_html_ae0d941458859797a82db541a78ada165"><div class="ttname"><a href="class_turing_machine.html#ae0d941458859797a82db541a78ada165">TuringMachine::isHalted</a></div><div class="ttdeci">bool isHalted() const</div><div class="ttdoc">Informuje, czy maszyna nie może już wykonać kolejnego kroku.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:81</div></div>
+<div class="ttc" id="aclass_turing_machine_html_af24d461f40da90b907cfcef1f32196ff"><div class="ttname"><a href="class_turing_machine.html#af24d461f40da90b907cfcef1f32196ff">TuringMachine::transitions_</a></div><div class="ttdeci">std::map&lt; TransitionKey, Transition &gt; transitions_</div><div class="ttdoc">Deterministyczna funkcja przejścia.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:127</div></div>
+<div class="ttc" id="aclass_turing_machine_html_af29ea827bd0b9a923ff46e0960ae3c56"><div class="ttname"><a href="class_turing_machine.html#af29ea827bd0b9a923ff46e0960ae3c56">TuringMachine::loadTape</a></div><div class="ttdeci">void loadTape(const std::string &amp;input)</div><div class="ttdoc">Wczytuje wejściową zawartość taśmy oraz zapamiętuje ją na potrzeby resetu.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:41</div></div>
+<div class="ttc" id="aclass_turing_machine_html_af91a3cbf038ffdf64604c5a334e57e8c"><div class="ttname"><a href="class_turing_machine.html#af91a3cbf038ffdf64604c5a334e57e8c">TuringMachine::addTransition</a></div><div class="ttdeci">void addTransition(const std::string &amp;state, char readSymbol, Transition transition)</div><div class="ttdoc">Dodaje regułę dla pary: aktualny stan i odczytany symbol.</div><div class="ttdef"><b>Definicja</b> TuringMachine.cpp:33</div></div>
+<div class="ttc" id="aclass_turing_machine_html_afc6296a2d300f1e5db7b275e1a6aba50"><div class="ttname"><a href="class_turing_machine.html#afc6296a2d300f1e5db7b275e1a6aba50">TuringMachine::TransitionKey</a></div><div class="ttdeci">std::pair&lt; std::string, char &gt; TransitionKey</div><div class="ttdoc">Klucz mapy przejść: aktualny stan i symbol odczytany z taśmy.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:118</div></div>
+<div class="ttc" id="astruct_transition_html"><div class="ttname"><a href="struct_transition.html">Transition</a></div><div class="ttdoc">Opisuje pojedyncze przejście funkcji przejścia maszyny Turinga.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:19</div></div>
+<div class="ttc" id="astruct_transition_html_a5947e2414c27ca6829bd074a16404396"><div class="ttname"><a href="struct_transition.html#a5947e2414c27ca6829bd074a16404396">Transition::writeSymbol</a></div><div class="ttdeci">char writeSymbol</div><div class="ttdoc">Symbol zapisywany w bieżącej komórce taśmy.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:21</div></div>
+<div class="ttc" id="astruct_transition_html_abe7c65328aef6fe05595aa09b9620744"><div class="ttname"><a href="struct_transition.html#abe7c65328aef6fe05595aa09b9620744">Transition::nextState</a></div><div class="ttdeci">std::string nextState</div><div class="ttdoc">Stan sterowania ustawiany po wykonaniu przejścia.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:25</div></div>
+<div class="ttc" id="astruct_transition_html_accb0997622ded0166dbe0e132d870bf9"><div class="ttname"><a href="struct_transition.html#accb0997622ded0166dbe0e132d870bf9">Transition::move</a></div><div class="ttdeci">HeadMove move</div><div class="ttdoc">Ruch głowicy wykonywany po zapisie symbolu.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:23</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>include</b></li><li class="navelem"><a href="_turing_machine_8h.html">TuringMachine.h</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

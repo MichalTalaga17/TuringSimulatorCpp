@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Plik źródłowy MachineEditorTab.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('_machine_editor_tab_8h_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">MachineEditorTab.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_machine_editor_tab_8h.html">Idź do dokumentacji tego pliku.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;QComboBox&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;QLabel&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;QLineEdit&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;QPushButton&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;QScrollArea&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;QSlider&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;QSpinBox&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;QTableWidget&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;QTimer&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;QWidget&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;set&gt;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;tuple&gt;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;<a class="code" href="storage_8h.html">storage.h</a>&quot;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &quot;<a class="code" href="_turing_machine_8h.html">TuringMachine.h</a>&quot;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span></div>
+<div class="foldopen" id="foldopen00035" data-start="{" data-end="};">
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="class_machine_editor_tab.html">   35</a></span><span class="keyword">class </span><a class="code hl_function" href="class_machine_editor_tab.html#a9ecd1435a970f541f797fe39149e6779">MachineEditorTab</a> : <span class="keyword">public</span> QWidget</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>{</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    Q_OBJECT</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keyword">explicit</span> <a class="code hl_function" href="class_machine_editor_tab.html#a9ecd1435a970f541f797fe39149e6779">MachineEditorTab</a>(<span class="keyword">const</span> QString &amp;untitledTitle, <span class="keywordtype">bool</span> startWithExample = <span class="keyword">true</span>, QWidget *parent = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <a class="code hl_function" href="class_machine_editor_tab.html#a9ecd1435a970f541f797fe39149e6779">~MachineEditorTab</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    QString <a class="code hl_function" href="class_machine_editor_tab.html#a99ae1d329878c5d6eb026c891ef3cee3">tabTitle</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_machine_editor_tab.html#a7cca96325215921a305c536c13e29b7e">loadFromFile</a>(<span class="keyword">const</span> QString &amp;filePath);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_machine_editor_tab.html#a49d4c95880fbdfd8459ada8762788a27">saveToFile</a>();</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_machine_editor_tab.html#a6c04ae44495a7e4053e0ba33c63fa2f8">saveToFileAs</a>();</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_machine_editor_tab.html#a46c131a508001b199c357b5319b4838f">validateMachine</a>();</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#af1eaa2624f28f318fe3e1301acbf8caf">resetToDefaultExample</a>();</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_machine_editor_tab.html#a4c3f18f7e5e76606bcc4d7bf0fb3d30b">saveToDatabase</a>();</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_machine_editor_tab.html#abd879167ae42b80bdef7871e780e2240">loadFromDatabase</a>(<span class="keyword">const</span> QString &amp;machineName);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>signals:</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="class_machine_editor_tab.html#a8e7f33cd363579b739f78c962f3f16cd">   96</a></span>    <span class="keywordtype">void</span> <a class="code hl_signal" href="class_machine_editor_tab.html#a8e7f33cd363579b739f78c962f3f16cd">titleChanged</a>(<span class="keyword">const</span> QString &amp;title);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="keyword">public</span> slots:</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_machine_editor_tab.html#a3ad388eec1c4b6b66de892f6b49b1966">onStepClicked</a>();</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_machine_editor_tab.html#a8c3ffef402559a347f665abc91ae9bc6">onRunClicked</a>();</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_machine_editor_tab.html#a884908d29ae26135e30d162b2e8a6be9">onResetClicked</a>();</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#afb90a60a21649a3d8cf073f7674a6cf5">resizeEvent</a>(QResizeEvent *event) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="keyword">private</span> slots:</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_machine_editor_tab.html#af9fb9325afc40d6827f4e2376a2dc346">onNumStatesChanged</a>(<span class="keywordtype">int</span> value);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_machine_editor_tab.html#ac74a22b7210435e2c67d91bf9b5a0750">onAlphabetChanged</a>();</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_machine_editor_tab.html#a361b5f0b9b2e84056f52b67917d0bb77">onBlankSymbolChanged</a>();</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_machine_editor_tab.html#acc85995df1ad30b691121d941c825672">onTableItemChanged</a>(QTableWidgetItem *item);</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_machine_editor_tab.html#a369e828333b9eea4742c248e051f6d1c">onTapeInputChanged</a>();</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_machine_editor_tab.html#a20f4595f73083723aa84b13117161b73">onSpeedChanged</a>(<span class="keywordtype">int</span> value);</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_machine_editor_tab.html#a4d2045d79cfe54cf19adae3d405e41fc">onExecutionTimer</a>();</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#aadf24fca1e2f302b8adfe30acbcdac6d">setupUI</a>();</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    QWidget *<a class="code hl_function" href="class_machine_editor_tab.html#a4a05ffc0911ecc22952d006e02358536">setupBuilderTab</a>();</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    QWidget *<a class="code hl_function" href="class_machine_editor_tab.html#a5daa7ba62a98086a97e84066d046eedb">setupExecutorTab</a>();</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a943d5bce47e04f7cb41e660407b5ca2a">applyModernStyle</a>();</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a5eab2fbf8e71aa48ed6b75d3697961f7">updateDisplay</a>();</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#aab9a56734967a92720d42391b88d1c39">updateActiveTransitionHighlight</a>();</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a3d3d13fdda6703cd1cb178d8eda1b130">highlightTransition</a>(<span class="keyword">const</span> std::string &amp;state, <span class="keywordtype">char</span> readSymbol);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#ae003e82a83ad69b0e01a869dd099bc5f">clearActiveTransitionHighlight</a>();</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a6d5920c559edc5d0202f8d4b4e82bba5">checkTapeForUndefinedSymbols</a>();</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#ab0d0d3b573fde7adc5c948e2b03e202e">setTransitionCellHighlighted</a>(<span class="keywordtype">int</span> row, <span class="keywordtype">int</span> col, <span class="keywordtype">bool</span> highlighted);</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a634851cddfd596552d094e9dadd85ff7">updateStateDisplay</a>();</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#ac03dbd97d8d997b1798a07b008203d49">updateTapeDisplay</a>();</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a02cff0d7efe0e14b10ec63f1afd6a9eb">scheduleTapeDisplayRefresh</a>();</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#adf366a8284a8a0b252d84189f8af4ad0">setupTapeCells</a>();</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a55dfd2a397176065a190ab4c0fd2ba49">ensureTapeCellsFitInput</a>();</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    QLabel *<a class="code hl_function" href="class_machine_editor_tab.html#a06a180a99961e2123b673f29a44542ec">createTapeCell</a>();</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a32a86d7303a67ff6cb0d64a0871c5fc1">applyTapeCellStyle</a>(QLabel *cell, <span class="keywordtype">bool</span> active);</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a84e683a729e4e1909597cf4df4ec5cf0">applyDefaultExample</a>();</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#aab957ff38ca5ceadaa05a82d595256e7">applyBlankMachine</a>();</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_machine_editor_tab.html#a6f2079efdd2c3363b00e638dac99682d">rebuildMachineFromEditor</a>();</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_machine_editor_tab.html#a9b8f50eb02c1a904513998dc6176b921">executeMachineStep</a>();</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_machine_editor_tab.html#a785c192b8bb1284792b93410ba883d49">buildMachineFromCurrentConfiguration</a>(<span class="keywordtype">bool</span> showSuccessDialog);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#aa5a026785b03344753ac71a5ec1d7e1e">rebuildTransitionsTable</a>();</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno"><a class="line" href="class_machine_editor_tab.html#a5ce027bd7519f4da8b42629c8ed52daf">  197</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a5ce027bd7519f4da8b42629c8ed52daf">changeColumnSymbol</a>(<span class="keywordtype">int</span> col, <span class="keywordtype">char</span> oldSymbol, <span class="keywordtype">char</span> newSymbol);</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a0001dee57b4b7a9a722d21a6ef5d5891">populateTransitionMapWithDefaults</a>();</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_machine_editor_tab.html#a94178f5dc39e1351f76c6a030afd6f88">saveMachineToPath</a>(<span class="keyword">const</span> QString &amp;filePath);</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_machine_editor_tab.html#a70b26fc0528510ddf00ca4a5bc63dc27">applyMachineData</a>(<span class="keyword">const</span> <a class="code hl_struct" href="struct_machine_data.html">MachineData</a>&amp; data);</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    QSpinBox *numStatesSpinBox;</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    QLineEdit *alphabetInputField;</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    QLineEdit *blankSymbolField;</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    QComboBox *initialStateCombo;</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    QTableWidget *transitionsTable;</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span></div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    QLabel *machineStateLabel;</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    QLabel *stepCountLabel;</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno"><a class="line" href="class_machine_editor_tab.html#ae3bdcb845ce27facaca5b19590f20b61">  219</a></span>    QScrollArea *<a class="code hl_variable" href="class_machine_editor_tab.html#ae3bdcb845ce27facaca5b19590f20b61">tapeScrollArea</a>;</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno"><a class="line" href="class_machine_editor_tab.html#a16610a39fb6a3e84b6d1d4ca94d113e5">  221</a></span>    QWidget *<a class="code hl_variable" href="class_machine_editor_tab.html#a16610a39fb6a3e84b6d1d4ca94d113e5">tapeDisplay</a>;</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    QLineEdit *tapeInputField;</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    QLabel *tapeWarningLabel;</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    QPushButton *stepButton;</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    QPushButton *runButton;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    QPushButton *resetButton;</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    QSlider *speedSlider;</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    QLabel *speedLabel;</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    QLabel *statusLabel;</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span></div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    std::unique_ptr&lt;TuringMachine&gt; machine;</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno"><a class="line" href="class_machine_editor_tab.html#aafecec4f11be5d6339565c60f82eb1aa">  236</a></span>    std::vector&lt;std::string&gt; <a class="code hl_variable" href="class_machine_editor_tab.html#aafecec4f11be5d6339565c60f82eb1aa">states</a>;</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    std::vector&lt;char&gt; alphabet;</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    std::string initialState;</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    std::set&lt;std::string&gt; acceptingStates;</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span></div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno"><a class="line" href="class_machine_editor_tab.html#aa1ba1aa70fb2ed12243a87f0783f2aa6">  242</a></span>    std::map&lt;std::pair&lt;std::string, char&gt;, std::tuple&lt;char, std::string, std::string&gt;&gt; <a class="code hl_variable" href="class_machine_editor_tab.html#aa1ba1aa70fb2ed12243a87f0783f2aa6">transitionMap</a>;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span> </div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    <span class="keywordtype">char</span> blankSymbol;</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    <span class="keywordtype">char</span> previousBlankSymbol;</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    <span class="keywordtype">bool</span> isRunning;</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    <span class="keywordtype">int</span> executionSpeed;</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    std::unique_ptr&lt;QTimer&gt; executionTimer;</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno"><a class="line" href="class_machine_editor_tab.html#a6605d4ca842c1310081d55582e55aa48">  251</a></span>    std::unique_ptr&lt;QTimer&gt; <a class="code hl_variable" href="class_machine_editor_tab.html#a6605d4ca842c1310081d55582e55aa48">tapeDisplayRefreshTimer</a>;</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno"><a class="line" href="class_machine_editor_tab.html#a0c7960ed15a47c0ae2e40bce741ff04e">  253</a></span>    std::vector&lt;QLabel *&gt; <a class="code hl_variable" href="class_machine_editor_tab.html#a0c7960ed15a47c0ae2e40bce741ff04e">tapeCells</a>;</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    QString untitledTitle;</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    QString currentFilePath;</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    <span class="keywordtype">bool</span> startWithExample;</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    <span class="keywordtype">int</span> highlightedTransitionRow;</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    <span class="keywordtype">int</span> highlightedTransitionCol;</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    std::vector&lt;char&gt; <a class="code hl_function" href="class_machine_editor_tab.html#a4f1ab7c6abc5b375aaca9edb83f32c44">getOrderedAlphabet</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno"><a class="line" href="class_machine_editor_tab.html#a9061af618c7c8e8d36fc74807f71a3aa">  271</a></span>    <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; <a class="code hl_function" href="class_machine_editor_tab.html#a9061af618c7c8e8d36fc74807f71a3aa">getStatesList</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="class_machine_editor_tab.html#aafecec4f11be5d6339565c60f82eb1aa">states</a>; }</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>};</div>
+</div>
+<div class="ttc" id="a_turing_machine_8h_html"><div class="ttname"><a href="_turing_machine_8h.html">TuringMachine.h</a></div><div class="ttdoc">Rdzeń deterministycznej jednotaśmowej maszyny Turinga.</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a0001dee57b4b7a9a722d21a6ef5d5891"><div class="ttname"><a href="class_machine_editor_tab.html#a0001dee57b4b7a9a722d21a6ef5d5891">MachineEditorTab::populateTransitionMapWithDefaults</a></div><div class="ttdeci">void populateTransitionMapWithDefaults()</div><div class="ttdoc">Synchronizuje mapę przejść z aktualną zawartością tabeli.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabPersistence.cpp:130</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a02cff0d7efe0e14b10ec63f1afd6a9eb"><div class="ttname"><a href="class_machine_editor_tab.html#a02cff0d7efe0e14b10ec63f1afd6a9eb">MachineEditorTab::scheduleTapeDisplayRefresh</a></div><div class="ttdeci">void scheduleTapeDisplayRefresh()</div><div class="ttdoc">Planuje pojedyncze odświeżenie widoku taśmy po zakończeniu bieżącej pętli zdarzeń.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:165</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a06a180a99961e2123b673f29a44542ec"><div class="ttname"><a href="class_machine_editor_tab.html#a06a180a99961e2123b673f29a44542ec">MachineEditorTab::createTapeCell</a></div><div class="ttdeci">QLabel * createTapeCell()</div><div class="ttdoc">Tworzy pojedynczą etykietę komórki taśmy.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:225</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a0c7960ed15a47c0ae2e40bce741ff04e"><div class="ttname"><a href="class_machine_editor_tab.html#a0c7960ed15a47c0ae2e40bce741ff04e">MachineEditorTab::tapeCells</a></div><div class="ttdeci">std::vector&lt; QLabel * &gt; tapeCells</div><div class="ttdoc">Bufor etykiet pojedynczych komórek taśmy używanych przy odświeżaniu widoku.</div><div class="ttdef"><b>Definicja</b> MachineEditorTab.h:253</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a16610a39fb6a3e84b6d1d4ca94d113e5"><div class="ttname"><a href="class_machine_editor_tab.html#a16610a39fb6a3e84b6d1d4ca94d113e5">MachineEditorTab::tapeDisplay</a></div><div class="ttdeci">QWidget * tapeDisplay</div><div class="ttdoc">Kontener z widocznymi komórkami reprezentującymi wycinek taśmy.</div><div class="ttdef"><b>Definicja</b> MachineEditorTab.h:221</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a20f4595f73083723aa84b13117161b73"><div class="ttname"><a href="class_machine_editor_tab.html#a20f4595f73083723aa84b13117161b73">MachineEditorTab::onSpeedChanged</a></div><div class="ttdeci">void onSpeedChanged(int value)</div><div class="ttdoc">Aktualizuje prędkość automatycznego wykonywania.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:440</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a32a86d7303a67ff6cb0d64a0871c5fc1"><div class="ttname"><a href="class_machine_editor_tab.html#a32a86d7303a67ff6cb0d64a0871c5fc1">MachineEditorTab::applyTapeCellStyle</a></div><div class="ttdeci">void applyTapeCellStyle(QLabel *cell, bool active)</div><div class="ttdoc">Nakłada styl zwykłej albo aktywnej komórki taśmy.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:234</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a361b5f0b9b2e84056f52b67917d0bb77"><div class="ttname"><a href="class_machine_editor_tab.html#a361b5f0b9b2e84056f52b67917d0bb77">MachineEditorTab::onBlankSymbolChanged</a></div><div class="ttdeci">void onBlankSymbolChanged()</div><div class="ttdoc">Zmienia symbol pusty i przebudowuje alfabet.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:122</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a369e828333b9eea4742c248e051f6d1c"><div class="ttname"><a href="class_machine_editor_tab.html#a369e828333b9eea4742c248e051f6d1c">MachineEditorTab::onTapeInputChanged</a></div><div class="ttdeci">void onTapeInputChanged()</div><div class="ttdoc">Reaguje na zmianę wejściowej taśmy.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:348</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a3ad388eec1c4b6b66de892f6b49b1966"><div class="ttname"><a href="class_machine_editor_tab.html#a3ad388eec1c4b6b66de892f6b49b1966">MachineEditorTab::onStepClicked</a></div><div class="ttdeci">void onStepClicked()</div><div class="ttdoc">Obsługuje wykonanie jednego kroku symulacji.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:377</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a3d3d13fdda6703cd1cb178d8eda1b130"><div class="ttname"><a href="class_machine_editor_tab.html#a3d3d13fdda6703cd1cb178d8eda1b130">MachineEditorTab::highlightTransition</a></div><div class="ttdeci">void highlightTransition(const std::string &amp;state, char readSymbol)</div><div class="ttdoc">Podświetla wskazaną instrukcję przejścia.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:35</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a46c131a508001b199c357b5319b4838f"><div class="ttname"><a href="class_machine_editor_tab.html#a46c131a508001b199c357b5319b4838f">MachineEditorTab::validateMachine</a></div><div class="ttdeci">bool validateMachine()</div><div class="ttdoc">Przebudowuje maszynę i pokazuje wynik walidacji.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:18</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a49d4c95880fbdfd8459ada8762788a27"><div class="ttname"><a href="class_machine_editor_tab.html#a49d4c95880fbdfd8459ada8762788a27">MachineEditorTab::saveToFile</a></div><div class="ttdeci">bool saveToFile()</div><div class="ttdoc">Zapisuje maszynę do znanej ścieżki albo pyta o nią, jeśli karta jest nowa.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabPersistence.cpp:159</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a4a05ffc0911ecc22952d006e02358536"><div class="ttname"><a href="class_machine_editor_tab.html#a4a05ffc0911ecc22952d006e02358536">MachineEditorTab::setupBuilderTab</a></div><div class="ttdeci">QWidget * setupBuilderTab()</div><div class="ttdoc">Tworzy edytor logiki z konfiguracją maszyny i tabelą przejść.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabView.cpp:79</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a4c3f18f7e5e76606bcc4d7bf0fb3d30b"><div class="ttname"><a href="class_machine_editor_tab.html#a4c3f18f7e5e76606bcc4d7bf0fb3d30b">MachineEditorTab::saveToDatabase</a></div><div class="ttdeci">bool saveToDatabase()</div><div class="ttdoc">Zapisuje aktualną maszynę do lokalnej bazy SQLite.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabPersistence.cpp:225</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a4d2045d79cfe54cf19adae3d405e41fc"><div class="ttname"><a href="class_machine_editor_tab.html#a4d2045d79cfe54cf19adae3d405e41fc">MachineEditorTab::onExecutionTimer</a></div><div class="ttdeci">void onExecutionTimer()</div><div class="ttdoc">Wykonuje kolejny krok wywołany przez timer symulacji.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:449</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a4f1ab7c6abc5b375aaca9edb83f32c44"><div class="ttname"><a href="class_machine_editor_tab.html#a4f1ab7c6abc5b375aaca9edb83f32c44">MachineEditorTab::getOrderedAlphabet</a></div><div class="ttdeci">std::vector&lt; char &gt; getOrderedAlphabet() const</div><div class="ttdoc">Zwraca alfabet z symbolem pustym zawsze na pierwszej pozycji.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabPersistence.cpp:115</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a55dfd2a397176065a190ab4c0fd2ba49"><div class="ttname"><a href="class_machine_editor_tab.html#a55dfd2a397176065a190ab4c0fd2ba49">MachineEditorTab::ensureTapeCellsFitInput</a></div><div class="ttdeci">void ensureTapeCellsFitInput()</div><div class="ttdoc">Rozszerza bufor komórek, gdy wpisana taśma wejściowa nie mieści się w wizualizacji.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:195</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a5ce027bd7519f4da8b42629c8ed52daf"><div class="ttname"><a href="class_machine_editor_tab.html#a5ce027bd7519f4da8b42629c8ed52daf">MachineEditorTab::changeColumnSymbol</a></div><div class="ttdeci">void changeColumnSymbol(int col, char oldSymbol, char newSymbol)</div><div class="ttdoc">Zmienia symbol w kolumnie bez przebudowania całej tabeli (dla zmiany symbolu pustego).</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a5daa7ba62a98086a97e84066d046eedb"><div class="ttname"><a href="class_machine_editor_tab.html#a5daa7ba62a98086a97e84066d046eedb">MachineEditorTab::setupExecutorTab</a></div><div class="ttdeci">QWidget * setupExecutorTab()</div><div class="ttdoc">Tworzy panel uruchamiania symulacji oraz widok taśmy.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabView.cpp:195</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a5eab2fbf8e71aa48ed6b75d3697961f7"><div class="ttname"><a href="class_machine_editor_tab.html#a5eab2fbf8e71aa48ed6b75d3697961f7">MachineEditorTab::updateDisplay</a></div><div class="ttdeci">void updateDisplay()</div><div class="ttdoc">Odświeża wszystkie elementy prezentujące bieżący stan maszyny.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:17</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a634851cddfd596552d094e9dadd85ff7"><div class="ttname"><a href="class_machine_editor_tab.html#a634851cddfd596552d094e9dadd85ff7">MachineEditorTab::updateStateDisplay</a></div><div class="ttdeci">void updateStateDisplay()</div><div class="ttdoc">Aktualizuje etykiety stanu sterowania i licznika kroków.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:116</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a6605d4ca842c1310081d55582e55aa48"><div class="ttname"><a href="class_machine_editor_tab.html#a6605d4ca842c1310081d55582e55aa48">MachineEditorTab::tapeDisplayRefreshTimer</a></div><div class="ttdeci">std::unique_ptr&lt; QTimer &gt; tapeDisplayRefreshTimer</div><div class="ttdoc">Jednostrzałowy timer współdzielony przez odświeżenia widoku taśmy, aby uniknąć kolejkowania duplikató...</div><div class="ttdef"><b>Definicja</b> MachineEditorTab.h:251</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a6c04ae44495a7e4053e0ba33c63fa2f8"><div class="ttname"><a href="class_machine_editor_tab.html#a6c04ae44495a7e4053e0ba33c63fa2f8">MachineEditorTab::saveToFileAs</a></div><div class="ttdeci">bool saveToFileAs()</div><div class="ttdoc">Zapisuje maszynę po wskazaniu ścieżki przez użytkownika.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabPersistence.cpp:169</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a6d5920c559edc5d0202f8d4b4e82bba5"><div class="ttname"><a href="class_machine_editor_tab.html#a6d5920c559edc5d0202f8d4b4e82bba5">MachineEditorTab::checkTapeForUndefinedSymbols</a></div><div class="ttdeci">void checkTapeForUndefinedSymbols()</div><div class="ttdoc">Sprawdza, czy taśma zawiera niezdefiniowane symbole.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:360</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a6f2079efdd2c3363b00e638dac99682d"><div class="ttname"><a href="class_machine_editor_tab.html#a6f2079efdd2c3363b00e638dac99682d">MachineEditorTab::rebuildMachineFromEditor</a></div><div class="ttdeci">bool rebuildMachineFromEditor()</div><div class="ttdoc">Przebudowuje maszynę z edytora i wczytuje aktualną zawartość pola taśmy.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:326</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a70b26fc0528510ddf00ca4a5bc63dc27"><div class="ttname"><a href="class_machine_editor_tab.html#a70b26fc0528510ddf00ca4a5bc63dc27">MachineEditorTab::applyMachineData</a></div><div class="ttdeci">void applyMachineData(const MachineData &amp;data)</div><div class="ttdoc">Stosuje dane maszyny odczytane z pliku lub bazy do formularza i tabeli.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabPersistence.cpp:282</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a785c192b8bb1284792b93410ba883d49"><div class="ttname"><a href="class_machine_editor_tab.html#a785c192b8bb1284792b93410ba883d49">MachineEditorTab::buildMachineFromCurrentConfiguration</a></div><div class="ttdeci">bool buildMachineFromCurrentConfiguration(bool showSuccessDialog)</div><div class="ttdoc">Buduje maszynę z aktualnej konfiguracji formularza i opcjonalnie pokazuje komunikat sukcesu.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:205</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a7cca96325215921a305c536c13e29b7e"><div class="ttname"><a href="class_machine_editor_tab.html#a7cca96325215921a305c536c13e29b7e">MachineEditorTab::loadFromFile</a></div><div class="ttdeci">bool loadFromFile(const QString &amp;filePath)</div><div class="ttdoc">Wczytuje maszynę ze wskazanego pliku do tej karty.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabPersistence.cpp:204</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a84e683a729e4e1909597cf4df4ec5cf0"><div class="ttname"><a href="class_machine_editor_tab.html#a84e683a729e4e1909597cf4df4ec5cf0">MachineEditorTab::applyDefaultExample</a></div><div class="ttdeci">void applyDefaultExample()</div><div class="ttdoc">Wypełnia formularz i tabelę przykładową maszyną startową.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:457</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a884908d29ae26135e30d162b2e8a6be9"><div class="ttname"><a href="class_machine_editor_tab.html#a884908d29ae26135e30d162b2e8a6be9">MachineEditorTab::onResetClicked</a></div><div class="ttdeci">void onResetClicked()</div><div class="ttdoc">Resetuje maszynę do stanu początkowego i wejściowej taśmy.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:422</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a8c3ffef402559a347f665abc91ae9bc6"><div class="ttname"><a href="class_machine_editor_tab.html#a8c3ffef402559a347f665abc91ae9bc6">MachineEditorTab::onRunClicked</a></div><div class="ttdeci">void onRunClicked()</div><div class="ttdoc">Obsługuje uruchomienie lub pauzę automatycznej symulacji.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:390</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a8e7f33cd363579b739f78c962f3f16cd"><div class="ttname"><a href="class_machine_editor_tab.html#a8e7f33cd363579b739f78c962f3f16cd">MachineEditorTab::titleChanged</a></div><div class="ttdeci">void titleChanged(const QString &amp;title)</div><div class="ttdoc">Emitowany, gdy tytuł karty powinien zostać odświeżony w QTabWidget.</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a9061af618c7c8e8d36fc74807f71a3aa"><div class="ttname"><a href="class_machine_editor_tab.html#a9061af618c7c8e8d36fc74807f71a3aa">MachineEditorTab::getStatesList</a></div><div class="ttdeci">const std::vector&lt; std::string &gt; &amp; getStatesList() const</div><div class="ttdoc">Udostępnia listę stanów delegate&#39;owi tabeli przejść.</div><div class="ttdef"><b>Definicja</b> MachineEditorTab.h:271</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a94178f5dc39e1351f76c6a030afd6f88"><div class="ttname"><a href="class_machine_editor_tab.html#a94178f5dc39e1351f76c6a030afd6f88">MachineEditorTab::saveMachineToPath</a></div><div class="ttdeci">bool saveMachineToPath(const QString &amp;filePath)</div><div class="ttdoc">Zapisuje aktualną definicję maszyny do wskazanej ścieżki.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabPersistence.cpp:180</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a943d5bce47e04f7cb41e660407b5ca2a"><div class="ttname"><a href="class_machine_editor_tab.html#a943d5bce47e04f7cb41e660407b5ca2a">MachineEditorTab::applyModernStyle</a></div><div class="ttdeci">void applyModernStyle()</div><div class="ttdoc">Nakłada wspólny styl wizualny na całą aplikację.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabView.cpp:330</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a99ae1d329878c5d6eb026c891ef3cee3"><div class="ttname"><a href="class_machine_editor_tab.html#a99ae1d329878c5d6eb026c891ef3cee3">MachineEditorTab::tabTitle</a></div><div class="ttdeci">QString tabTitle() const</div><div class="ttdoc">Zwraca tytuł prezentowany na karcie.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:8</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a9b8f50eb02c1a904513998dc6176b921"><div class="ttname"><a href="class_machine_editor_tab.html#a9b8f50eb02c1a904513998dc6176b921">MachineEditorTab::executeMachineStep</a></div><div class="ttdeci">bool executeMachineStep()</div><div class="ttdoc">Wykonuje jeden krok i spójnie kończy/pauzuje UI, jeśli maszyna się zatrzyma.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:291</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_a9ecd1435a970f541f797fe39149e6779"><div class="ttname"><a href="class_machine_editor_tab.html#a9ecd1435a970f541f797fe39149e6779">MachineEditorTab::MachineEditorTab</a></div><div class="ttdeci">MachineEditorTab(const QString &amp;untitledTitle, bool startWithExample=true, QWidget *parent=nullptr)</div><div class="ttdoc">Tworzy nową kartę edytora.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabView.cpp:23</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_aa1ba1aa70fb2ed12243a87f0783f2aa6"><div class="ttname"><a href="class_machine_editor_tab.html#aa1ba1aa70fb2ed12243a87f0783f2aa6">MachineEditorTab::transitionMap</a></div><div class="ttdeci">std::map&lt; std::pair&lt; std::string, char &gt;, std::tuple&lt; char, std::string, std::string &gt; &gt; transitionMap</div><div class="ttdoc">Mapa przejść: (stan, symbol odczytu) -&gt; (symbol zapisu, ruch, następny stan).</div><div class="ttdef"><b>Definicja</b> MachineEditorTab.h:242</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_aa5a026785b03344753ac71a5ec1d7e1e"><div class="ttname"><a href="class_machine_editor_tab.html#aa5a026785b03344753ac71a5ec1d7e1e">MachineEditorTab::rebuildTransitionsTable</a></div><div class="ttdeci">void rebuildTransitionsTable()</div><div class="ttdoc">Przebudowuje tabelę przejść po zmianie liczby stanów lub alfabetu.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabPersistence.cpp:55</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_aab957ff38ca5ceadaa05a82d595256e7"><div class="ttname"><a href="class_machine_editor_tab.html#aab957ff38ca5ceadaa05a82d595256e7">MachineEditorTab::applyBlankMachine</a></div><div class="ttdeci">void applyBlankMachine()</div><div class="ttdoc">Wypełnia formularz minimalną pustą konfiguracją do pracy od zera.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:510</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_aab9a56734967a92720d42391b88d1c39"><div class="ttname"><a href="class_machine_editor_tab.html#aab9a56734967a92720d42391b88d1c39">MachineEditorTab::updateActiveTransitionHighlight</a></div><div class="ttdeci">void updateActiveTransitionHighlight()</div><div class="ttdoc">Podświetla komórkę tabeli przejść odpowiadająca aktualnie wykonywanej instrukcji.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:24</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_aadf24fca1e2f302b8adfe30acbcdac6d"><div class="ttname"><a href="class_machine_editor_tab.html#aadf24fca1e2f302b8adfe30acbcdac6d">MachineEditorTab::setupUI</a></div><div class="ttdeci">void setupUI()</div><div class="ttdoc">Buduje główny układ okna jako jedną wspólną stronę aplikacji.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabView.cpp:36</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_aafecec4f11be5d6339565c60f82eb1aa"><div class="ttname"><a href="class_machine_editor_tab.html#aafecec4f11be5d6339565c60f82eb1aa">MachineEditorTab::states</a></div><div class="ttdeci">std::vector&lt; std::string &gt; states</div><div class="ttdoc">Lista stanów generowanych jako q0, q1, ...</div><div class="ttdef"><b>Definicja</b> MachineEditorTab.h:236</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_ab0d0d3b573fde7adc5c948e2b03e202e"><div class="ttname"><a href="class_machine_editor_tab.html#ab0d0d3b573fde7adc5c948e2b03e202e">MachineEditorTab::setTransitionCellHighlighted</a></div><div class="ttdeci">void setTransitionCellHighlighted(int row, int col, bool highlighted)</div><div class="ttdoc">Ustawia wizualny stan pojedynczej komórki tabeli przejść.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:98</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_abd879167ae42b80bdef7871e780e2240"><div class="ttname"><a href="class_machine_editor_tab.html#abd879167ae42b80bdef7871e780e2240">MachineEditorTab::loadFromDatabase</a></div><div class="ttdeci">bool loadFromDatabase(const QString &amp;machineName)</div><div class="ttdoc">Wczytuje maszynę z lokalnej bazy SQLite.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabPersistence.cpp:253</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_ac03dbd97d8d997b1798a07b008203d49"><div class="ttname"><a href="class_machine_editor_tab.html#ac03dbd97d8d997b1798a07b008203d49">MachineEditorTab::updateTapeDisplay</a></div><div class="ttdeci">void updateTapeDisplay()</div><div class="ttdoc">Odtwarza aktualny wycinek taśmy i centruje aktywną komórkę.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:125</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_ac74a22b7210435e2c67d91bf9b5a0750"><div class="ttname"><a href="class_machine_editor_tab.html#ac74a22b7210435e2c67d91bf9b5a0750">MachineEditorTab::onAlphabetChanged</a></div><div class="ttdeci">void onAlphabetChanged()</div><div class="ttdoc">Aktualizuje alfabet i tabelę przejść po zmianie pola alfabetu.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:70</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_acc85995df1ad30b691121d941c825672"><div class="ttname"><a href="class_machine_editor_tab.html#acc85995df1ad30b691121d941c825672">MachineEditorTab::onTableItemChanged</a></div><div class="ttdeci">void onTableItemChanged(QTableWidgetItem *item)</div><div class="ttdoc">Synchronizuje mapę przejść po ręcznej edycji komórki tabeli.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:165</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_adf366a8284a8a0b252d84189f8af4ad0"><div class="ttname"><a href="class_machine_editor_tab.html#adf366a8284a8a0b252d84189f8af4ad0">MachineEditorTab::setupTapeCells</a></div><div class="ttdeci">void setupTapeCells()</div><div class="ttdoc">Tworzy zestaw widocznych komórek używanych do wizualizacji taśmy.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:175</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_ae003e82a83ad69b0e01a869dd099bc5f"><div class="ttname"><a href="class_machine_editor_tab.html#ae003e82a83ad69b0e01a869dd099bc5f">MachineEditorTab::clearActiveTransitionHighlight</a></div><div class="ttdeci">void clearActiveTransitionHighlight()</div><div class="ttdoc">Czyści podświetlenie komórki przejścia.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabDisplay.cpp:87</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_ae3bdcb845ce27facaca5b19590f20b61"><div class="ttname"><a href="class_machine_editor_tab.html#ae3bdcb845ce27facaca5b19590f20b61">MachineEditorTab::tapeScrollArea</a></div><div class="ttdeci">QScrollArea * tapeScrollArea</div><div class="ttdoc">Przewijany kontener widoku taśmy używany do centrowania aktywnej komórki.</div><div class="ttdef"><b>Definicja</b> MachineEditorTab.h:219</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_af1eaa2624f28f318fe3e1301acbf8caf"><div class="ttname"><a href="class_machine_editor_tab.html#af1eaa2624f28f318fe3e1301acbf8caf">MachineEditorTab::resetToDefaultExample</a></div><div class="ttdeci">void resetToDefaultExample()</div><div class="ttdoc">Przywraca przykład startowy w bieżącej karcie.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:29</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_af9fb9325afc40d6827f4e2376a2dc346"><div class="ttname"><a href="class_machine_editor_tab.html#af9fb9325afc40d6827f4e2376a2dc346">MachineEditorTab::onNumStatesChanged</a></div><div class="ttdeci">void onNumStatesChanged(int value)</div><div class="ttdoc">Aktualizuje listę stanów po zmianie liczby stanów.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabLogic.cpp:36</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html_afb90a60a21649a3d8cf073f7674a6cf5"><div class="ttname"><a href="class_machine_editor_tab.html#afb90a60a21649a3d8cf073f7674a6cf5">MachineEditorTab::resizeEvent</a></div><div class="ttdeci">void resizeEvent(QResizeEvent *event) override</div><div class="ttdoc">Reaguje na zmianę rozmiaru okna i ponownie centruje aktywną komórkę taśmy.</div><div class="ttdef"><b>Definicja</b> MachineEditorTabView.cpp:67</div></div>
+<div class="ttc" id="astorage_8h_html"><div class="ttname"><a href="storage_8h.html">storage.h</a></div><div class="ttdoc">API zapisu i odczytu definicji maszyn z plików JSON oraz SQLite.</div></div>
+<div class="ttc" id="astruct_machine_data_html"><div class="ttname"><a href="struct_machine_data.html">MachineData</a></div><div class="ttdoc">Dane definicji maszyny odczytane z trwałego nośnika.</div><div class="ttdef"><b>Definicja</b> storage.h:27</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>include</b></li><li class="navelem"><a href="_machine_editor_tab_8h.html">MachineEditorTab.h</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

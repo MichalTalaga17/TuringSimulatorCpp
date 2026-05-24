@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Dokumentacja klasy TransitionDelegate</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('class_transition_delegate.html','','class_transition_delegate-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Dokumentacja klasy TransitionDelegate</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Rysuje i edytuje pojedyncze instrukcje przejścia w QTableWidget.  
+ <a href="#details">Więcej...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_transition_delegate_8h_source.html">TransitionDelegate.h</a>&gt;</code></p>
+<div class="dynheader">
+Diagram dziedziczenia dla TransitionDelegate</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_transition_delegate.png" alt=""/>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Metody publiczne</h2></td></tr>
+<tr class="memitem:ac083b2e8ff17ab50d8ca0c3bf363ea6d" id="r_ac083b2e8ff17ab50d8ca0c3bf363ea6d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ac083b2e8ff17ab50d8ca0c3bf363ea6d">TransitionDelegate</a> (<a class="el" href="class_machine_editor_tab.html">MachineEditorTab</a> *tab, QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:ac083b2e8ff17ab50d8ca0c3bf363ea6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy delegate powiązany z kartą edytora.  <br /></td></tr>
+<tr class="memitem:afba8e144c9d92519c1f7dd175fd48062" id="r_afba8e144c9d92519c1f7dd175fd48062"><td class="memItemLeft"><a id="afba8e144c9d92519c1f7dd175fd48062" name="afba8e144c9d92519c1f7dd175fd48062"></a>
+void&#160;</td><td class="memItemRight"><b>paint</b> (QPainter *painter, const QStyleOptionViewItem &amp;option, const QModelIndex &amp;index) const override</td></tr>
+<tr class="memdesc:afba8e144c9d92519c1f7dd175fd48062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rysuje komórkę tabeli oraz ramkę aktywnego przejścia. <br /></td></tr>
+<tr class="memitem:a9f0841fb2adaf4c8f5a17fe12f339402" id="r_a9f0841fb2adaf4c8f5a17fe12f339402"><td class="memItemLeft"><a id="a9f0841fb2adaf4c8f5a17fe12f339402" name="a9f0841fb2adaf4c8f5a17fe12f339402"></a>
+QWidget *&#160;</td><td class="memItemRight"><b>createEditor</b> (QWidget *parent, const QStyleOptionViewItem &amp;option, const QModelIndex &amp;index) const override</td></tr>
+<tr class="memdesc:a9f0841fb2adaf4c8f5a17fe12f339402"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy edytor z listami wyboru dla przejścia. <br /></td></tr>
+<tr class="memitem:ab77c80986a1b77a384401c2b8290c07d" id="r_ab77c80986a1b77a384401c2b8290c07d"><td class="memItemLeft"><a id="ab77c80986a1b77a384401c2b8290c07d" name="ab77c80986a1b77a384401c2b8290c07d"></a>
+void&#160;</td><td class="memItemRight"><b>setEditorData</b> (QWidget *widget, const QModelIndex &amp;index) const override</td></tr>
+<tr class="memdesc:ab77c80986a1b77a384401c2b8290c07d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przenosi tekst z modelu do pól edytora. <br /></td></tr>
+<tr class="memitem:aecc56fd225a82a293cc88858580798d6" id="r_aecc56fd225a82a293cc88858580798d6"><td class="memItemLeft"><a id="aecc56fd225a82a293cc88858580798d6" name="aecc56fd225a82a293cc88858580798d6"></a>
+void&#160;</td><td class="memItemRight"><b>setModelData</b> (QWidget *widget, QAbstractItemModel *model, const QModelIndex &amp;index) const override</td></tr>
+<tr class="memdesc:aecc56fd225a82a293cc88858580798d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje wartości edytora z powrotem do modelu tabeli. <br /></td></tr>
+<tr class="memitem:a9b01aeedc6094e517830c013045fd28e" id="r_a9b01aeedc6094e517830c013045fd28e"><td class="memItemLeft"><a id="a9b01aeedc6094e517830c013045fd28e" name="a9b01aeedc6094e517830c013045fd28e"></a>
+void&#160;</td><td class="memItemRight"><b>updateEditorGeometry</b> (QWidget *editor, const QStyleOptionViewItem &amp;option, const QModelIndex &amp;index) const override</td></tr>
+<tr class="memdesc:a9b01aeedc6094e517830c013045fd28e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dopasowuje geometrię edytora do prostokąta komórki. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Atrybuty prywatne</h2></td></tr>
+<tr class="memitem:a968ff0bb73294f8f83adc928c1effe1f" id="r_a968ff0bb73294f8f83adc928c1effe1f"><td class="memItemLeft"><a id="a968ff0bb73294f8f83adc928c1effe1f" name="a968ff0bb73294f8f83adc928c1effe1f"></a>
+<a class="el" href="class_machine_editor_tab.html">MachineEditorTab</a> *&#160;</td><td class="memItemRight"><b>m_tab</b></td></tr>
+<tr class="memdesc:a968ff0bb73294f8f83adc928c1effe1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Karta edytora udostępniająca aktualny alfabet i listę stanów. <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Opis szczegółowy</h2>
+<div class="textblock"><p>Rysuje i edytuje pojedyncze instrukcje przejścia w QTableWidget. </p>
+<p>Delegate tworzy kompaktowy edytor z trzema listami: symbol zapisu, ruch głowicy i następny stan. Obsługuje też wizualne podświetlenie aktywnej instrukcji wykonywanej przez symulator. </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Dokumentacja konstruktora i destruktora</h2>
+<a id="ac083b2e8ff17ab50d8ca0c3bf363ea6d" name="ac083b2e8ff17ab50d8ca0c3bf363ea6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac083b2e8ff17ab50d8ca0c3bf363ea6d">&#9670;&#160;</a></span>TransitionDelegate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">TransitionDelegate::TransitionDelegate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_machine_editor_tab.html">MachineEditorTab</a> *</td>          <td class="paramname"><span class="paramname"><em>tab</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QObject *</td>          <td class="paramname"><span class="paramname"><em>parent</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tworzy delegate powiązany z kartą edytora. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tab</td><td>Karta dostarczająca alfabet i listę stanów. </td></tr>
+    <tr><td class="paramname">parent</td><td>Opcjonalny rodzic Qt. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>Dokumentacja dla tej klasy została wygenerowana z plików:<ul>
+<li><a class="el" href="_transition_delegate_8h_source.html">TransitionDelegate.h</a></li>
+<li><b>TransitionDelegate.cpp</b></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="class_transition_delegate.html">TransitionDelegate</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

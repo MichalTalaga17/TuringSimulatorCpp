@@ -1,5 +1,10 @@
 #pragma once
 
+/**
+ * @file TuringMachine.h
+ * @brief Rdzeń deterministycznej jednotaśmowej maszyny Turinga.
+ */
+
 #include "Tape.h"
 
 #include <map>
@@ -7,61 +12,130 @@
 #include <set>
 #include <string>
 
-/// Opisuje pojedyncze przejście funkcji przejścia maszyny Turinga.
+/**
+ * @brief Opisuje pojedyncze przejście funkcji przejścia maszyny Turinga.
+ */
 struct Transition
 {
+    /// Symbol zapisywany w bieżącej komórce taśmy.
     char writeSymbol;
+    /// Ruch głowicy wykonywany po zapisie symbolu.
     HeadMove move;
+    /// Stan sterowania ustawiany po wykonaniu przejścia.
     std::string nextState;
 };
 
-/// Udostępnia logikę jednotaśmowej deterministycznej maszyny Turinga.
+/**
+ * @brief Udostępnia logikę jednotaśmowej deterministycznej maszyny Turinga.
+ *
+ * Klasa przechowuje stan sterowania, taśmę, zbiór stanów akceptujących oraz
+ * deterministyczną funkcję przejścia. Warstwa UI buduje tę klasę z formularza,
+ * a potem wykonuje symulację przez kolejne wywołania step().
+ */
 class TuringMachine
 {
 public:
-    /// Tworzy maszynę z wybranym symbolem pustym taśmy.
+    /**
+     * @brief Tworzy maszynę z wybranym symbolem pustym taśmy.
+     * @param blankSymbol Symbol pustej komórki używany przez wewnętrzną taśmę.
+     */
     explicit TuringMachine(char blankSymbol = '_');
 
-    /// Ustawia stan, od którego zaczyna się każde uruchomienie lub reset.
+    /**
+     * @brief Ustawia stan, od którego zaczyna się każde uruchomienie lub reset.
+     * @param state Nazwa stanu początkowego.
+     */
     void setInitialState(std::string state);
-    /// Rejestruje stan kończący obliczenia z wynikiem akceptacji.
+    /**
+     * @brief Rejestruje stan kończący obliczenia z wynikiem akceptacji.
+     * @param state Nazwa stanu akceptującego.
+     */
     void addAcceptingState(std::string state);
-    /// Dodaje regułę dla pary: aktualny stan i odczytany symbol.
+    /**
+     * @brief Dodaje regułę dla pary: aktualny stan i odczytany symbol.
+     * @param state Stan, w którym reguła ma zostać użyta.
+     * @param readSymbol Symbol wymagany pod głowicą.
+     * @param transition Operacja zapisu, ruchu i zmiany stanu.
+     */
     void addTransition(
         const std::string &state,
         char readSymbol,
         Transition transition);
-    /// Wczytuje wejściową zawartość taśmy oraz zapamiętuje ją na potrzeby resetu.
+    /**
+     * @brief Wczytuje wejściową zawartość taśmy oraz zapamiętuje ją na potrzeby resetu.
+     * @param input Początkowy ciąg symboli taśmy.
+     */
     void loadTape(const std::string &input);
-    /// Przywraca stan początkowy, licznik kroków i startową zawartość taśmy.
+    /**
+     * @brief Przywraca stan początkowy, licznik kroków i startową zawartość taśmy.
+     */
     void reset();
 
-    /// Wykonuje jeden krok obliczeń. Zwraca `false`, jeśli maszyna była lub stała się zatrzymana.
+    /**
+     * @brief Wykonuje jeden krok obliczeń.
+     * @return `true`, gdy wykonano przejście; `false`, gdy maszyna była już zatrzymana
+     * albo nie znaleziono instrukcji dla bieżącego stanu i symbolu.
+     */
     bool step();
-    /// Informuje, czy maszyna nie może już wykonać kolejnego kroku.
+    /**
+     * @brief Informuje, czy maszyna nie może już wykonać kolejnego kroku.
+     * @return `true`, jeśli maszyna jest zatrzymana.
+     */
     bool isHalted() const;
-    /// Informuje, czy zatrzymanie nastąpiło w stanie akceptującym.
+    /**
+     * @brief Informuje, czy zatrzymanie nastąpiło w stanie akceptującym.
+     * @return `true`, jeśli maszyna zatrzymała się w stanie akceptującym.
+     */
     bool isAccepted() const;
 
-    /// Zwraca nazwę aktualnego stanu sterowania.
+    /**
+     * @brief Zwraca nazwę aktualnego stanu sterowania.
+     * @return Referencja do nazwy bieżącego stanu.
+     */
     const std::string &currentState() const;
-    /// Udostępnia bieżący stan taśmy tylko do odczytu.
+    /**
+     * @brief Udostępnia bieżący stan taśmy tylko do odczytu.
+     * @return Referencja do taśmy maszyny.
+     */
     const Tape &tape() const;
-    /// Zwraca liczbę wykonanych kroków od ostatniego resetu.
+    /**
+     * @brief Zwraca liczbę wykonanych kroków od ostatniego resetu.
+     * @return Licznik poprawnie wykonanych przejść.
+     */
     std::size_t stepCount() const;
-    /// Getter do zapisu instrukcji z maszyny
+    /**
+     * @brief Mapa przejść indeksowana parą `(stan, odczytany symbol)`.
+     */
     using TransitionMap = std::map<std::pair<std::string, char>, Transition>;
+    /**
+     * @brief Udostępnia zdefiniowane przejścia do zapisu w pliku lub bazie.
+     * @return Niemodyfikowalna mapa przejść.
+     */
     const TransitionMap &getTransitions() const { return transitions_; };
 
 private:
+    /// Klucz mapy przejść: aktualny stan i symbol odczytany z taśmy.
     using TransitionKey = std::pair<std::string, char>;
 
+    /// Stan ustawiany podczas resetu maszyny.
     std::string initialState_;
+    /// Aktualny stan sterowania.
     std::string currentState_;
+    /// Taśma robocza maszyny.
     Tape tape_;
+    /// Deterministyczna funkcja przejścia.
     std::map<TransitionKey, Transition> transitions_;
+    /// Stany zatrzymujące obliczenia z wynikiem akceptacji.
     std::set<std::string> acceptingStates_;
+    /// Wejście używane do odtworzenia taśmy podczas resetu.
     std::optional<std::string> initialTapeInput_;
+    /// Liczba przejść wykonanych od ostatniego resetu.
     std::size_t stepCount_ = 0;
+    /// Flaga oznaczająca, że maszyna nie wykona kolejnego kroku.
     bool halted_ = false;
+
+    /**
+     * @brief Aktualizuje stan zatrzymania na podstawie bieżącego stanu sterowania.
+     */
+    void updateHaltedForCurrentState();
 };

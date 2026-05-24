@@ -1,4 +1,5 @@
 #include "MachineEditorTab.h"
+#include "TransitionDelegate.h"
 
 #include <QAbstractSpinBox>
 #include <QApplication>
@@ -15,161 +16,9 @@
 #include <QStyleFactory>
 #include <QTableWidget>
 #include <QVBoxLayout>
-#include <QStyledItemDelegate>
 #include <QRegularExpressionValidator>
-#include <QPainter>
-#include <QSignalBlocker>
 
 #include <tuple>
-
-namespace
-{
-    constexpr int activeTransitionRole = Qt::UserRole + 1;
-
-    class TransitionEditor : public QWidget
-    {
-        Q_OBJECT
-    public:
-        QComboBox *writeCombo;
-        QComboBox *moveCombo;
-        QComboBox *stateCombo;
-
-        TransitionEditor(QWidget *parent = nullptr) : QWidget(parent)
-        {
-            QHBoxLayout *l = new QHBoxLayout(this);
-            l->setContentsMargins(0, 0, 0, 0);
-            l->setSpacing(2);
-
-            writeCombo = new QComboBox(this);
-            writeCombo->setFixedHeight(26);
-            writeCombo->setProperty("isCompact", true);
-            writeCombo->setMaxVisibleItems(8);
-            auto wv = new QListView(this);
-            wv->setMinimumWidth(50);
-            writeCombo->setView(wv);
-
-            moveCombo = new QComboBox(this);
-            moveCombo->setFixedHeight(26);
-            moveCombo->setProperty("isCompact", true);
-            moveCombo->setMaxVisibleItems(8);
-            auto mv = new QListView(this);
-            mv->setMinimumWidth(65);
-            moveCombo->setView(mv);
-
-            stateCombo = new QComboBox(this);
-            stateCombo->setFixedHeight(26);
-            stateCombo->setProperty("isCompact", true);
-            stateCombo->setMaxVisibleItems(8);
-            auto sv = new QListView(this);
-            sv->setMinimumWidth(70);
-            stateCombo->setView(sv);
-
-            l->addWidget(writeCombo);
-            l->addWidget(moveCombo);
-            l->addWidget(stateCombo);
-            setFocusPolicy(Qt::StrongFocus);
-            setFocusProxy(writeCombo);
-            setAutoFillBackground(true);
-        }
-    };
-
-    class TransitionDelegate : public QStyledItemDelegate
-    {
-    private:
-        MachineEditorTab *m_tab;
-
-    public:
-        TransitionDelegate(MachineEditorTab *tab, QObject *parent = nullptr) : QStyledItemDelegate(parent), m_tab(tab) {}
-
-        void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override
-        {
-            QStyledItemDelegate::paint(painter, option, index);
-
-            if (!index.data(activeTransitionRole).toBool())
-            {
-                return;
-            }
-
-            painter->save();
-            painter->setRenderHint(QPainter::Antialiasing, true);
-
-            const QRectF highlightRect = option.rect.adjusted(4, 4, -4, -4);
-            painter->setBrush(QColor(63, 116, 216, 70));
-            painter->setPen(QPen(QColor(63, 116, 216), 2));
-            painter->drawRoundedRect(highlightRect, 6, 6);
-
-            painter->restore();
-        }
-
-        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override
-        {
-            TransitionEditor *editor = new TransitionEditor(parent);
-            
-            // Populate write combos
-            for (char c : m_tab->getOrderedAlphabet()) {
-                editor->writeCombo->addItem(QString(c));
-            }
-            
-            // Populate move combos
-            editor->moveCombo->addItems({"L", "R", "Stay", "Stop"});
-            
-            // Populate state combos
-            for (const auto &s : m_tab->getStatesList()) {
-                editor->stateCombo->addItem(QString::fromStdString(s));
-            }
-
-            auto commitChanges = [this, editor]() {
-                auto self = const_cast<TransitionDelegate*>(this);
-                emit self->commitData(editor);
-            };
-
-            connect(editor->writeCombo, QOverload<int>::of(&QComboBox::activated), editor, commitChanges);
-            connect(editor->moveCombo, QOverload<int>::of(&QComboBox::activated), editor, commitChanges);
-            connect(editor->stateCombo, QOverload<int>::of(&QComboBox::activated), editor, commitChanges);
-
-            return editor;
-        }
-
-        void setEditorData(QWidget *widget, const QModelIndex &index) const override
-        {
-            TransitionEditor *editor = qobject_cast<TransitionEditor *>(widget);
-            if (!editor) return;
-
-            QSignalBlocker blockWrite(editor->writeCombo);
-            QSignalBlocker blockMove(editor->moveCombo);
-            QSignalBlocker blockState(editor->stateCombo);
-
-            QString text = index.data(Qt::DisplayRole).toString();
-            QStringList parts = text.split(",");
-            for (QString &part : parts) {
-                part = part.trimmed();
-            }
-            if (parts.size() == 3) {
-                editor->writeCombo->setCurrentText(parts[0]);
-                editor->moveCombo->setCurrentText(parts[1]);
-                editor->stateCombo->setCurrentText(parts[2]);
-            }
-        }
-
-        void setModelData(QWidget *widget, QAbstractItemModel *model, const QModelIndex &index) const override
-        {
-            TransitionEditor *editor = qobject_cast<TransitionEditor *>(widget);
-            if (!editor) return;
-
-            QString text = QString("%1, %2, %3")
-                               .arg(editor->writeCombo->currentText())
-                               .arg(editor->moveCombo->currentText())
-                               .arg(editor->stateCombo->currentText());
-                               
-            model->setData(index, text, Qt::DisplayRole);
-        }
-
-        void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const override
-        {
-            editor->setGeometry(option.rect);
-        }
-    };
-} // namespace
 
 MachineEditorTab::MachineEditorTab(const QString &untitledTitle, bool startWithExample, QWidget *parent)
     : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), previousBlankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample), highlightedTransitionRow(-1), highlightedTransitionCol(-1)
@@ -852,5 +701,3 @@ void MachineEditorTab::applyModernStyle()
 
     qApp->setStyleSheet(styleSheet);
 }
-
-#include "MachineEditorTabView.moc"

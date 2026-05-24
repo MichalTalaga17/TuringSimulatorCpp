@@ -1,0 +1,680 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Dokumentacja klasy MachineEditorTab</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('class_machine_editor_tab.html','','class_machine_editor_tab-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Dokumentacja klasy MachineEditorTab</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Pojedyncza karta edycji i uruchamiania maszyny Turinga.  
+ <a href="#details">Więcej...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_machine_editor_tab_8h_source.html">MachineEditorTab.h</a>&gt;</code></p>
+<div class="dynheader">
+Diagram dziedziczenia dla MachineEditorTab</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_machine_editor_tab.png" alt=""/>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-slots" class="groupheader"><a id="pub-slots" name="pub-slots"></a>
+Sloty publiczne</h2></td></tr>
+<tr class="memitem:a3ad388eec1c4b6b66de892f6b49b1966" id="r_a3ad388eec1c4b6b66de892f6b49b1966"><td class="memItemLeft"><a id="a3ad388eec1c4b6b66de892f6b49b1966" name="a3ad388eec1c4b6b66de892f6b49b1966"></a>
+void&#160;</td><td class="memItemRight"><b>onStepClicked</b> ()</td></tr>
+<tr class="memdesc:a3ad388eec1c4b6b66de892f6b49b1966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obsługuje wykonanie jednego kroku symulacji. <br /></td></tr>
+<tr class="memitem:a8c3ffef402559a347f665abc91ae9bc6" id="r_a8c3ffef402559a347f665abc91ae9bc6"><td class="memItemLeft"><a id="a8c3ffef402559a347f665abc91ae9bc6" name="a8c3ffef402559a347f665abc91ae9bc6"></a>
+void&#160;</td><td class="memItemRight"><b>onRunClicked</b> ()</td></tr>
+<tr class="memdesc:a8c3ffef402559a347f665abc91ae9bc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obsługuje uruchomienie lub pauzę automatycznej symulacji. <br /></td></tr>
+<tr class="memitem:a884908d29ae26135e30d162b2e8a6be9" id="r_a884908d29ae26135e30d162b2e8a6be9"><td class="memItemLeft"><a id="a884908d29ae26135e30d162b2e8a6be9" name="a884908d29ae26135e30d162b2e8a6be9"></a>
+void&#160;</td><td class="memItemRight"><b>onResetClicked</b> ()</td></tr>
+<tr class="memdesc:a884908d29ae26135e30d162b2e8a6be9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resetuje maszynę do stanu początkowego i wejściowej taśmy. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-signals" class="groupheader"><a id="signals" name="signals"></a>
+Sygnały</h2></td></tr>
+<tr class="memitem:a8e7f33cd363579b739f78c962f3f16cd" id="r_a8e7f33cd363579b739f78c962f3f16cd"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8e7f33cd363579b739f78c962f3f16cd">titleChanged</a> (const QString &amp;title)</td></tr>
+<tr class="memdesc:a8e7f33cd363579b739f78c962f3f16cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitowany, gdy tytuł karty powinien zostać odświeżony w QTabWidget.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Metody publiczne</h2></td></tr>
+<tr class="memitem:a9ecd1435a970f541f797fe39149e6779" id="r_a9ecd1435a970f541f797fe39149e6779"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a9ecd1435a970f541f797fe39149e6779">MachineEditorTab</a> (const QString &amp;untitledTitle, bool startWithExample=true, QWidget *parent=nullptr)</td></tr>
+<tr class="memdesc:a9ecd1435a970f541f797fe39149e6779"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy nową kartę edytora.  <br /></td></tr>
+<tr class="memitem:a99ae1d329878c5d6eb026c891ef3cee3" id="r_a99ae1d329878c5d6eb026c891ef3cee3"><td class="memItemLeft">QString&#160;</td><td class="memItemRight"><a class="el" href="#a99ae1d329878c5d6eb026c891ef3cee3">tabTitle</a> () const</td></tr>
+<tr class="memdesc:a99ae1d329878c5d6eb026c891ef3cee3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zwraca tytuł prezentowany na karcie.  <br /></td></tr>
+<tr class="memitem:a7cca96325215921a305c536c13e29b7e" id="r_a7cca96325215921a305c536c13e29b7e"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a7cca96325215921a305c536c13e29b7e">loadFromFile</a> (const QString &amp;filePath)</td></tr>
+<tr class="memdesc:a7cca96325215921a305c536c13e29b7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wczytuje maszynę ze wskazanego pliku do tej karty.  <br /></td></tr>
+<tr class="memitem:a49d4c95880fbdfd8459ada8762788a27" id="r_a49d4c95880fbdfd8459ada8762788a27"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a49d4c95880fbdfd8459ada8762788a27">saveToFile</a> ()</td></tr>
+<tr class="memdesc:a49d4c95880fbdfd8459ada8762788a27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje maszynę do znanej ścieżki albo pyta o nią, jeśli karta jest nowa.  <br /></td></tr>
+<tr class="memitem:a6c04ae44495a7e4053e0ba33c63fa2f8" id="r_a6c04ae44495a7e4053e0ba33c63fa2f8"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a6c04ae44495a7e4053e0ba33c63fa2f8">saveToFileAs</a> ()</td></tr>
+<tr class="memdesc:a6c04ae44495a7e4053e0ba33c63fa2f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje maszynę po wskazaniu ścieżki przez użytkownika.  <br /></td></tr>
+<tr class="memitem:a46c131a508001b199c357b5319b4838f" id="r_a46c131a508001b199c357b5319b4838f"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a46c131a508001b199c357b5319b4838f">validateMachine</a> ()</td></tr>
+<tr class="memdesc:a46c131a508001b199c357b5319b4838f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przebudowuje maszynę i pokazuje wynik walidacji.  <br /></td></tr>
+<tr class="memitem:af1eaa2624f28f318fe3e1301acbf8caf" id="r_af1eaa2624f28f318fe3e1301acbf8caf"><td class="memItemLeft"><a id="af1eaa2624f28f318fe3e1301acbf8caf" name="af1eaa2624f28f318fe3e1301acbf8caf"></a>
+void&#160;</td><td class="memItemRight"><b>resetToDefaultExample</b> ()</td></tr>
+<tr class="memdesc:af1eaa2624f28f318fe3e1301acbf8caf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przywraca przykład startowy w bieżącej karcie. <br /></td></tr>
+<tr class="memitem:a4c3f18f7e5e76606bcc4d7bf0fb3d30b" id="r_a4c3f18f7e5e76606bcc4d7bf0fb3d30b"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a4c3f18f7e5e76606bcc4d7bf0fb3d30b">saveToDatabase</a> ()</td></tr>
+<tr class="memdesc:a4c3f18f7e5e76606bcc4d7bf0fb3d30b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje aktualną maszynę do lokalnej bazy SQLite.  <br /></td></tr>
+<tr class="memitem:abd879167ae42b80bdef7871e780e2240" id="r_abd879167ae42b80bdef7871e780e2240"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#abd879167ae42b80bdef7871e780e2240">loadFromDatabase</a> (const QString &amp;machineName)</td></tr>
+<tr class="memdesc:abd879167ae42b80bdef7871e780e2240"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wczytuje maszynę z lokalnej bazy SQLite.  <br /></td></tr>
+<tr class="memitem:a4f1ab7c6abc5b375aaca9edb83f32c44" id="r_a4f1ab7c6abc5b375aaca9edb83f32c44"><td class="memItemLeft">std::vector&lt; char &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a4f1ab7c6abc5b375aaca9edb83f32c44">getOrderedAlphabet</a> () const</td></tr>
+<tr class="memdesc:a4f1ab7c6abc5b375aaca9edb83f32c44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zwraca alfabet z symbolem pustym zawsze na pierwszej pozycji.  <br /></td></tr>
+<tr class="memitem:a9061af618c7c8e8d36fc74807f71a3aa" id="r_a9061af618c7c8e8d36fc74807f71a3aa"><td class="memItemLeft">const std::vector&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a9061af618c7c8e8d36fc74807f71a3aa">getStatesList</a> () const</td></tr>
+<tr class="memdesc:a9061af618c7c8e8d36fc74807f71a3aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Udostępnia listę stanów delegate'owi tabeli przejść.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Metody chronione</h2></td></tr>
+<tr class="memitem:afb90a60a21649a3d8cf073f7674a6cf5" id="r_afb90a60a21649a3d8cf073f7674a6cf5"><td class="memItemLeft"><a id="afb90a60a21649a3d8cf073f7674a6cf5" name="afb90a60a21649a3d8cf073f7674a6cf5"></a>
+void&#160;</td><td class="memItemRight"><b>resizeEvent</b> (QResizeEvent *event) override</td></tr>
+<tr class="memdesc:afb90a60a21649a3d8cf073f7674a6cf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reaguje na zmianę rozmiaru okna i ponownie centruje aktywną komórkę taśmy. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-slots" class="groupheader"><a id="pri-slots" name="pri-slots"></a>
+Sloty prywatne</h2></td></tr>
+<tr class="memitem:af9fb9325afc40d6827f4e2376a2dc346" id="r_af9fb9325afc40d6827f4e2376a2dc346"><td class="memItemLeft"><a id="af9fb9325afc40d6827f4e2376a2dc346" name="af9fb9325afc40d6827f4e2376a2dc346"></a>
+void&#160;</td><td class="memItemRight"><b>onNumStatesChanged</b> (int value)</td></tr>
+<tr class="memdesc:af9fb9325afc40d6827f4e2376a2dc346"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aktualizuje listę stanów po zmianie liczby stanów. <br /></td></tr>
+<tr class="memitem:ac74a22b7210435e2c67d91bf9b5a0750" id="r_ac74a22b7210435e2c67d91bf9b5a0750"><td class="memItemLeft"><a id="ac74a22b7210435e2c67d91bf9b5a0750" name="ac74a22b7210435e2c67d91bf9b5a0750"></a>
+void&#160;</td><td class="memItemRight"><b>onAlphabetChanged</b> ()</td></tr>
+<tr class="memdesc:ac74a22b7210435e2c67d91bf9b5a0750"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aktualizuje alfabet i tabelę przejść po zmianie pola alfabetu. <br /></td></tr>
+<tr class="memitem:a361b5f0b9b2e84056f52b67917d0bb77" id="r_a361b5f0b9b2e84056f52b67917d0bb77"><td class="memItemLeft"><a id="a361b5f0b9b2e84056f52b67917d0bb77" name="a361b5f0b9b2e84056f52b67917d0bb77"></a>
+void&#160;</td><td class="memItemRight"><b>onBlankSymbolChanged</b> ()</td></tr>
+<tr class="memdesc:a361b5f0b9b2e84056f52b67917d0bb77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zmienia symbol pusty i przebudowuje alfabet. <br /></td></tr>
+<tr class="memitem:acc85995df1ad30b691121d941c825672" id="r_acc85995df1ad30b691121d941c825672"><td class="memItemLeft"><a id="acc85995df1ad30b691121d941c825672" name="acc85995df1ad30b691121d941c825672"></a>
+void&#160;</td><td class="memItemRight"><b>onTableItemChanged</b> (QTableWidgetItem *item)</td></tr>
+<tr class="memdesc:acc85995df1ad30b691121d941c825672"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronizuje mapę przejść po ręcznej edycji komórki tabeli. <br /></td></tr>
+<tr class="memitem:a369e828333b9eea4742c248e051f6d1c" id="r_a369e828333b9eea4742c248e051f6d1c"><td class="memItemLeft"><a id="a369e828333b9eea4742c248e051f6d1c" name="a369e828333b9eea4742c248e051f6d1c"></a>
+void&#160;</td><td class="memItemRight"><b>onTapeInputChanged</b> ()</td></tr>
+<tr class="memdesc:a369e828333b9eea4742c248e051f6d1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reaguje na zmianę wejściowej taśmy. <br /></td></tr>
+<tr class="memitem:a20f4595f73083723aa84b13117161b73" id="r_a20f4595f73083723aa84b13117161b73"><td class="memItemLeft"><a id="a20f4595f73083723aa84b13117161b73" name="a20f4595f73083723aa84b13117161b73"></a>
+void&#160;</td><td class="memItemRight"><b>onSpeedChanged</b> (int value)</td></tr>
+<tr class="memdesc:a20f4595f73083723aa84b13117161b73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aktualizuje prędkość automatycznego wykonywania. <br /></td></tr>
+<tr class="memitem:a4d2045d79cfe54cf19adae3d405e41fc" id="r_a4d2045d79cfe54cf19adae3d405e41fc"><td class="memItemLeft"><a id="a4d2045d79cfe54cf19adae3d405e41fc" name="a4d2045d79cfe54cf19adae3d405e41fc"></a>
+void&#160;</td><td class="memItemRight"><b>onExecutionTimer</b> ()</td></tr>
+<tr class="memdesc:a4d2045d79cfe54cf19adae3d405e41fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wykonuje kolejny krok wywołany przez timer symulacji. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Metody prywatne</h2></td></tr>
+<tr class="memitem:aadf24fca1e2f302b8adfe30acbcdac6d" id="r_aadf24fca1e2f302b8adfe30acbcdac6d"><td class="memItemLeft"><a id="aadf24fca1e2f302b8adfe30acbcdac6d" name="aadf24fca1e2f302b8adfe30acbcdac6d"></a>
+void&#160;</td><td class="memItemRight"><b>setupUI</b> ()</td></tr>
+<tr class="memdesc:aadf24fca1e2f302b8adfe30acbcdac6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buduje główny układ okna jako jedną wspólną stronę aplikacji. <br /></td></tr>
+<tr class="memitem:a4a05ffc0911ecc22952d006e02358536" id="r_a4a05ffc0911ecc22952d006e02358536"><td class="memItemLeft"><a id="a4a05ffc0911ecc22952d006e02358536" name="a4a05ffc0911ecc22952d006e02358536"></a>
+QWidget *&#160;</td><td class="memItemRight"><b>setupBuilderTab</b> ()</td></tr>
+<tr class="memdesc:a4a05ffc0911ecc22952d006e02358536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy edytor logiki z konfiguracją maszyny i tabelą przejść. <br /></td></tr>
+<tr class="memitem:a5daa7ba62a98086a97e84066d046eedb" id="r_a5daa7ba62a98086a97e84066d046eedb"><td class="memItemLeft"><a id="a5daa7ba62a98086a97e84066d046eedb" name="a5daa7ba62a98086a97e84066d046eedb"></a>
+QWidget *&#160;</td><td class="memItemRight"><b>setupExecutorTab</b> ()</td></tr>
+<tr class="memdesc:a5daa7ba62a98086a97e84066d046eedb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy panel uruchamiania symulacji oraz widok taśmy. <br /></td></tr>
+<tr class="memitem:a943d5bce47e04f7cb41e660407b5ca2a" id="r_a943d5bce47e04f7cb41e660407b5ca2a"><td class="memItemLeft"><a id="a943d5bce47e04f7cb41e660407b5ca2a" name="a943d5bce47e04f7cb41e660407b5ca2a"></a>
+void&#160;</td><td class="memItemRight"><b>applyModernStyle</b> ()</td></tr>
+<tr class="memdesc:a943d5bce47e04f7cb41e660407b5ca2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nakłada wspólny styl wizualny na całą aplikację. <br /></td></tr>
+<tr class="memitem:a5eab2fbf8e71aa48ed6b75d3697961f7" id="r_a5eab2fbf8e71aa48ed6b75d3697961f7"><td class="memItemLeft"><a id="a5eab2fbf8e71aa48ed6b75d3697961f7" name="a5eab2fbf8e71aa48ed6b75d3697961f7"></a>
+void&#160;</td><td class="memItemRight"><b>updateDisplay</b> ()</td></tr>
+<tr class="memdesc:a5eab2fbf8e71aa48ed6b75d3697961f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Odświeża wszystkie elementy prezentujące bieżący stan maszyny. <br /></td></tr>
+<tr class="memitem:aab9a56734967a92720d42391b88d1c39" id="r_aab9a56734967a92720d42391b88d1c39"><td class="memItemLeft"><a id="aab9a56734967a92720d42391b88d1c39" name="aab9a56734967a92720d42391b88d1c39"></a>
+void&#160;</td><td class="memItemRight"><b>updateActiveTransitionHighlight</b> ()</td></tr>
+<tr class="memdesc:aab9a56734967a92720d42391b88d1c39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Podświetla komórkę tabeli przejść odpowiadająca aktualnie wykonywanej instrukcji. <br /></td></tr>
+<tr class="memitem:a3d3d13fdda6703cd1cb178d8eda1b130" id="r_a3d3d13fdda6703cd1cb178d8eda1b130"><td class="memItemLeft"><a id="a3d3d13fdda6703cd1cb178d8eda1b130" name="a3d3d13fdda6703cd1cb178d8eda1b130"></a>
+void&#160;</td><td class="memItemRight"><b>highlightTransition</b> (const std::string &amp;state, char readSymbol)</td></tr>
+<tr class="memdesc:a3d3d13fdda6703cd1cb178d8eda1b130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Podświetla wskazaną instrukcję przejścia. <br /></td></tr>
+<tr class="memitem:ae003e82a83ad69b0e01a869dd099bc5f" id="r_ae003e82a83ad69b0e01a869dd099bc5f"><td class="memItemLeft"><a id="ae003e82a83ad69b0e01a869dd099bc5f" name="ae003e82a83ad69b0e01a869dd099bc5f"></a>
+void&#160;</td><td class="memItemRight"><b>clearActiveTransitionHighlight</b> ()</td></tr>
+<tr class="memdesc:ae003e82a83ad69b0e01a869dd099bc5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Czyści podświetlenie komórki przejścia. <br /></td></tr>
+<tr class="memitem:a6d5920c559edc5d0202f8d4b4e82bba5" id="r_a6d5920c559edc5d0202f8d4b4e82bba5"><td class="memItemLeft"><a id="a6d5920c559edc5d0202f8d4b4e82bba5" name="a6d5920c559edc5d0202f8d4b4e82bba5"></a>
+void&#160;</td><td class="memItemRight"><b>checkTapeForUndefinedSymbols</b> ()</td></tr>
+<tr class="memdesc:a6d5920c559edc5d0202f8d4b4e82bba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sprawdza, czy taśma zawiera niezdefiniowane symbole. <br /></td></tr>
+<tr class="memitem:ab0d0d3b573fde7adc5c948e2b03e202e" id="r_ab0d0d3b573fde7adc5c948e2b03e202e"><td class="memItemLeft"><a id="ab0d0d3b573fde7adc5c948e2b03e202e" name="ab0d0d3b573fde7adc5c948e2b03e202e"></a>
+void&#160;</td><td class="memItemRight"><b>setTransitionCellHighlighted</b> (int row, int col, bool highlighted)</td></tr>
+<tr class="memdesc:ab0d0d3b573fde7adc5c948e2b03e202e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ustawia wizualny stan pojedynczej komórki tabeli przejść. <br /></td></tr>
+<tr class="memitem:a634851cddfd596552d094e9dadd85ff7" id="r_a634851cddfd596552d094e9dadd85ff7"><td class="memItemLeft"><a id="a634851cddfd596552d094e9dadd85ff7" name="a634851cddfd596552d094e9dadd85ff7"></a>
+void&#160;</td><td class="memItemRight"><b>updateStateDisplay</b> ()</td></tr>
+<tr class="memdesc:a634851cddfd596552d094e9dadd85ff7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aktualizuje etykiety stanu sterowania i licznika kroków. <br /></td></tr>
+<tr class="memitem:ac03dbd97d8d997b1798a07b008203d49" id="r_ac03dbd97d8d997b1798a07b008203d49"><td class="memItemLeft"><a id="ac03dbd97d8d997b1798a07b008203d49" name="ac03dbd97d8d997b1798a07b008203d49"></a>
+void&#160;</td><td class="memItemRight"><b>updateTapeDisplay</b> ()</td></tr>
+<tr class="memdesc:ac03dbd97d8d997b1798a07b008203d49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Odtwarza aktualny wycinek taśmy i centruje aktywną komórkę. <br /></td></tr>
+<tr class="memitem:a02cff0d7efe0e14b10ec63f1afd6a9eb" id="r_a02cff0d7efe0e14b10ec63f1afd6a9eb"><td class="memItemLeft"><a id="a02cff0d7efe0e14b10ec63f1afd6a9eb" name="a02cff0d7efe0e14b10ec63f1afd6a9eb"></a>
+void&#160;</td><td class="memItemRight"><b>scheduleTapeDisplayRefresh</b> ()</td></tr>
+<tr class="memdesc:a02cff0d7efe0e14b10ec63f1afd6a9eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Planuje pojedyncze odświeżenie widoku taśmy po zakończeniu bieżącej pętli zdarzeń. <br /></td></tr>
+<tr class="memitem:adf366a8284a8a0b252d84189f8af4ad0" id="r_adf366a8284a8a0b252d84189f8af4ad0"><td class="memItemLeft"><a id="adf366a8284a8a0b252d84189f8af4ad0" name="adf366a8284a8a0b252d84189f8af4ad0"></a>
+void&#160;</td><td class="memItemRight"><b>setupTapeCells</b> ()</td></tr>
+<tr class="memdesc:adf366a8284a8a0b252d84189f8af4ad0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy zestaw widocznych komórek używanych do wizualizacji taśmy. <br /></td></tr>
+<tr class="memitem:a55dfd2a397176065a190ab4c0fd2ba49" id="r_a55dfd2a397176065a190ab4c0fd2ba49"><td class="memItemLeft"><a id="a55dfd2a397176065a190ab4c0fd2ba49" name="a55dfd2a397176065a190ab4c0fd2ba49"></a>
+void&#160;</td><td class="memItemRight"><b>ensureTapeCellsFitInput</b> ()</td></tr>
+<tr class="memdesc:a55dfd2a397176065a190ab4c0fd2ba49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rozszerza bufor komórek, gdy wpisana taśma wejściowa nie mieści się w wizualizacji. <br /></td></tr>
+<tr class="memitem:a06a180a99961e2123b673f29a44542ec" id="r_a06a180a99961e2123b673f29a44542ec"><td class="memItemLeft"><a id="a06a180a99961e2123b673f29a44542ec" name="a06a180a99961e2123b673f29a44542ec"></a>
+QLabel *&#160;</td><td class="memItemRight"><b>createTapeCell</b> ()</td></tr>
+<tr class="memdesc:a06a180a99961e2123b673f29a44542ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy pojedynczą etykietę komórki taśmy. <br /></td></tr>
+<tr class="memitem:a32a86d7303a67ff6cb0d64a0871c5fc1" id="r_a32a86d7303a67ff6cb0d64a0871c5fc1"><td class="memItemLeft"><a id="a32a86d7303a67ff6cb0d64a0871c5fc1" name="a32a86d7303a67ff6cb0d64a0871c5fc1"></a>
+void&#160;</td><td class="memItemRight"><b>applyTapeCellStyle</b> (QLabel *cell, bool active)</td></tr>
+<tr class="memdesc:a32a86d7303a67ff6cb0d64a0871c5fc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nakłada styl zwykłej albo aktywnej komórki taśmy. <br /></td></tr>
+<tr class="memitem:a84e683a729e4e1909597cf4df4ec5cf0" id="r_a84e683a729e4e1909597cf4df4ec5cf0"><td class="memItemLeft"><a id="a84e683a729e4e1909597cf4df4ec5cf0" name="a84e683a729e4e1909597cf4df4ec5cf0"></a>
+void&#160;</td><td class="memItemRight"><b>applyDefaultExample</b> ()</td></tr>
+<tr class="memdesc:a84e683a729e4e1909597cf4df4ec5cf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wypełnia formularz i tabelę przykładową maszyną startową. <br /></td></tr>
+<tr class="memitem:aab957ff38ca5ceadaa05a82d595256e7" id="r_aab957ff38ca5ceadaa05a82d595256e7"><td class="memItemLeft"><a id="aab957ff38ca5ceadaa05a82d595256e7" name="aab957ff38ca5ceadaa05a82d595256e7"></a>
+void&#160;</td><td class="memItemRight"><b>applyBlankMachine</b> ()</td></tr>
+<tr class="memdesc:aab957ff38ca5ceadaa05a82d595256e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wypełnia formularz minimalną pustą konfiguracją do pracy od zera. <br /></td></tr>
+<tr class="memitem:a6f2079efdd2c3363b00e638dac99682d" id="r_a6f2079efdd2c3363b00e638dac99682d"><td class="memItemLeft"><a id="a6f2079efdd2c3363b00e638dac99682d" name="a6f2079efdd2c3363b00e638dac99682d"></a>
+bool&#160;</td><td class="memItemRight"><b>rebuildMachineFromEditor</b> ()</td></tr>
+<tr class="memdesc:a6f2079efdd2c3363b00e638dac99682d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przebudowuje maszynę z edytora i wczytuje aktualną zawartość pola taśmy. <br /></td></tr>
+<tr class="memitem:a9b8f50eb02c1a904513998dc6176b921" id="r_a9b8f50eb02c1a904513998dc6176b921"><td class="memItemLeft"><a id="a9b8f50eb02c1a904513998dc6176b921" name="a9b8f50eb02c1a904513998dc6176b921"></a>
+bool&#160;</td><td class="memItemRight"><b>executeMachineStep</b> ()</td></tr>
+<tr class="memdesc:a9b8f50eb02c1a904513998dc6176b921"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wykonuje jeden krok i spójnie kończy/pauzuje UI, jeśli maszyna się zatrzyma. <br /></td></tr>
+<tr class="memitem:a785c192b8bb1284792b93410ba883d49" id="r_a785c192b8bb1284792b93410ba883d49"><td class="memItemLeft"><a id="a785c192b8bb1284792b93410ba883d49" name="a785c192b8bb1284792b93410ba883d49"></a>
+bool&#160;</td><td class="memItemRight"><b>buildMachineFromCurrentConfiguration</b> (bool showSuccessDialog)</td></tr>
+<tr class="memdesc:a785c192b8bb1284792b93410ba883d49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buduje maszynę z aktualnej konfiguracji formularza i opcjonalnie pokazuje komunikat sukcesu. <br /></td></tr>
+<tr class="memitem:aa5a026785b03344753ac71a5ec1d7e1e" id="r_aa5a026785b03344753ac71a5ec1d7e1e"><td class="memItemLeft"><a id="aa5a026785b03344753ac71a5ec1d7e1e" name="aa5a026785b03344753ac71a5ec1d7e1e"></a>
+void&#160;</td><td class="memItemRight"><b>rebuildTransitionsTable</b> ()</td></tr>
+<tr class="memdesc:aa5a026785b03344753ac71a5ec1d7e1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przebudowuje tabelę przejść po zmianie liczby stanów lub alfabetu. <br /></td></tr>
+<tr class="memitem:a5ce027bd7519f4da8b42629c8ed52daf" id="r_a5ce027bd7519f4da8b42629c8ed52daf"><td class="memItemLeft"><a id="a5ce027bd7519f4da8b42629c8ed52daf" name="a5ce027bd7519f4da8b42629c8ed52daf"></a>
+void&#160;</td><td class="memItemRight"><b>changeColumnSymbol</b> (int col, char oldSymbol, char newSymbol)</td></tr>
+<tr class="memdesc:a5ce027bd7519f4da8b42629c8ed52daf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zmienia symbol w kolumnie bez przebudowania całej tabeli (dla zmiany symbolu pustego). <br /></td></tr>
+<tr class="memitem:a0001dee57b4b7a9a722d21a6ef5d5891" id="r_a0001dee57b4b7a9a722d21a6ef5d5891"><td class="memItemLeft"><a id="a0001dee57b4b7a9a722d21a6ef5d5891" name="a0001dee57b4b7a9a722d21a6ef5d5891"></a>
+void&#160;</td><td class="memItemRight"><b>populateTransitionMapWithDefaults</b> ()</td></tr>
+<tr class="memdesc:a0001dee57b4b7a9a722d21a6ef5d5891"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronizuje mapę przejść z aktualną zawartością tabeli. <br /></td></tr>
+<tr class="memitem:a94178f5dc39e1351f76c6a030afd6f88" id="r_a94178f5dc39e1351f76c6a030afd6f88"><td class="memItemLeft"><a id="a94178f5dc39e1351f76c6a030afd6f88" name="a94178f5dc39e1351f76c6a030afd6f88"></a>
+bool&#160;</td><td class="memItemRight"><b>saveMachineToPath</b> (const QString &amp;filePath)</td></tr>
+<tr class="memdesc:a94178f5dc39e1351f76c6a030afd6f88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje aktualną definicję maszyny do wskazanej ścieżki. <br /></td></tr>
+<tr class="memitem:a70b26fc0528510ddf00ca4a5bc63dc27" id="r_a70b26fc0528510ddf00ca4a5bc63dc27"><td class="memItemLeft"><a id="a70b26fc0528510ddf00ca4a5bc63dc27" name="a70b26fc0528510ddf00ca4a5bc63dc27"></a>
+void&#160;</td><td class="memItemRight"><b>applyMachineData</b> (const <a class="el" href="struct_machine_data.html">MachineData</a> &amp;data)</td></tr>
+<tr class="memdesc:a70b26fc0528510ddf00ca4a5bc63dc27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stosuje dane maszyny odczytane z pliku lub bazy do formularza i tabeli. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Atrybuty prywatne</h2></td></tr>
+<tr id="pri-attribs-0" class="groupHeader"><td colspan="2"><div class="groupHeader">Komponenty edytora definicji</div></td></tr>
+<tr class="memitem:a41262f484ad8fd96a80b16ab23987f4e" id="r_a41262f484ad8fd96a80b16ab23987f4e"><td class="memItemLeft"><a id="a41262f484ad8fd96a80b16ab23987f4e" name="a41262f484ad8fd96a80b16ab23987f4e"></a>
+QSpinBox *&#160;</td><td class="memItemRight"><b>numStatesSpinBox</b></td></tr>
+<tr class="memitem:a9c2a480a14885e64ddd03051a3622883" id="r_a9c2a480a14885e64ddd03051a3622883"><td class="memItemLeft"><a id="a9c2a480a14885e64ddd03051a3622883" name="a9c2a480a14885e64ddd03051a3622883"></a>
+QLineEdit *&#160;</td><td class="memItemRight"><b>alphabetInputField</b></td></tr>
+<tr class="memitem:a0b79f5e580f78852e289e6b82a5c8c64" id="r_a0b79f5e580f78852e289e6b82a5c8c64"><td class="memItemLeft"><a id="a0b79f5e580f78852e289e6b82a5c8c64" name="a0b79f5e580f78852e289e6b82a5c8c64"></a>
+QLineEdit *&#160;</td><td class="memItemRight"><b>blankSymbolField</b></td></tr>
+<tr class="memitem:a20d7e7a5381e468db2b8b8aa73d8c8cb" id="r_a20d7e7a5381e468db2b8b8aa73d8c8cb"><td class="memItemLeft"><a id="a20d7e7a5381e468db2b8b8aa73d8c8cb" name="a20d7e7a5381e468db2b8b8aa73d8c8cb"></a>
+QComboBox *&#160;</td><td class="memItemRight"><b>initialStateCombo</b></td></tr>
+<tr class="memitem:a0f430ed502253964c42eefda1b1b4316" id="r_a0f430ed502253964c42eefda1b1b4316"><td class="memItemLeft"><a id="a0f430ed502253964c42eefda1b1b4316" name="a0f430ed502253964c42eefda1b1b4316"></a>
+QTableWidget *&#160;</td><td class="memItemRight"><b>transitionsTable</b></td></tr>
+<tr id="pri-attribs-1" class="groupHeader"><td colspan="2"><div class="groupHeader">Komponenty panelu wykonania</div></td></tr>
+<tr class="memitem:ac82c00c29404c3dfb0011e3366a98e1c" id="r_ac82c00c29404c3dfb0011e3366a98e1c"><td class="memItemLeft"><a id="ac82c00c29404c3dfb0011e3366a98e1c" name="ac82c00c29404c3dfb0011e3366a98e1c"></a>
+QLabel *&#160;</td><td class="memItemRight"><b>machineStateLabel</b></td></tr>
+<tr class="memitem:ab2c8aedf77f9d3ac4be28decd0de3f10" id="r_ab2c8aedf77f9d3ac4be28decd0de3f10"><td class="memItemLeft"><a id="ab2c8aedf77f9d3ac4be28decd0de3f10" name="ab2c8aedf77f9d3ac4be28decd0de3f10"></a>
+QLabel *&#160;</td><td class="memItemRight"><b>stepCountLabel</b></td></tr>
+<tr class="memitem:ae3bdcb845ce27facaca5b19590f20b61" id="r_ae3bdcb845ce27facaca5b19590f20b61"><td class="memItemLeft"><a id="ae3bdcb845ce27facaca5b19590f20b61" name="ae3bdcb845ce27facaca5b19590f20b61"></a>
+QScrollArea *&#160;</td><td class="memItemRight"><b>tapeScrollArea</b></td></tr>
+<tr class="memdesc:ae3bdcb845ce27facaca5b19590f20b61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przewijany kontener widoku taśmy używany do centrowania aktywnej komórki. <br /></td></tr>
+<tr class="memitem:a16610a39fb6a3e84b6d1d4ca94d113e5" id="r_a16610a39fb6a3e84b6d1d4ca94d113e5"><td class="memItemLeft"><a id="a16610a39fb6a3e84b6d1d4ca94d113e5" name="a16610a39fb6a3e84b6d1d4ca94d113e5"></a>
+QWidget *&#160;</td><td class="memItemRight"><b>tapeDisplay</b></td></tr>
+<tr class="memdesc:a16610a39fb6a3e84b6d1d4ca94d113e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kontener z widocznymi komórkami reprezentującymi wycinek taśmy. <br /></td></tr>
+<tr class="memitem:a305fd9e53b823cc421486f4f8dea7366" id="r_a305fd9e53b823cc421486f4f8dea7366"><td class="memItemLeft"><a id="a305fd9e53b823cc421486f4f8dea7366" name="a305fd9e53b823cc421486f4f8dea7366"></a>
+QLineEdit *&#160;</td><td class="memItemRight"><b>tapeInputField</b></td></tr>
+<tr class="memitem:ae110a936ddd3c54180a21ec8eddbeebc" id="r_ae110a936ddd3c54180a21ec8eddbeebc"><td class="memItemLeft"><a id="ae110a936ddd3c54180a21ec8eddbeebc" name="ae110a936ddd3c54180a21ec8eddbeebc"></a>
+QLabel *&#160;</td><td class="memItemRight"><b>tapeWarningLabel</b></td></tr>
+<tr class="memitem:a283340b44dfcf2ca2e96cdfc6f13ec47" id="r_a283340b44dfcf2ca2e96cdfc6f13ec47"><td class="memItemLeft"><a id="a283340b44dfcf2ca2e96cdfc6f13ec47" name="a283340b44dfcf2ca2e96cdfc6f13ec47"></a>
+QPushButton *&#160;</td><td class="memItemRight"><b>stepButton</b></td></tr>
+<tr class="memitem:a31100ad99d70043d8ee87d33fcdb50cc" id="r_a31100ad99d70043d8ee87d33fcdb50cc"><td class="memItemLeft"><a id="a31100ad99d70043d8ee87d33fcdb50cc" name="a31100ad99d70043d8ee87d33fcdb50cc"></a>
+QPushButton *&#160;</td><td class="memItemRight"><b>runButton</b></td></tr>
+<tr class="memitem:ae0eec97eb48e66a31b2b636385cc8d5c" id="r_ae0eec97eb48e66a31b2b636385cc8d5c"><td class="memItemLeft"><a id="ae0eec97eb48e66a31b2b636385cc8d5c" name="ae0eec97eb48e66a31b2b636385cc8d5c"></a>
+QPushButton *&#160;</td><td class="memItemRight"><b>resetButton</b></td></tr>
+<tr class="memitem:afb9eb167096cdba87f297d28a3df9d13" id="r_afb9eb167096cdba87f297d28a3df9d13"><td class="memItemLeft"><a id="afb9eb167096cdba87f297d28a3df9d13" name="afb9eb167096cdba87f297d28a3df9d13"></a>
+QSlider *&#160;</td><td class="memItemRight"><b>speedSlider</b></td></tr>
+<tr class="memitem:a3381fb1a4b86bcf9e451b80d93924e98" id="r_a3381fb1a4b86bcf9e451b80d93924e98"><td class="memItemLeft"><a id="a3381fb1a4b86bcf9e451b80d93924e98" name="a3381fb1a4b86bcf9e451b80d93924e98"></a>
+QLabel *&#160;</td><td class="memItemRight"><b>speedLabel</b></td></tr>
+<tr class="memitem:a3e679c52511793090d5a18acadf8aee1" id="r_a3e679c52511793090d5a18acadf8aee1"><td class="memItemLeft"><a id="a3e679c52511793090d5a18acadf8aee1" name="a3e679c52511793090d5a18acadf8aee1"></a>
+QLabel *&#160;</td><td class="memItemRight"><b>statusLabel</b></td></tr>
+<tr id="pri-attribs-2" class="groupHeader"><td colspan="2"><div class="groupHeader">Stan logiczny maszyny i symulacji</div></td></tr>
+<tr class="memitem:a7631ad5bfb3ff53bd195caf6a83f0ecd" id="r_a7631ad5bfb3ff53bd195caf6a83f0ecd"><td class="memItemLeft"><a id="a7631ad5bfb3ff53bd195caf6a83f0ecd" name="a7631ad5bfb3ff53bd195caf6a83f0ecd"></a>
+std::unique_ptr&lt; <a class="el" href="class_turing_machine.html">TuringMachine</a> &gt;&#160;</td><td class="memItemRight"><b>machine</b></td></tr>
+<tr class="memitem:aafecec4f11be5d6339565c60f82eb1aa" id="r_aafecec4f11be5d6339565c60f82eb1aa"><td class="memItemLeft"><a id="aafecec4f11be5d6339565c60f82eb1aa" name="aafecec4f11be5d6339565c60f82eb1aa"></a>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight"><b>states</b></td></tr>
+<tr class="memdesc:aafecec4f11be5d6339565c60f82eb1aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lista stanów generowanych jako <span class="tt">q0</span>, <span class="tt">q1</span>, ... <br /></td></tr>
+<tr class="memitem:a04c322502a026e509475d5c56a401094" id="r_a04c322502a026e509475d5c56a401094"><td class="memItemLeft"><a id="a04c322502a026e509475d5c56a401094" name="a04c322502a026e509475d5c56a401094"></a>
+std::vector&lt; char &gt;&#160;</td><td class="memItemRight"><b>alphabet</b></td></tr>
+<tr class="memitem:a2348623125cbce51b544a458643051bc" id="r_a2348623125cbce51b544a458643051bc"><td class="memItemLeft"><a id="a2348623125cbce51b544a458643051bc" name="a2348623125cbce51b544a458643051bc"></a>
+std::string&#160;</td><td class="memItemRight"><b>initialState</b></td></tr>
+<tr class="memitem:ac5b4acbdf013f9d45133284a317373fc" id="r_ac5b4acbdf013f9d45133284a317373fc"><td class="memItemLeft"><a id="ac5b4acbdf013f9d45133284a317373fc" name="ac5b4acbdf013f9d45133284a317373fc"></a>
+std::set&lt; std::string &gt;&#160;</td><td class="memItemRight"><b>acceptingStates</b></td></tr>
+<tr class="memitem:aa1ba1aa70fb2ed12243a87f0783f2aa6" id="r_aa1ba1aa70fb2ed12243a87f0783f2aa6"><td class="memItemLeft"><a id="aa1ba1aa70fb2ed12243a87f0783f2aa6" name="aa1ba1aa70fb2ed12243a87f0783f2aa6"></a>
+std::map&lt; std::pair&lt; std::string, char &gt;, std::tuple&lt; char, std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight"><b>transitionMap</b></td></tr>
+<tr class="memdesc:aa1ba1aa70fb2ed12243a87f0783f2aa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mapa przejść: <span class="tt">(stan, symbol odczytu) -&gt; (symbol zapisu, ruch, następny stan)</span>. <br /></td></tr>
+<tr class="memitem:a531f17a453609232ae88c7287222961b" id="r_a531f17a453609232ae88c7287222961b"><td class="memItemLeft"><a id="a531f17a453609232ae88c7287222961b" name="a531f17a453609232ae88c7287222961b"></a>
+char&#160;</td><td class="memItemRight"><b>blankSymbol</b></td></tr>
+<tr class="memitem:a9ee777cafa48f535e1d5ae864912a33f" id="r_a9ee777cafa48f535e1d5ae864912a33f"><td class="memItemLeft"><a id="a9ee777cafa48f535e1d5ae864912a33f" name="a9ee777cafa48f535e1d5ae864912a33f"></a>
+char&#160;</td><td class="memItemRight"><b>previousBlankSymbol</b></td></tr>
+<tr class="memitem:aaa0fe9094e9dd42f75366016f980c6e8" id="r_aaa0fe9094e9dd42f75366016f980c6e8"><td class="memItemLeft"><a id="aaa0fe9094e9dd42f75366016f980c6e8" name="aaa0fe9094e9dd42f75366016f980c6e8"></a>
+bool&#160;</td><td class="memItemRight"><b>isRunning</b></td></tr>
+<tr class="memitem:a988801ac56213cd81ca3387ee70efe2a" id="r_a988801ac56213cd81ca3387ee70efe2a"><td class="memItemLeft"><a id="a988801ac56213cd81ca3387ee70efe2a" name="a988801ac56213cd81ca3387ee70efe2a"></a>
+int&#160;</td><td class="memItemRight"><b>executionSpeed</b></td></tr>
+<tr class="memitem:ac7fa67759f0565294eae3a396fe17af6" id="r_ac7fa67759f0565294eae3a396fe17af6"><td class="memItemLeft"><a id="ac7fa67759f0565294eae3a396fe17af6" name="ac7fa67759f0565294eae3a396fe17af6"></a>
+std::unique_ptr&lt; QTimer &gt;&#160;</td><td class="memItemRight"><b>executionTimer</b></td></tr>
+<tr class="memitem:a6605d4ca842c1310081d55582e55aa48" id="r_a6605d4ca842c1310081d55582e55aa48"><td class="memItemLeft"><a id="a6605d4ca842c1310081d55582e55aa48" name="a6605d4ca842c1310081d55582e55aa48"></a>
+std::unique_ptr&lt; QTimer &gt;&#160;</td><td class="memItemRight"><b>tapeDisplayRefreshTimer</b></td></tr>
+<tr class="memdesc:a6605d4ca842c1310081d55582e55aa48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Jednostrzałowy timer współdzielony przez odświeżenia widoku taśmy, aby uniknąć kolejkowania duplikatów. <br /></td></tr>
+<tr class="memitem:a0c7960ed15a47c0ae2e40bce741ff04e" id="r_a0c7960ed15a47c0ae2e40bce741ff04e"><td class="memItemLeft"><a id="a0c7960ed15a47c0ae2e40bce741ff04e" name="a0c7960ed15a47c0ae2e40bce741ff04e"></a>
+std::vector&lt; QLabel * &gt;&#160;</td><td class="memItemRight"><b>tapeCells</b></td></tr>
+<tr class="memdesc:a0c7960ed15a47c0ae2e40bce741ff04e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bufor etykiet pojedynczych komórek taśmy używanych przy odświeżaniu widoku. <br /></td></tr>
+<tr class="memitem:a47237d30fe09516fb78a6d6dcc53e07d" id="r_a47237d30fe09516fb78a6d6dcc53e07d"><td class="memItemLeft"><a id="a47237d30fe09516fb78a6d6dcc53e07d" name="a47237d30fe09516fb78a6d6dcc53e07d"></a>
+QString&#160;</td><td class="memItemRight"><b>untitledTitle</b></td></tr>
+<tr class="memitem:ad20bd41f0b1c7d0479d5768a83aed315" id="r_ad20bd41f0b1c7d0479d5768a83aed315"><td class="memItemLeft"><a id="ad20bd41f0b1c7d0479d5768a83aed315" name="ad20bd41f0b1c7d0479d5768a83aed315"></a>
+QString&#160;</td><td class="memItemRight"><b>currentFilePath</b></td></tr>
+<tr class="memitem:a3abfe955d96d1996feb1a947f9d3734b" id="r_a3abfe955d96d1996feb1a947f9d3734b"><td class="memItemLeft"><a id="a3abfe955d96d1996feb1a947f9d3734b" name="a3abfe955d96d1996feb1a947f9d3734b"></a>
+bool&#160;</td><td class="memItemRight"><b>startWithExample</b></td></tr>
+<tr class="memitem:a3bc78b7a12aa1eea78e434434e8ea3cf" id="r_a3bc78b7a12aa1eea78e434434e8ea3cf"><td class="memItemLeft"><a id="a3bc78b7a12aa1eea78e434434e8ea3cf" name="a3bc78b7a12aa1eea78e434434e8ea3cf"></a>
+int&#160;</td><td class="memItemRight"><b>highlightedTransitionRow</b></td></tr>
+<tr class="memitem:ac7d43e2c08ddb8e409a8fd8240b767b7" id="r_ac7d43e2c08ddb8e409a8fd8240b767b7"><td class="memItemLeft"><a id="ac7d43e2c08ddb8e409a8fd8240b767b7" name="ac7d43e2c08ddb8e409a8fd8240b767b7"></a>
+int&#160;</td><td class="memItemRight"><b>highlightedTransitionCol</b></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Opis szczegółowy</h2>
+<div class="textblock"><p>Pojedyncza karta edycji i uruchamiania maszyny Turinga. </p>
+<p>Klasa łączy formularz definicji maszyny, tabelę przejść, widok taśmy, sterowanie symulacją oraz operacje zapisu/odczytu. Logika została rozdzielona na kilka plików <span class="tt">.cpp</span>, ale wszystkie metody należą do tej jednej klasy widżetu. </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Dokumentacja konstruktora i destruktora</h2>
+<a id="a9ecd1435a970f541f797fe39149e6779" name="a9ecd1435a970f541f797fe39149e6779"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ecd1435a970f541f797fe39149e6779">&#9670;&#160;</a></span>MachineEditorTab()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">MachineEditorTab::MachineEditorTab </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>untitledTitle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>startWithExample</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QWidget *</td>          <td class="paramname"><span class="paramname"><em>parent</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tworzy nową kartę edytora. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">untitledTitle</td><td>Tytuł używany dopóki karta nie ma pliku ani nazwy z bazy. </td></tr>
+    <tr><td class="paramname">startWithExample</td><td>Czy wypełnić kartę przykładową maszyną. </td></tr>
+    <tr><td class="paramname">parent</td><td>Opcjonalny rodzic Qt. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Dokumentacja funkcji składowych</h2>
+<a id="a4f1ab7c6abc5b375aaca9edb83f32c44" name="a4f1ab7c6abc5b375aaca9edb83f32c44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f1ab7c6abc5b375aaca9edb83f32c44">&#9670;&#160;</a></span>getOrderedAlphabet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; char &gt; MachineEditorTab::getOrderedAlphabet </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zwraca alfabet z symbolem pustym zawsze na pierwszej pozycji. </p>
+<dl class="section return"><dt>Zwraca</dt><dd>Uporządkowany alfabet używany przez tabelę przejść. </dd></dl>
+
+</div>
+</div>
+<a id="a9061af618c7c8e8d36fc74807f71a3aa" name="a9061af618c7c8e8d36fc74807f71a3aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9061af618c7c8e8d36fc74807f71a3aa">&#9670;&#160;</a></span>getStatesList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; std::string &gt; &amp; MachineEditorTab::getStatesList </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Udostępnia listę stanów delegate'owi tabeli przejść. </p>
+<dl class="section return"><dt>Zwraca</dt><dd>Niemodyfikowalna lista nazw stanów. </dd></dl>
+
+</div>
+</div>
+<a id="abd879167ae42b80bdef7871e780e2240" name="abd879167ae42b80bdef7871e780e2240"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd879167ae42b80bdef7871e780e2240">&#9670;&#160;</a></span>loadFromDatabase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MachineEditorTab::loadFromDatabase </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>machineName</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wczytuje maszynę z lokalnej bazy SQLite. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">machineName</td><td>Nazwa maszyny w bazie. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd><span class="tt">true</span>, jeśli rekord został znaleziony i odtworzony w UI. </dd></dl>
+
+</div>
+</div>
+<a id="a7cca96325215921a305c536c13e29b7e" name="a7cca96325215921a305c536c13e29b7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cca96325215921a305c536c13e29b7e">&#9670;&#160;</a></span>loadFromFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MachineEditorTab::loadFromFile </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>filePath</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wczytuje maszynę ze wskazanego pliku do tej karty. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>Ścieżka pliku JSON. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd><span class="tt">true</span>, jeśli dane zostały poprawnie odczytane i zastosowane. </dd></dl>
+
+</div>
+</div>
+<a id="a4c3f18f7e5e76606bcc4d7bf0fb3d30b" name="a4c3f18f7e5e76606bcc4d7bf0fb3d30b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c3f18f7e5e76606bcc4d7bf0fb3d30b">&#9670;&#160;</a></span>saveToDatabase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MachineEditorTab::saveToDatabase </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zapisuje aktualną maszynę do lokalnej bazy SQLite. </p>
+<dl class="section return"><dt>Zwraca</dt><dd><span class="tt">true</span>, jeśli zapis do bazy się powiódł. </dd></dl>
+
+</div>
+</div>
+<a id="a49d4c95880fbdfd8459ada8762788a27" name="a49d4c95880fbdfd8459ada8762788a27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49d4c95880fbdfd8459ada8762788a27">&#9670;&#160;</a></span>saveToFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MachineEditorTab::saveToFile </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zapisuje maszynę do znanej ścieżki albo pyta o nią, jeśli karta jest nowa. </p>
+<dl class="section return"><dt>Zwraca</dt><dd><span class="tt">true</span>, jeśli zapis zakończył się powodzeniem. </dd></dl>
+
+</div>
+</div>
+<a id="a6c04ae44495a7e4053e0ba33c63fa2f8" name="a6c04ae44495a7e4053e0ba33c63fa2f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c04ae44495a7e4053e0ba33c63fa2f8">&#9670;&#160;</a></span>saveToFileAs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MachineEditorTab::saveToFileAs </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zapisuje maszynę po wskazaniu ścieżki przez użytkownika. </p>
+<dl class="section return"><dt>Zwraca</dt><dd><span class="tt">true</span>, jeśli użytkownik wybrał plik i zapis się powiódł. </dd></dl>
+
+</div>
+</div>
+<a id="a99ae1d329878c5d6eb026c891ef3cee3" name="a99ae1d329878c5d6eb026c891ef3cee3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99ae1d329878c5d6eb026c891ef3cee3">&#9670;&#160;</a></span>tabTitle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString MachineEditorTab::tabTitle </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zwraca tytuł prezentowany na karcie. </p>
+<dl class="section return"><dt>Zwraca</dt><dd>Nazwa pliku, nazwa z bazy lub tytuł tymczasowy. </dd></dl>
+
+</div>
+</div>
+<a id="a8e7f33cd363579b739f78c962f3f16cd" name="a8e7f33cd363579b739f78c962f3f16cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e7f33cd363579b739f78c962f3f16cd">&#9670;&#160;</a></span>titleChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MachineEditorTab::titleChanged </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>title</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel signal">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Emitowany, gdy tytuł karty powinien zostać odświeżony w QTabWidget. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">title</td><td>Nowy tytuł karty. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a46c131a508001b199c357b5319b4838f" name="a46c131a508001b199c357b5319b4838f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46c131a508001b199c357b5319b4838f">&#9670;&#160;</a></span>validateMachine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MachineEditorTab::validateMachine </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Przebudowuje maszynę i pokazuje wynik walidacji. </p>
+<dl class="section return"><dt>Zwraca</dt><dd><span class="tt">true</span>, jeśli aktualna konfiguracja jest poprawna. </dd></dl>
+
+</div>
+</div>
+<hr/>Dokumentacja dla tej klasy została wygenerowana z plików:<ul>
+<li><a class="el" href="_machine_editor_tab_8h_source.html">MachineEditorTab.h</a></li>
+<li><b>MachineEditorTabDisplay.cpp</b></li>
+<li><b>MachineEditorTabLogic.cpp</b></li>
+<li><b>MachineEditorTabPersistence.cpp</b></li>
+<li><b>MachineEditorTabView.cpp</b></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="class_machine_editor_tab.html">MachineEditorTab</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

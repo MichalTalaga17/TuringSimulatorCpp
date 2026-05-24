@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Dokumentacja klasy Tape</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('class_tape.html','','class_tape-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Dokumentacja klasy Tape</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Modeluje nieskończoną taśmę przechowywaną jako rzadka mapa komórek.  
+ <a href="#details">Więcej...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_tape_8h_source.html">Tape.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Metody publiczne</h2></td></tr>
+<tr class="memitem:a362717e6e4175ddaabbe9673494d2a60" id="r_a362717e6e4175ddaabbe9673494d2a60"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a362717e6e4175ddaabbe9673494d2a60">Tape</a> (char blankSymbol='_')</td></tr>
+<tr class="memdesc:a362717e6e4175ddaabbe9673494d2a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tworzy pustą taśmę z wybranym symbolem pustym.  <br /></td></tr>
+<tr class="memitem:ab600ca235e8db3c04c6c5e5df508e654" id="r_ab600ca235e8db3c04c6c5e5df508e654"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab600ca235e8db3c04c6c5e5df508e654">load</a> (const std::string &amp;input)</td></tr>
+<tr class="memdesc:ab600ca235e8db3c04c6c5e5df508e654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wczytuje początkową zawartość taśmy i ustawia głowicę na pozycji 0.  <br /></td></tr>
+<tr class="memitem:ab8ff70f09fd81b9c23b561ee58e9f85c" id="r_ab8ff70f09fd81b9c23b561ee58e9f85c"><td class="memItemLeft">char&#160;</td><td class="memItemRight"><a class="el" href="#ab8ff70f09fd81b9c23b561ee58e9f85c">read</a> () const</td></tr>
+<tr class="memdesc:ab8ff70f09fd81b9c23b561ee58e9f85c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Odczytuje symbol spod aktualnej pozycji głowicy.  <br /></td></tr>
+<tr class="memitem:a31c00dabc085c9725ffe99fb53b5be37" id="r_a31c00dabc085c9725ffe99fb53b5be37"><td class="memItemLeft">char&#160;</td><td class="memItemRight"><a class="el" href="#a31c00dabc085c9725ffe99fb53b5be37">readAt</a> (int position) const</td></tr>
+<tr class="memdesc:a31c00dabc085c9725ffe99fb53b5be37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Odczytuje symbol z dowolnej pozycji taśmy bez przesuwania głowicy.  <br /></td></tr>
+<tr class="memitem:a106da612b72ead6e926ff2b36fb7a80d" id="r_a106da612b72ead6e926ff2b36fb7a80d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a106da612b72ead6e926ff2b36fb7a80d">write</a> (char symbol)</td></tr>
+<tr class="memdesc:a106da612b72ead6e926ff2b36fb7a80d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zapisuje symbol pod głowicą.  <br /></td></tr>
+<tr class="memitem:a9bea6772850138039581ede404661c1e" id="r_a9bea6772850138039581ede404661c1e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9bea6772850138039581ede404661c1e">move</a> (<a class="el" href="_tape_8h.html#a0854d4de5316f80beeefbf341b1ca2d0">HeadMove</a> moveDirection)</td></tr>
+<tr class="memdesc:a9bea6772850138039581ede404661c1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Przesuwa głowicę zgodnie z kierunkiem przejścia.  <br /></td></tr>
+<tr class="memitem:af139b08b38ce7d170c87c97ed85e355c" id="r_af139b08b38ce7d170c87c97ed85e355c"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#af139b08b38ce7d170c87c97ed85e355c">headPosition</a> () const</td></tr>
+<tr class="memdesc:af139b08b38ce7d170c87c97ed85e355c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zwraca bieżącą pozycję głowicy względem początku taśmy.  <br /></td></tr>
+<tr class="memitem:a323b35199139fa3874d9a34149093c92" id="r_a323b35199139fa3874d9a34149093c92"><td class="memItemLeft">char&#160;</td><td class="memItemRight"><a class="el" href="#a323b35199139fa3874d9a34149093c92">blank</a> () const</td></tr>
+<tr class="memdesc:a323b35199139fa3874d9a34149093c92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zwraca symbol traktowany jako pusty.  <br /></td></tr>
+<tr class="memitem:a7c6558a1f144d3db9b060921eb24930d" id="r_a7c6558a1f144d3db9b060921eb24930d"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a7c6558a1f144d3db9b060921eb24930d">snapshot</a> (int from, int to) const</td></tr>
+<tr class="memdesc:a7c6558a1f144d3db9b060921eb24930d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buduje wycinek taśmy z przedziału domkniętego <span class="tt">&lt;from, to&gt;</span>.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Atrybuty prywatne</h2></td></tr>
+<tr class="memitem:a9baeaf27e7df11711181b14968bb2a9d" id="r_a9baeaf27e7df11711181b14968bb2a9d"><td class="memItemLeft"><a id="a9baeaf27e7df11711181b14968bb2a9d" name="a9baeaf27e7df11711181b14968bb2a9d"></a>
+std::map&lt; int, char &gt;&#160;</td><td class="memItemRight"><b>cells_</b></td></tr>
+<tr class="memdesc:a9baeaf27e7df11711181b14968bb2a9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Niepuste komórki taśmy indeksowane pozycją. <br /></td></tr>
+<tr class="memitem:a4627095d9ece7a60e6ff3fc4b1a9d729" id="r_a4627095d9ece7a60e6ff3fc4b1a9d729"><td class="memItemLeft"><a id="a4627095d9ece7a60e6ff3fc4b1a9d729" name="a4627095d9ece7a60e6ff3fc4b1a9d729"></a>
+int&#160;</td><td class="memItemRight"><b>headPosition_</b> = 0</td></tr>
+<tr class="memdesc:a4627095d9ece7a60e6ff3fc4b1a9d729"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aktualna pozycja głowicy względem początku wejścia. <br /></td></tr>
+<tr class="memitem:a55aeda0d0432dee06ae56806306850ab" id="r_a55aeda0d0432dee06ae56806306850ab"><td class="memItemLeft"><a id="a55aeda0d0432dee06ae56806306850ab" name="a55aeda0d0432dee06ae56806306850ab"></a>
+char&#160;</td><td class="memItemRight"><b>blankSymbol_</b></td></tr>
+<tr class="memdesc:a55aeda0d0432dee06ae56806306850ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Symbol zwracany dla pustych lub usuniętych komórek. <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Opis szczegółowy</h2>
+<div class="textblock"><p>Modeluje nieskończoną taśmę przechowywaną jako rzadka mapa komórek. </p>
+<p>Taśma zapisuje tylko komórki różne od symbolu pustego. Dzięki temu puste obszary po lewej i prawej stronie wejścia nie zajmują pamięci, a odczyt nieustawionej pozycji zawsze zwraca <span class="tt"><a class="el" href="#a55aeda0d0432dee06ae56806306850ab" title="Symbol zwracany dla pustych lub usuniętych komórek.">blankSymbol_</a></span>. </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Dokumentacja konstruktora i destruktora</h2>
+<a id="a362717e6e4175ddaabbe9673494d2a60" name="a362717e6e4175ddaabbe9673494d2a60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a362717e6e4175ddaabbe9673494d2a60">&#9670;&#160;</a></span>Tape()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Tape::Tape </td>
+          <td>(</td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>blankSymbol</em></span><span class="paramdefsep"> = </span><span class="paramdefval">'_'</span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tworzy pustą taśmę z wybranym symbolem pustym. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">blankSymbol</td><td>Symbol traktowany jako pusta komórka. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Dokumentacja funkcji składowych</h2>
+<a id="a323b35199139fa3874d9a34149093c92" name="a323b35199139fa3874d9a34149093c92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a323b35199139fa3874d9a34149093c92">&#9670;&#160;</a></span>blank()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char Tape::blank </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zwraca symbol traktowany jako pusty. </p>
+<dl class="section return"><dt>Zwraca</dt><dd>Symbol pustej komórki. </dd></dl>
+
+</div>
+</div>
+<a id="af139b08b38ce7d170c87c97ed85e355c" name="af139b08b38ce7d170c87c97ed85e355c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af139b08b38ce7d170c87c97ed85e355c">&#9670;&#160;</a></span>headPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Tape::headPosition </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zwraca bieżącą pozycję głowicy względem początku taśmy. </p>
+<dl class="section return"><dt>Zwraca</dt><dd>Indeks aktualnej komórki głowicy. </dd></dl>
+
+</div>
+</div>
+<a id="ab600ca235e8db3c04c6c5e5df508e654" name="ab600ca235e8db3c04c6c5e5df508e654"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab600ca235e8db3c04c6c5e5df508e654">&#9670;&#160;</a></span>load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tape::load </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>input</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wczytuje początkową zawartość taśmy i ustawia głowicę na pozycji 0. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Ciąg symboli zapisywany od pozycji 0 w prawo. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9bea6772850138039581ede404661c1e" name="a9bea6772850138039581ede404661c1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bea6772850138039581ede404661c1e">&#9670;&#160;</a></span>move()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tape::move </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_tape_8h.html#a0854d4de5316f80beeefbf341b1ca2d0">HeadMove</a></td>          <td class="paramname"><span class="paramname"><em>moveDirection</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Przesuwa głowicę zgodnie z kierunkiem przejścia. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">moveDirection</td><td>Kierunek ruchu głowicy. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Wyjątki</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>Gdy przekazano nieobsługiwaną wartość ruchu. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab8ff70f09fd81b9c23b561ee58e9f85c" name="ab8ff70f09fd81b9c23b561ee58e9f85c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8ff70f09fd81b9c23b561ee58e9f85c">&#9670;&#160;</a></span>read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char Tape::read </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Odczytuje symbol spod aktualnej pozycji głowicy. </p>
+<dl class="section return"><dt>Zwraca</dt><dd>Symbol zapisany w bieżącej komórce albo symbol pusty. </dd></dl>
+
+</div>
+</div>
+<a id="a31c00dabc085c9725ffe99fb53b5be37" name="a31c00dabc085c9725ffe99fb53b5be37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31c00dabc085c9725ffe99fb53b5be37">&#9670;&#160;</a></span>readAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char Tape::readAt </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>position</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Odczytuje symbol z dowolnej pozycji taśmy bez przesuwania głowicy. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">position</td><td>Pozycja komórki względem początku wejścia. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd>Symbol zapisany w komórce albo symbol pusty. </dd></dl>
+
+</div>
+</div>
+<a id="a7c6558a1f144d3db9b060921eb24930d" name="a7c6558a1f144d3db9b060921eb24930d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c6558a1f144d3db9b060921eb24930d">&#9670;&#160;</a></span>snapshot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Tape::snapshot </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>from</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>to</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Buduje wycinek taśmy z przedziału domkniętego <span class="tt">&lt;from, to&gt;</span>. </p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">from</td><td>Pierwsza pozycja wycinka. </td></tr>
+    <tr><td class="paramname">to</td><td>Ostatnia pozycja wycinka. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Zwraca</dt><dd>Napis reprezentujący kolejne komórki wycinka. </dd></dl>
+
+</div>
+</div>
+<a id="a106da612b72ead6e926ff2b36fb7a80d" name="a106da612b72ead6e926ff2b36fb7a80d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a106da612b72ead6e926ff2b36fb7a80d">&#9670;&#160;</a></span>write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Tape::write </td>
+          <td>(</td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>symbol</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zapisuje symbol pod głowicą. </p>
+<p>Zapis symbolu pustego usuwa komórkę z mapy, aby zachować rzadką reprezentację taśmy.</p>
+<dl class="params"><dt>Parametry</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">symbol</td><td>Symbol do zapisania w bieżącej komórce. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>Dokumentacja dla tej klasy została wygenerowana z plików:<ul>
+<li><a class="el" href="_tape_8h_source.html">Tape.h</a></li>
+<li><b>Tape.cpp</b></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="class_tape.html">Tape</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

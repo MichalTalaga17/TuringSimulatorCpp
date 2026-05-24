@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Symulator Maszyny Turinga w C++</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('md__r_e_a_d_m_e.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">Symulator Maszyny Turinga w C++ </div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p><a class="anchor" id="autotoc_md0"></a></p>
+<p>Prosty symulator jednotaśmowej deterministycznej maszyny Turinga napisany w C++.</p>
+<p>Aktualnie projekt zawiera:</p><ul>
+<li>rdzeń symulacji w czystym C++,</li>
+<li>graficzny interfejs Qt Widgets z kartami edytora,</li>
+<li>zapis i odczyt maszyn z plików JSON,</li>
+<li>zapis i odczyt maszyn z lokalnej bazy SQLite,</li>
+<li>notację stanów w stylu <span class="tt">q0</span>, <span class="tt">q1</span>, <span class="tt">q2</span> itd.,</li>
+<li>notację ruchów głowicy widoczną dla użytkownika: <span class="tt">L</span>, <span class="tt">P</span>, <span class="tt">_</span>, <span class="tt">STOP</span>.</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md1"></a>
+Wymagania</h1>
+<p>Do uruchomienia projektu na innym komputerze potrzebne są:</p><ul>
+<li><span class="tt">git</span></li>
+<li><span class="tt">cmake</span> w wersji 3.20 lub nowszej</li>
+<li>kompilator obsługujący C++17</li>
+<li>Qt 6 z modułami <span class="tt">Core</span>, <span class="tt">Gui</span>, <span class="tt">Widgets</span> i <span class="tt">Sql</span></li>
+</ul>
+<p>Przykłady:</p><ul>
+<li>macOS: <span class="tt">clang++</span> z Xcode Command Line Tools</li>
+<li>Linux: <span class="tt">g++</span> albo <span class="tt">clang++</span></li>
+<li>Windows: MSVC albo MinGW</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
+Instalacja CMake</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
+macOS</h2>
+<p>Najpierw warto doinstalować narzędzia deweloperskie Apple:</p>
+<div class="fragment"><div class="line">xcode-select --install</div>
+</div><!-- fragment --><p>Jeśli używasz Homebrew:</p>
+<div class="fragment"><div class="line">brew install cmake</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
+Ubuntu / Debian</h2>
+<div class="fragment"><div class="line">sudo apt update</div>
+<div class="line">sudo apt install cmake build-essential git</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
+Fedora</h2>
+<div class="fragment"><div class="line">sudo dnf install cmake gcc-c++ git</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
+Windows</h2>
+<p>Najwygodniejsze opcje:</p><ul>
+<li>zainstalować Visual Studio Community z modułem <span class="tt">Desktop development with C++</span>,</li>
+<li>albo pobrać <span class="tt">CMake</span> bezpośrednio ze strony producenta: <a href="https://cmake.org/download/">cmake.org</a>.</li>
+</ul>
+<p>Po instalacji warto sprawdzić, czy polecenie działa:</p>
+<div class="fragment"><div class="line">cmake --version</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
+Pobranie projektu</h1>
+<div class="fragment"><div class="line">git clone https://github.com/MichalTalaga17/TuringSimulatorCpp</div>
+<div class="line">cd TuringSimulatorCpp</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
+Budowanie</h1>
+<div class="fragment"><div class="line">cmake -S . -B build</div>
+<div class="line">cmake --build build</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+Testy</h1>
+<div class="fragment"><div class="line">ctest --test-dir build --output-on-failure</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+Dokumentacja Doxygen</h1>
+<p>Projekt zawiera konfigurację <span class="tt">Doxyfile</span> oraz stronę główną dokumentacji w <span class="tt">docs/mainpage.dox</span>.</p>
+<p>Generowanie bezpośrednio przez Doxygen:</p>
+<div class="fragment"><div class="line">doxygen Doxyfile</div>
+</div><!-- fragment --><p>Jeśli CMake znajdzie program <span class="tt">doxygen</span>, dostępny jest też target:</p>
+<div class="fragment"><div class="line">cmake --build build --target docs</div>
+</div><!-- fragment --><p>Wynik pojawi się w katalogu:</p>
+<div class="fragment"><div class="line">docs/doxygen/html</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
+Uruchamianie</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+macOS i Linux</h2>
+<div class="fragment"><div class="line">./build/TuringSimulatorCpp</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
+Windows</h2>
+<p>W zależności od generatora i konfiguracji:</p>
+<div class="fragment"><div class="line">.\build\Debug\TuringSimulatorCpp.exe</div>
+</div><!-- fragment --><p>albo:</p>
+<div class="fragment"><div class="line">.\build\Release\TuringSimulatorCpp.exe</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
+Przykład startowy</h1>
+<p>Domyślny przykład:</p><ul>
+<li>startuje w stanie <span class="tt">q0</span>,</li>
+<li>zamienia kolejne symbole <span class="tt">0</span> na <span class="tt">1</span> i <span class="tt">1</span> na <span class="tt">0</span>,</li>
+<li>przesuwa głowicę w prawo,</li>
+<li>po napotkaniu symbolu pustego wykonuje <span class="tt">STOP</span>,</li>
+<li>kończy działanie ruchem <span class="tt">STOP</span>.</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+Znaczenie ruchów głowicy</h1>
+<ul>
+<li><span class="tt">L</span> - ruch w lewo</li>
+<li><span class="tt">P</span> - ruch w prawo</li>
+<li><span class="tt">_</span> - brak ruchu</li>
+<li><span class="tt">STOP</span> - zatrzymanie maszyny</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
+Struktura projektu</h1>
+<p>Najważniejsze pliki:</p><ul>
+<li><span class="tt"><a class="el" href="_tape_8h.html" title="Model rzadko zapisanej, nieskończonej taśmy maszyny Turinga.">include/Tape.h</a></span> - model taśmy</li>
+<li><span class="tt"><a class="el" href="_turing_machine_8h.html" title="Rdzeń deterministycznej jednotaśmowej maszyny Turinga.">include/TuringMachine.h</a></span> - logika maszyny Turinga</li>
+<li><span class="tt"><a class="el" href="_machine_editor_tab_8h.html" title="Karta edycji, walidacji, zapisu i uruchamiania pojedynczej maszyny.">include/MachineEditorTab.h</a></span> - karta edycji i symulacji maszyny</li>
+<li><span class="tt"><a class="el" href="_turing_simulator_u_i_8h.html" title="Główne okno aplikacji z menu, kartami i stroną startową.">include/TuringSimulatorUI.h</a></span> - główne okno aplikacji</li>
+<li><span class="tt"><a class="el" href="storage_8h.html" title="API zapisu i odczytu definicji maszyn z plików JSON oraz SQLite.">include/storage.h</a></span> - API zapisu do JSON i SQLite</li>
+<li><span class="tt">src/ui/</span> - implementacja interfejsu Qt</li>
+<li><span class="tt">src/storage/</span> - implementacja zapisu i odczytu</li>
+<li><span class="tt">tests/</span> - testy rdzenia symulacji </li>
+</ul>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

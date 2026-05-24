@@ -1,0 +1,46 @@
+/**
+ * @mainpage Symulator Maszyny Turinga
+ *
+ * @section overview Opis
+ *
+ * Aplikacja jest symulatorem jednotaśmowej deterministycznej maszyny Turinga
+ * napisanym w C++17 z interfejsem Qt Widgets. Użytkownik może definiować
+ * alfabet, liczbę stanów, stan początkowy, tabelę przejść i wejściową taśmę,
+ * a następnie wykonywać maszynę krokowo albo automatycznie.
+ *
+ * @section modules Główne moduły
+ *
+ * - @ref TuringMachine i @ref Tape tworzą niezależny od UI rdzeń symulacji.
+ * - @ref MachineEditorTab obsługuje edycję maszyny, walidację, symulację,
+ *   wizualizację taśmy oraz zapis i odczyt definicji.
+ * - @ref TuringSimulatorUI zarządza głównym oknem, menu, stroną startową
+ *   oraz kartami edytora.
+ * - @ref ThemeManager aplikuje jasny lub ciemny motyw aplikacji.
+ * - `storage.h` udostępnia funkcje zapisu do JSON oraz lokalnej bazy SQLite.
+ * - @ref TransitionDelegate dostarcza kompaktowy edytor pojedynczej instrukcji
+ *   przejścia w tabeli.
+ *
+ * @section dataflow Przepływ danych
+ *
+ * 1. Użytkownik wypełnia formularz i tabelę przejść w @ref MachineEditorTab.
+ * 2. Karta buduje obiekt @ref TuringMachine z aktualnej konfiguracji.
+ * 3. Symulacja wykonuje kolejne wywołania TuringMachine::step().
+ * 4. Widok taśmy odczytuje dane z @ref Tape i centruje aktywną komórkę.
+ * 5. Definicja maszyny może zostać zapisana do pliku JSON lub SQLite.
+ *
+ * @section generating Generowanie dokumentacji
+ *
+ * Z katalogu głównego projektu można uruchomić:
+ *
+ * @code
+ * doxygen Doxyfile
+ * @endcode
+ *
+ * Po konfiguracji CMake i wykryciu programu Doxygen dostępny jest też target:
+ *
+ * @code
+ * cmake --build build --target docs
+ * @endcode
+ *
+ * Wygenerowane pliki HTML znajdują się w katalogu `docs/doxygen/html`.
+ */

@@ -1,5 +1,10 @@
 #pragma once
 
+/**
+ * @file MachineEditorTab.h
+ * @brief Karta edycji, walidacji, zapisu i uruchamiania pojedynczej maszyny.
+ */
+
 #include <QComboBox>
 #include <QLabel>
 #include <QLineEdit>
@@ -19,54 +24,126 @@
 #include "storage.h"
 #include "TuringMachine.h"
 
-/// Pojedyncza karta edycji i uruchamiania maszyny Turinga.
+/**
+ * @brief Pojedyncza karta edycji i uruchamiania maszyny Turinga.
+ *
+ * Klasa łączy formularz definicji maszyny, tabelę przejść, widok taśmy,
+ * sterowanie symulacją oraz operacje zapisu/odczytu. Logika została
+ * rozdzielona na kilka plików `.cpp`, ale wszystkie metody należą do tej
+ * jednej klasy widżetu.
+ */
 class MachineEditorTab : public QWidget
 {
     Q_OBJECT
 
 public:
+    /**
+     * @brief Tworzy nową kartę edytora.
+     * @param untitledTitle Tytuł używany dopóki karta nie ma pliku ani nazwy z bazy.
+     * @param startWithExample Czy wypełnić kartę przykładową maszyną.
+     * @param parent Opcjonalny rodzic Qt.
+     */
     explicit MachineEditorTab(const QString &untitledTitle, bool startWithExample = true, QWidget *parent = nullptr);
     ~MachineEditorTab() = default;
 
-    /// Zwraca tytuł prezentowany na karcie.
+    /**
+     * @brief Zwraca tytuł prezentowany na karcie.
+     * @return Nazwa pliku, nazwa z bazy lub tytuł tymczasowy.
+     */
     QString tabTitle() const;
-    /// Wczytuje maszynę ze wskazanego pliku do tej karty.
+    /**
+     * @brief Wczytuje maszynę ze wskazanego pliku do tej karty.
+     * @param filePath Ścieżka pliku JSON.
+     * @return `true`, jeśli dane zostały poprawnie odczytane i zastosowane.
+     */
     bool loadFromFile(const QString &filePath);
-    /// Zapisuje maszynę do znanej ścieżki albo pyta o nią, jeśli karta jest nowa.
+    /**
+     * @brief Zapisuje maszynę do znanej ścieżki albo pyta o nią, jeśli karta jest nowa.
+     * @return `true`, jeśli zapis zakończył się powodzeniem.
+     */
     bool saveToFile();
-    /// Zapisuje maszynę po wskazaniu ścieżki przez użytkownika.
+    /**
+     * @brief Zapisuje maszynę po wskazaniu ścieżki przez użytkownika.
+     * @return `true`, jeśli użytkownik wybrał plik i zapis się powiódł.
+     */
     bool saveToFileAs();
-    /// Przebudowuje maszynę i pokazuje wynik walidacji.
+    /**
+     * @brief Przebudowuje maszynę i pokazuje wynik walidacji.
+     * @return `true`, jeśli aktualna konfiguracja jest poprawna.
+     */
     bool validateMachine();
-    /// Przywraca przykład startowy w bieżącej karcie.
+    /**
+     * @brief Przywraca przykład startowy w bieżącej karcie.
+     */
     void resetToDefaultExample();
-    /// Zapisuje do bazy danych.
+    /**
+     * @brief Zapisuje aktualną maszynę do lokalnej bazy SQLite.
+     * @return `true`, jeśli zapis do bazy się powiódł.
+     */
     bool saveToDatabase();
-    /// Wczytuje z bazy danych.
+    /**
+     * @brief Wczytuje maszynę z lokalnej bazy SQLite.
+     * @param machineName Nazwa maszyny w bazie.
+     * @return `true`, jeśli rekord został znaleziony i odtworzony w UI.
+     */
     bool loadFromDatabase(const QString &machineName);
 
 signals:
+    /**
+     * @brief Emitowany, gdy tytuł karty powinien zostać odświeżony w QTabWidget.
+     * @param title Nowy tytuł karty.
+     */
     void titleChanged(const QString &title);
 
 public slots:
-    // Execution slots
+    /**
+     * @brief Obsługuje wykonanie jednego kroku symulacji.
+     */
     void onStepClicked();
+    /**
+     * @brief Obsługuje uruchomienie lub pauzę automatycznej symulacji.
+     */
     void onRunClicked();
+    /**
+     * @brief Resetuje maszynę do stanu początkowego i wejściowej taśmy.
+     */
     void onResetClicked();
 
 protected:
-    /// Reaguje na zmianę rozmiaru okna i ponownie centruje aktywną komórkę taśmy.
+    /**
+     * @brief Reaguje na zmianę rozmiaru okna i ponownie centruje aktywną komórkę taśmy.
+     */
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    // Builder slots
+    /**
+     * @brief Aktualizuje listę stanów po zmianie liczby stanów.
+     */
     void onNumStatesChanged(int value);
+    /**
+     * @brief Aktualizuje alfabet i tabelę przejść po zmianie pola alfabetu.
+     */
     void onAlphabetChanged();
+    /**
+     * @brief Zmienia symbol pusty i przebudowuje alfabet.
+     */
     void onBlankSymbolChanged();
+    /**
+     * @brief Synchronizuje mapę przejść po ręcznej edycji komórki tabeli.
+     */
     void onTableItemChanged(QTableWidgetItem *item);
+    /**
+     * @brief Reaguje na zmianę wejściowej taśmy.
+     */
     void onTapeInputChanged();
 
+    /**
+     * @brief Aktualizuje prędkość automatycznego wykonywania.
+     */
     void onSpeedChanged(int value);
+    /**
+     * @brief Wykonuje kolejny krok wywołany przez timer symulacji.
+     */
     void onExecutionTimer();
 
 private:
@@ -122,16 +199,20 @@ private:
     void populateTransitionMapWithDefaults();
     /// Zapisuje aktualną definicję maszyny do wskazanej ścieżki.
     bool saveMachineToPath(const QString &filePath);
+    /// Stosuje dane maszyny odczytane z pliku lub bazy do formularza i tabeli.
     void applyMachineData(const MachineData& data);
 
-    // Builder Components
+    /// @name Komponenty edytora definicji
+    /// @{
     QSpinBox *numStatesSpinBox;
     QLineEdit *alphabetInputField;
     QLineEdit *blankSymbolField;
     QComboBox *initialStateCombo;
     QTableWidget *transitionsTable;
+    /// @}
 
-    // Executor Components
+    /// @name Komponenty panelu wykonania
+    /// @{
     QLabel *machineStateLabel;
     QLabel *stepCountLabel;
     /// Przewijany kontener widoku taśmy używany do centrowania aktywnej komórki.
@@ -146,15 +227,18 @@ private:
     QSlider *speedSlider;
     QLabel *speedLabel;
     QLabel *statusLabel;
+    /// @}
 
-    // Logic
+    /// @name Stan logiczny maszyny i symulacji
+    /// @{
     std::unique_ptr<TuringMachine> machine;
-    std::vector<std::string> states; // q0, q1, q2, ...
+    /// Lista stanów generowanych jako `q0`, `q1`, ...
+    std::vector<std::string> states;
     std::vector<char> alphabet;
     std::string initialState;
     std::set<std::string> acceptingStates;
 
-    // Maps: (state, readSymbol) -> (writeSymbol, moveString, nextState)
+    /// Mapa przejść: `(stan, symbol odczytu) -> (symbol zapisu, ruch, następny stan)`.
     std::map<std::pair<std::string, char>, std::tuple<char, std::string, std::string>> transitionMap;
 
     char blankSymbol;
@@ -173,7 +257,16 @@ private:
     bool startWithExample;
     int highlightedTransitionRow;
     int highlightedTransitionCol;
+    /// @}
 public:
+    /**
+     * @brief Zwraca alfabet z symbolem pustym zawsze na pierwszej pozycji.
+     * @return Uporządkowany alfabet używany przez tabelę przejść.
+     */
     std::vector<char> getOrderedAlphabet() const;
+    /**
+     * @brief Udostępnia listę stanów delegate'owi tabeli przejść.
+     * @return Niemodyfikowalna lista nazw stanów.
+     */
     const std::vector<std::string>& getStatesList() const { return states; }
 };

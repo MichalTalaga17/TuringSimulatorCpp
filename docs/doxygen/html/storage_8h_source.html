@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Plik źródłowy storage.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('storage_8h_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">storage.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="storage_8h.html">Idź do dokumentacji tego pliku.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef STORAGE_H</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define STORAGE_H</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;QStringList&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;tuple&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">class </span><a class="code hl_class" href="class_turing_machine.html">TuringMachine</a>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span></div>
+<div class="foldopen" id="foldopen00027" data-start="{" data-end="};">
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="struct_machine_data.html">   27</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_machine_data.html">MachineData</a> {</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="struct_machine_data.html#af028f8b8652ccbb43ec2b02285153b3e">   29</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_machine_data.html#af028f8b8652ccbb43ec2b02285153b3e">numStates</a> = 0;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="struct_machine_data.html#a09429624fee68d6d39f61dfecf2c0e00">   31</a></span>    std::vector&lt;char&gt; <a class="code hl_variable" href="struct_machine_data.html#a09429624fee68d6d39f61dfecf2c0e00">alphabet</a>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="struct_machine_data.html#acd8043597d32828fec686b8a3d170b26">   33</a></span>    std::vector&lt;std::tuple&lt;std::string, char, std::string, char, std::string&gt;&gt; <a class="code hl_variable" href="struct_machine_data.html#acd8043597d32828fec686b8a3d170b26">transitions</a>;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="struct_machine_data.html#a2928356746501763a54bd7212093e056">   36</a></span>    std::string <a class="code hl_variable" href="struct_machine_data.html#a2928356746501763a54bd7212093e056">initialState</a>;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="struct_machine_data.html#a4951eacc30a8b4f8efa9da5697000fa9">   38</a></span>    <span class="keywordtype">char</span> <a class="code hl_variable" href="struct_machine_data.html#a4951eacc30a8b4f8efa9da5697000fa9">blankSymbol</a> = <span class="charliteral">&#39;_&#39;</span>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="struct_machine_data.html#aefd1b8b1540f80ac68f651f8ec14e903">   41</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_machine_data.html#aefd1b8b1540f80ac68f651f8ec14e903">success</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="struct_machine_data.html#aa8a180c9b910b019856b743b745ec83f">   43</a></span>    QString <a class="code hl_variable" href="struct_machine_data.html#aa8a180c9b910b019856b743b745ec83f">errorMessage</a> = <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>};</div>
+</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="keywordtype">bool</span> <a class="code hl_function" href="storage_8h.html#a9bac9e921b771f571aa9f11c35729596">saveInstructionsToFile</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_turing_machine.html">TuringMachine</a>&amp; machine, <span class="keyword">const</span> QString&amp; filePath, <span class="keyword">const</span> QString&amp; initialState, <span class="keywordtype">char</span> blankSymbol, <span class="keywordtype">int</span> numStates, <span class="keyword">const</span> std::vector&lt;char&gt;&amp; alphabet);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><a class="code hl_struct" href="struct_machine_data.html">MachineData</a> <a class="code hl_function" href="storage_8h.html#a7a39f380e2fad15eca9c554c8c1bb1dc">loadInstructionsFromFile</a>(<span class="keyword">const</span> QString&amp; filePath);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="keywordtype">bool</span> <a class="code hl_function" href="storage_8h.html#aa1805c8a8ea576e37c23a8e8b0c231c9">saveMachineToDatabase</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_turing_machine.html">TuringMachine</a>&amp; machine, <span class="keyword">const</span> QString&amp; machineName, <span class="keyword">const</span> QString&amp; initialState, <span class="keywordtype">char</span> blankSymbol, <span class="keywordtype">int</span> numStates, <span class="keyword">const</span> std::vector&lt;char&gt;&amp; alphabet);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><a class="code hl_struct" href="struct_machine_data.html">MachineData</a> <a class="code hl_function" href="storage_8h.html#a7a43cbe54596f6a5cd322c702dbdcec6">loadMachineFromDatabase</a>(<span class="keyword">const</span> QString&amp; machineName);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>QStringList <a class="code hl_function" href="storage_8h.html#adb956e02aa82fa5f9fc92428ccf3c824">getMachineNamesFromDatabase</a>();</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="preprocessor">#endif </span><span class="comment">// STORAGE_H</span></div>
+<div class="ttc" id="aclass_turing_machine_html"><div class="ttname"><a href="class_turing_machine.html">TuringMachine</a></div><div class="ttdoc">Udostępnia logikę jednotaśmowej deterministycznej maszyny Turinga.</div><div class="ttdef"><b>Definicja</b> TuringMachine.h:36</div></div>
+<div class="ttc" id="astorage_8h_html_a7a39f380e2fad15eca9c554c8c1bb1dc"><div class="ttname"><a href="storage_8h.html#a7a39f380e2fad15eca9c554c8c1bb1dc">loadInstructionsFromFile</a></div><div class="ttdeci">MachineData loadInstructionsFromFile(const QString &amp;filePath)</div><div class="ttdoc">Wczytuje definicję maszyny z pliku JSON.</div><div class="ttdef"><b>Definicja</b> FileStorage.cpp:149</div></div>
+<div class="ttc" id="astorage_8h_html_a7a43cbe54596f6a5cd322c702dbdcec6"><div class="ttname"><a href="storage_8h.html#a7a43cbe54596f6a5cd322c702dbdcec6">loadMachineFromDatabase</a></div><div class="ttdeci">MachineData loadMachineFromDatabase(const QString &amp;machineName)</div><div class="ttdoc">Wczytuje definicję maszyny z lokalnej bazy SQLite.</div><div class="ttdef"><b>Definicja</b> DatabaseStorage.cpp:205</div></div>
+<div class="ttc" id="astorage_8h_html_a9bac9e921b771f571aa9f11c35729596"><div class="ttname"><a href="storage_8h.html#a9bac9e921b771f571aa9f11c35729596">saveInstructionsToFile</a></div><div class="ttdeci">bool saveInstructionsToFile(const TuringMachine &amp;machine, const QString &amp;filePath, const QString &amp;initialState, char blankSymbol, int numStates, const std::vector&lt; char &gt; &amp;alphabet)</div><div class="ttdoc">Zapisuje definicję maszyny do pliku JSON.</div><div class="ttdef"><b>Definicja</b> FileStorage.cpp:74</div></div>
+<div class="ttc" id="astorage_8h_html_aa1805c8a8ea576e37c23a8e8b0c231c9"><div class="ttname"><a href="storage_8h.html#aa1805c8a8ea576e37c23a8e8b0c231c9">saveMachineToDatabase</a></div><div class="ttdeci">bool saveMachineToDatabase(const TuringMachine &amp;machine, const QString &amp;machineName, const QString &amp;initialState, char blankSymbol, int numStates, const std::vector&lt; char &gt; &amp;alphabet)</div><div class="ttdoc">Zapisuje definicję maszyny w lokalnej bazie SQLite.</div><div class="ttdef"><b>Definicja</b> DatabaseStorage.cpp:100</div></div>
+<div class="ttc" id="astorage_8h_html_adb956e02aa82fa5f9fc92428ccf3c824"><div class="ttname"><a href="storage_8h.html#adb956e02aa82fa5f9fc92428ccf3c824">getMachineNamesFromDatabase</a></div><div class="ttdeci">QStringList getMachineNamesFromDatabase()</div><div class="ttdoc">Zwraca listę nazw maszyn zapisanych w bazie SQLite.</div><div class="ttdef"><b>Definicja</b> DatabaseStorage.cpp:72</div></div>
+<div class="ttc" id="astruct_machine_data_html"><div class="ttname"><a href="struct_machine_data.html">MachineData</a></div><div class="ttdoc">Dane definicji maszyny odczytane z trwałego nośnika.</div><div class="ttdef"><b>Definicja</b> storage.h:27</div></div>
+<div class="ttc" id="astruct_machine_data_html_a09429624fee68d6d39f61dfecf2c0e00"><div class="ttname"><a href="struct_machine_data.html#a09429624fee68d6d39f61dfecf2c0e00">MachineData::alphabet</a></div><div class="ttdeci">std::vector&lt; char &gt; alphabet</div><div class="ttdoc">Alfabet maszyny, zwykle z symbolem pustym na pierwszej pozycji.</div><div class="ttdef"><b>Definicja</b> storage.h:31</div></div>
+<div class="ttc" id="astruct_machine_data_html_a2928356746501763a54bd7212093e056"><div class="ttname"><a href="struct_machine_data.html#a2928356746501763a54bd7212093e056">MachineData::initialState</a></div><div class="ttdeci">std::string initialState</div><div class="ttdoc">Nazwa stanu początkowego.</div><div class="ttdef"><b>Definicja</b> storage.h:36</div></div>
+<div class="ttc" id="astruct_machine_data_html_a4951eacc30a8b4f8efa9da5697000fa9"><div class="ttname"><a href="struct_machine_data.html#a4951eacc30a8b4f8efa9da5697000fa9">MachineData::blankSymbol</a></div><div class="ttdeci">char blankSymbol</div><div class="ttdoc">Symbol pustej komórki taśmy.</div><div class="ttdef"><b>Definicja</b> storage.h:38</div></div>
+<div class="ttc" id="astruct_machine_data_html_aa8a180c9b910b019856b743b745ec83f"><div class="ttname"><a href="struct_machine_data.html#aa8a180c9b910b019856b743b745ec83f">MachineData::errorMessage</a></div><div class="ttdeci">QString errorMessage</div><div class="ttdoc">Komunikat błędu prezentowany użytkownikowi po nieudanym odczycie.</div><div class="ttdef"><b>Definicja</b> storage.h:43</div></div>
+<div class="ttc" id="astruct_machine_data_html_acd8043597d32828fec686b8a3d170b26"><div class="ttname"><a href="struct_machine_data.html#acd8043597d32828fec686b8a3d170b26">MachineData::transitions</a></div><div class="ttdeci">std::vector&lt; std::tuple&lt; std::string, char, std::string, char, std::string &gt; &gt; transitions</div><div class="ttdoc">Lista przejść: stan, odczyt, następny stan, zapis, ruch.</div><div class="ttdef"><b>Definicja</b> storage.h:33</div></div>
+<div class="ttc" id="astruct_machine_data_html_aefd1b8b1540f80ac68f651f8ec14e903"><div class="ttname"><a href="struct_machine_data.html#aefd1b8b1540f80ac68f651f8ec14e903">MachineData::success</a></div><div class="ttdeci">bool success</div><div class="ttdoc">Flaga powodzenia operacji odczytu.</div><div class="ttdef"><b>Definicja</b> storage.h:41</div></div>
+<div class="ttc" id="astruct_machine_data_html_af028f8b8652ccbb43ec2b02285153b3e"><div class="ttname"><a href="struct_machine_data.html#af028f8b8652ccbb43ec2b02285153b3e">MachineData::numStates</a></div><div class="ttdeci">int numStates</div><div class="ttdoc">Liczba stanów q0...qN odtwarzana w edytorze.</div><div class="ttdef"><b>Definicja</b> storage.h:29</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>include</b></li><li class="navelem"><a href="storage_8h.html">storage.h</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

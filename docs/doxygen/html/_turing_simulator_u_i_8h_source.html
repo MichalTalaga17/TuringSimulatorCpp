@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turing Machine Simulator: Plik źródłowy TuringSimulatorUI.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Turing Machine Simulator
+   </div>
+   <div id="projectbrief">Qt/C++ simulator jednotaśmowej deterministycznej maszyny Turinga</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('_turing_simulator_u_i_8h_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Wczytywanie...</div>
+<div class="SRStatus" id="Searching">Szukanie...</div>
+<div class="SRStatus" id="NoMatches">Brak dopasowań</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">TuringSimulatorUI.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_turing_simulator_u_i_8h.html">Idź do dokumentacji tego pliku.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;QAction&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;QMainWindow&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;QTabWidget&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="_machine_editor_tab_8h.html">MachineEditorTab.h</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="_theme_manager_8h.html">ThemeManager.h</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">class </span>QPushButton;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">class </span>QResizeEvent;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span></div>
+<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="class_turing_simulator_u_i.html">   26</a></span><span class="keyword">class </span><a class="code hl_function" href="class_turing_simulator_u_i.html#a267892be8b12a6c93836bb60d1a70d37">TuringSimulatorUI</a> : <span class="keyword">public</span> QMainWindow</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>{</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    Q_OBJECT</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keyword">explicit</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#a267892be8b12a6c93836bb60d1a70d37">TuringSimulatorUI</a>(QWidget *parent = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <a class="code hl_function" href="class_turing_simulator_u_i.html#a267892be8b12a6c93836bb60d1a70d37">~TuringSimulatorUI</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#ad04f1df0dc19079a6abf417a7c41377a">resizeEvent</a>(QResizeEvent *event) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keyword">private</span> slots:</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a1f91f5b6dcbb27b2910fec0099a0af83">showStartPage</a>();</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#ab858a8264d5b7ec3505204fbf0d63e18">createNewMachineTab</a>();</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#af7fac24aa34c16ab9378a2a05448a0a6">createExampleMachineTab</a>();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a5e94e0163dd5938da92c61ff4c42d93c">openMachineInNewTab</a>();</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#acb8d364522f683ad569356e2c553a400">saveCurrentMachine</a>();</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a43dc474c1667448889bf9bdc43914a88">saveCurrentMachineAs</a>();</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a1aba5ab3cc32d8a722daa98fee55c99a">openMachineFromDatabase</a>();</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a6c7acd92ffa87fc628bb841bd084a8d1">saveCurrentMachineToDatabase</a>();</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a20a0d788cdc3a02e736d5525ee3b1973">closeCurrentMachineTab</a>();</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#ac33f567ac40225a3f92c9e8ba40fda9d">validateCurrentMachine</a>();</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a063f7b2f26a79b23a5a4a1675d6f7912">resetCurrentMachineToExample</a>();</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#ab99e0b8992eeab8d0211d3e317875e05">stepCurrentMachine</a>();</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a8b3c3a281e689324830d922511dd9d02">toggleCurrentMachineRun</a>();</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a5716bc8057d4f1e64ce5b0d0bd107aba">resetCurrentMachine</a>();</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#ae0d58a92afbc717f83cfb3617cf9ab12">selectPreviousTab</a>();</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#ad16e692374209e6d8959c2aeb491c27a">selectNextTab</a>();</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#ad9213981b5eae59153fa0f1c9d9a41f0">updateMenuState</a>();</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a0b96ad29e7887f3e4ffd62fb0e3b3007">showAboutDialog</a>();</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a3dc2d1302a1e849dcb6f7291609a7064">showAboutAuthorsDialog</a>();</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_turing_simulator_u_i.html#a244930d57a6576035982149a9feeab09">toggleTheme</a>();</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#aa729e73925255154112e68c715b4d93f">setupUI</a>();</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#af2f087a8d20a6eb8fb3dcfbc92149be0">setupMenu</a>();</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <a class="code hl_class" href="class_machine_editor_tab.html">MachineEditorTab</a> *<a class="code hl_function" href="class_turing_simulator_u_i.html#ab42567931160ff82b8e968d36358ff8b">currentMachineTab</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    QWidget *<a class="code hl_function" href="class_turing_simulator_u_i.html#adf8633ed220e8bada1ff92fd34eb92a0">createStartPage</a>();</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#a067c63c216311936416238f50aa83746">isStartPage</a>(QWidget *widget) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#a88220d61886db3b89b5b3f56a954a56d">addClosableTab</a>(QWidget *tab, <span class="keyword">const</span> QString &amp;title, <span class="keywordtype">int</span> insertIndex = -1);</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#ac5b09d6688dbb6b134ac7df3eda2ffd9">addMachineTab</a>(<a class="code hl_class" href="class_machine_editor_tab.html">MachineEditorTab</a> *tab, <span class="keywordtype">int</span> insertIndex = -1);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#a49e4db7635af9f041bbb44d068932cd6">addMachineTabFromStartPage</a>(<a class="code hl_class" href="class_machine_editor_tab.html">MachineEditorTab</a> *tab);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#a70a44f3c4bcae182f9cdefe0dbcbbf93">openMachineFromDatabaseName</a>(<span class="keyword">const</span> QString &amp;machineName);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#acd114f03ba31764a97c43dce23890fba">closeTabAt</a>(<span class="keywordtype">int</span> index);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_turing_simulator_u_i.html#a4bb3f66014a4d26eb2d810cc42b1af38">updateNewTabButtonPosition</a>();</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="class_turing_simulator_u_i.html#a91e6fb49b7a1a5b43586def3165b4353">  111</a></span>    QTabWidget *<a class="code hl_variable" href="class_turing_simulator_u_i.html#a91e6fb49b7a1a5b43586def3165b4353">machineTabs</a>;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="class_turing_simulator_u_i.html#adf41bf39c5c1d34ada626884e232463c">  113</a></span>    QPushButton *<a class="code hl_variable" href="class_turing_simulator_u_i.html#adf41bf39c5c1d34ada626884e232463c">newTabButton</a>;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    QAction *saveAction;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    QAction *saveAsAction;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    QAction *closeTabAction;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    QAction *validateAction;</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    QAction *resetExampleAction;</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    QAction *stepAction;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    QAction *runAction;</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    QAction *resetAction;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    QAction *previousTabAction;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    QAction *nextTabAction;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    QAction *toggleThemeAction;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno"><a class="line" href="class_turing_simulator_u_i.html#a14cccaf835a537bf6ddeffd73ca99a05">  129</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="class_turing_simulator_u_i.html#a14cccaf835a537bf6ddeffd73ca99a05">untitledTabCounter</a>;</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="class_turing_simulator_u_i.html#ab104fc760e14061bc7a24b3b6dc03a56">  131</a></span>    std::unique_ptr&lt;ThemeManager&gt; <a class="code hl_variable" href="class_turing_simulator_u_i.html#ab104fc760e14061bc7a24b3b6dc03a56">themeManager</a>;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>};</div>
+</div>
+<div class="ttc" id="a_machine_editor_tab_8h_html"><div class="ttname"><a href="_machine_editor_tab_8h.html">MachineEditorTab.h</a></div><div class="ttdoc">Karta edycji, walidacji, zapisu i uruchamiania pojedynczej maszyny.</div></div>
+<div class="ttc" id="a_theme_manager_8h_html"><div class="ttname"><a href="_theme_manager_8h.html">ThemeManager.h</a></div><div class="ttdoc">Zarządzanie jasnym i ciemnym motywem aplikacji Qt.</div></div>
+<div class="ttc" id="aclass_machine_editor_tab_html"><div class="ttname"><a href="class_machine_editor_tab.html">MachineEditorTab</a></div><div class="ttdoc">Pojedyncza karta edycji i uruchamiania maszyny Turinga.</div><div class="ttdef"><b>Definicja</b> MachineEditorTab.h:36</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a063f7b2f26a79b23a5a4a1675d6f7912"><div class="ttname"><a href="class_turing_simulator_u_i.html#a063f7b2f26a79b23a5a4a1675d6f7912">TuringSimulatorUI::resetCurrentMachineToExample</a></div><div class="ttdeci">void resetCurrentMachineToExample()</div><div class="ttdoc">Przywraca przykład startowy w bieżącej karcie.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:530</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a067c63c216311936416238f50aa83746"><div class="ttname"><a href="class_turing_simulator_u_i.html#a067c63c216311936416238f50aa83746">TuringSimulatorUI::isStartPage</a></div><div class="ttdeci">bool isStartPage(QWidget *widget) const</div><div class="ttdoc">Sprawdza, czy widżet jest stroną startową.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:351</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a0b96ad29e7887f3e4ffd62fb0e3b3007"><div class="ttname"><a href="class_turing_simulator_u_i.html#a0b96ad29e7887f3e4ffd62fb0e3b3007">TuringSimulatorUI::showAboutDialog</a></div><div class="ttdeci">void showAboutDialog()</div><div class="ttdoc">Pokazuje okno informacji o programie.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:628</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a14cccaf835a537bf6ddeffd73ca99a05"><div class="ttname"><a href="class_turing_simulator_u_i.html#a14cccaf835a537bf6ddeffd73ca99a05">TuringSimulatorUI::untitledTabCounter</a></div><div class="ttdeci">int untitledTabCounter</div><div class="ttdoc">Licznik tytułów nowych, niezapisanych kart.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.h:129</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a1aba5ab3cc32d8a722daa98fee55c99a"><div class="ttname"><a href="class_turing_simulator_u_i.html#a1aba5ab3cc32d8a722daa98fee55c99a">TuringSimulatorUI::openMachineFromDatabase</a></div><div class="ttdeci">void openMachineFromDatabase()</div><div class="ttdoc">Pokazuje dialog wyboru maszyny z bazy danych.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:646</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a1f91f5b6dcbb27b2910fec0099a0af83"><div class="ttname"><a href="class_turing_simulator_u_i.html#a1f91f5b6dcbb27b2910fec0099a0af83">TuringSimulatorUI::showStartPage</a></div><div class="ttdeci">void showStartPage()</div><div class="ttdoc">Pokazuje lub tworzy stronę startową.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:356</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a20a0d788cdc3a02e736d5525ee3b1973"><div class="ttname"><a href="class_turing_simulator_u_i.html#a20a0d788cdc3a02e736d5525ee3b1973">TuringSimulatorUI::closeCurrentMachineTab</a></div><div class="ttdeci">void closeCurrentMachineTab()</div><div class="ttdoc">Zamyka aktualnie aktywną kartę.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:492</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a244930d57a6576035982149a9feeab09"><div class="ttname"><a href="class_turing_simulator_u_i.html#a244930d57a6576035982149a9feeab09">TuringSimulatorUI::toggleTheme</a></div><div class="ttdeci">void toggleTheme()</div><div class="ttdoc">Przełącza jasny i ciemny motyw aplikacji.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:546</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a267892be8b12a6c93836bb60d1a70d37"><div class="ttname"><a href="class_turing_simulator_u_i.html#a267892be8b12a6c93836bb60d1a70d37">TuringSimulatorUI::TuringSimulatorUI</a></div><div class="ttdeci">TuringSimulatorUI(QWidget *parent=nullptr)</div><div class="ttdoc">Tworzy główne okno aplikacji i inicjalizuje menu, karty oraz motyw.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:26</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a3dc2d1302a1e849dcb6f7291609a7064"><div class="ttname"><a href="class_turing_simulator_u_i.html#a3dc2d1302a1e849dcb6f7291609a7064">TuringSimulatorUI::showAboutAuthorsDialog</a></div><div class="ttdeci">void showAboutAuthorsDialog()</div><div class="ttdoc">Pokazuje okno informacji o autorach.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:639</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a43dc474c1667448889bf9bdc43914a88"><div class="ttname"><a href="class_turing_simulator_u_i.html#a43dc474c1667448889bf9bdc43914a88">TuringSimulatorUI::saveCurrentMachineAs</a></div><div class="ttdeci">void saveCurrentMachineAs()</div><div class="ttdoc">Zapisuje bieżącą kartę po wskazaniu ścieżki.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:484</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a49e4db7635af9f041bbb44d068932cd6"><div class="ttname"><a href="class_turing_simulator_u_i.html#a49e4db7635af9f041bbb44d068932cd6">TuringSimulatorUI::addMachineTabFromStartPage</a></div><div class="ttdeci">void addMachineTabFromStartPage(MachineEditorTab *tab)</div><div class="ttdoc">Dodaje kartę maszyny, zastępując stronę startową, jeśli była aktywna.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:430</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a4bb3f66014a4d26eb2d810cc42b1af38"><div class="ttname"><a href="class_turing_simulator_u_i.html#a4bb3f66014a4d26eb2d810cc42b1af38">TuringSimulatorUI::updateNewTabButtonPosition</a></div><div class="ttdeci">void updateNewTabButtonPosition()</div><div class="ttdoc">Utrzymuje przycisk nowej karty nad paskiem kart.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:203</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a5716bc8057d4f1e64ce5b0d0bd107aba"><div class="ttname"><a href="class_turing_simulator_u_i.html#a5716bc8057d4f1e64ce5b0d0bd107aba">TuringSimulatorUI::resetCurrentMachine</a></div><div class="ttdeci">void resetCurrentMachine()</div><div class="ttdoc">Resetuje bieżącą maszynę.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:571</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a5e94e0163dd5938da92c61ff4c42d93c"><div class="ttname"><a href="class_turing_simulator_u_i.html#a5e94e0163dd5938da92c61ff4c42d93c">TuringSimulatorUI::openMachineInNewTab</a></div><div class="ttdeci">void openMachineInNewTab()</div><div class="ttdoc">Otwiera maszynę z pliku JSON w nowej karcie.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:458</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a6c7acd92ffa87fc628bb841bd084a8d1"><div class="ttname"><a href="class_turing_simulator_u_i.html#a6c7acd92ffa87fc628bb841bd084a8d1">TuringSimulatorUI::saveCurrentMachineToDatabase</a></div><div class="ttdeci">void saveCurrentMachineToDatabase()</div><div class="ttdoc">Zapisuje bieżącą maszynę w bazie danych.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:676</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a70a44f3c4bcae182f9cdefe0dbcbbf93"><div class="ttname"><a href="class_turing_simulator_u_i.html#a70a44f3c4bcae182f9cdefe0dbcbbf93">TuringSimulatorUI::openMachineFromDatabaseName</a></div><div class="ttdeci">void openMachineFromDatabaseName(const QString &amp;machineName)</div><div class="ttdoc">Otwiera wskazaną maszynę z bazy w nowej karcie.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:664</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a88220d61886db3b89b5b3f56a954a56d"><div class="ttname"><a href="class_turing_simulator_u_i.html#a88220d61886db3b89b5b3f56a954a56d">TuringSimulatorUI::addClosableTab</a></div><div class="ttdeci">int addClosableTab(QWidget *tab, const QString &amp;title, int insertIndex=-1)</div><div class="ttdoc">Dodaje kartę z własnym przyciskiem zamykania.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:377</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a8b3c3a281e689324830d922511dd9d02"><div class="ttname"><a href="class_turing_simulator_u_i.html#a8b3c3a281e689324830d922511dd9d02">TuringSimulatorUI::toggleCurrentMachineRun</a></div><div class="ttdeci">void toggleCurrentMachineRun()</div><div class="ttdoc">Przełącza tryb run/pause bieżącej maszyny.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:563</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_a91e6fb49b7a1a5b43586def3165b4353"><div class="ttname"><a href="class_turing_simulator_u_i.html#a91e6fb49b7a1a5b43586def3165b4353">TuringSimulatorUI::machineTabs</a></div><div class="ttdeci">QTabWidget * machineTabs</div><div class="ttdoc">Kontener kart maszyn i strony startowej.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.h:111</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_aa729e73925255154112e68c715b4d93f"><div class="ttname"><a href="class_turing_simulator_u_i.html#aa729e73925255154112e68c715b4d93f">TuringSimulatorUI::setupUI</a></div><div class="ttdeci">void setupUI()</div><div class="ttdoc">Buduje główny QTabWidget i przycisk dodawania kart.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:55</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_ab104fc760e14061bc7a24b3b6dc03a56"><div class="ttname"><a href="class_turing_simulator_u_i.html#ab104fc760e14061bc7a24b3b6dc03a56">TuringSimulatorUI::themeManager</a></div><div class="ttdeci">std::unique_ptr&lt; ThemeManager &gt; themeManager</div><div class="ttdoc">Manager globalnego motywu aplikacji.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.h:131</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_ab42567931160ff82b8e968d36358ff8b"><div class="ttname"><a href="class_turing_simulator_u_i.html#ab42567931160ff82b8e968d36358ff8b">TuringSimulatorUI::currentMachineTab</a></div><div class="ttdeci">MachineEditorTab * currentMachineTab() const</div><div class="ttdoc">Zwraca aktualną kartę maszyny albo nullptr, jeśli aktywna jest strona startowa.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:187</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_ab858a8264d5b7ec3505204fbf0d63e18"><div class="ttname"><a href="class_turing_simulator_u_i.html#ab858a8264d5b7ec3505204fbf0d63e18">TuringSimulatorUI::createNewMachineTab</a></div><div class="ttdeci">void createNewMachineTab()</div><div class="ttdoc">Tworzy nową pustą kartę maszyny.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:446</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_ab99e0b8992eeab8d0211d3e317875e05"><div class="ttname"><a href="class_turing_simulator_u_i.html#ab99e0b8992eeab8d0211d3e317875e05">TuringSimulatorUI::stepCurrentMachine</a></div><div class="ttdeci">void stepCurrentMachine()</div><div class="ttdoc">Wykonuje pojedynczy krok bieżącej maszyny.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:538</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_ac33f567ac40225a3f92c9e8ba40fda9d"><div class="ttname"><a href="class_turing_simulator_u_i.html#ac33f567ac40225a3f92c9e8ba40fda9d">TuringSimulatorUI::validateCurrentMachine</a></div><div class="ttdeci">void validateCurrentMachine()</div><div class="ttdoc">Waliduje i przebudowuje bieżącą maszynę.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:522</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_ac5b09d6688dbb6b134ac7df3eda2ffd9"><div class="ttname"><a href="class_turing_simulator_u_i.html#ac5b09d6688dbb6b134ac7df3eda2ffd9">TuringSimulatorUI::addMachineTab</a></div><div class="ttdeci">void addMachineTab(MachineEditorTab *tab, int insertIndex=-1)</div><div class="ttdoc">Dodaje kartę maszyny i podłącza sygnał zmiany tytułu.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:412</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_acb8d364522f683ad569356e2c553a400"><div class="ttname"><a href="class_turing_simulator_u_i.html#acb8d364522f683ad569356e2c553a400">TuringSimulatorUI::saveCurrentMachine</a></div><div class="ttdeci">void saveCurrentMachine()</div><div class="ttdoc">Zapisuje bieżącą kartę do znanej ścieżki albo uruchamia &quot;Zapisz jako&quot;.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:476</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_acd114f03ba31764a97c43dce23890fba"><div class="ttname"><a href="class_turing_simulator_u_i.html#acd114f03ba31764a97c43dce23890fba">TuringSimulatorUI::closeTabAt</a></div><div class="ttdeci">void closeTabAt(int index)</div><div class="ttdoc">Zamyka kartę o podanym indeksie.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:502</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_ad04f1df0dc19079a6abf417a7c41377a"><div class="ttname"><a href="class_turing_simulator_u_i.html#ad04f1df0dc19079a6abf417a7c41377a">TuringSimulatorUI::resizeEvent</a></div><div class="ttdeci">void resizeEvent(QResizeEvent *event) override</div><div class="ttdoc">Aktualizuje elementy zależne od rozmiaru okna.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:197</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_ad16e692374209e6d8959c2aeb491c27a"><div class="ttname"><a href="class_turing_simulator_u_i.html#ad16e692374209e6d8959c2aeb491c27a">TuringSimulatorUI::selectNextTab</a></div><div class="ttdeci">void selectNextTab()</div><div class="ttdoc">Aktywuje następną kartę.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:591</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_ad9213981b5eae59153fa0f1c9d9a41f0"><div class="ttname"><a href="class_turing_simulator_u_i.html#ad9213981b5eae59153fa0f1c9d9a41f0">TuringSimulatorUI::updateMenuState</a></div><div class="ttdeci">void updateMenuState()</div><div class="ttdoc">Odświeża dostępność akcji menu i tytuł okna.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:603</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_adf41bf39c5c1d34ada626884e232463c"><div class="ttname"><a href="class_turing_simulator_u_i.html#adf41bf39c5c1d34ada626884e232463c">TuringSimulatorUI::newTabButton</a></div><div class="ttdeci">QPushButton * newTabButton</div><div class="ttdoc">Przycisk + tworzący lub pokazujący stronę startową.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.h:113</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_adf8633ed220e8bada1ff92fd34eb92a0"><div class="ttname"><a href="class_turing_simulator_u_i.html#adf8633ed220e8bada1ff92fd34eb92a0">TuringSimulatorUI::createStartPage</a></div><div class="ttdeci">QWidget * createStartPage()</div><div class="ttdoc">Tworzy widżet strony startowej.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:214</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_ae0d58a92afbc717f83cfb3617cf9ab12"><div class="ttname"><a href="class_turing_simulator_u_i.html#ae0d58a92afbc717f83cfb3617cf9ab12">TuringSimulatorUI::selectPreviousTab</a></div><div class="ttdeci">void selectPreviousTab()</div><div class="ttdoc">Aktywuje poprzednią kartę.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:579</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_af2f087a8d20a6eb8fb3dcfbc92149be0"><div class="ttname"><a href="class_turing_simulator_u_i.html#af2f087a8d20a6eb8fb3dcfbc92149be0">TuringSimulatorUI::setupMenu</a></div><div class="ttdeci">void setupMenu()</div><div class="ttdoc">Tworzy menu aplikacji i podpina skróty klawiaturowe.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:89</div></div>
+<div class="ttc" id="aclass_turing_simulator_u_i_html_af7fac24aa34c16ab9378a2a05448a0a6"><div class="ttname"><a href="class_turing_simulator_u_i.html#af7fac24aa34c16ab9378a2a05448a0a6">TuringSimulatorUI::createExampleMachineTab</a></div><div class="ttdeci">void createExampleMachineTab()</div><div class="ttdoc">Tworzy nową kartę z przykładową maszyną.</div><div class="ttdef"><b>Definicja</b> TuringSimulatorUI.cpp:452</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>include</b></li><li class="navelem"><a href="_turing_simulator_u_i_8h.html">TuringSimulatorUI.h</a></li>
+    <li class="footer">Wygenerowano za pomocą <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

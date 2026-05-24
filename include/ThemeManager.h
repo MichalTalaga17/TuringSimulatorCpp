@@ -1,54 +1,108 @@
 #pragma once
 
+/**
+ * @file ThemeManager.h
+ * @brief Zarządzanie jasnym i ciemnym motywem aplikacji Qt.
+ */
+
 #include <QObject>
 #include <QString>
 
-/// Manages application theme (light/dark mode) with mica effect
+/**
+ * @brief Zarządza globalnym motywem aplikacji.
+ *
+ * Klasa wczytuje preferencję użytkownika z QSettings, aplikuje paletę i arkusz
+ * stylów do QApplication oraz emituje sygnał po zmianie motywu.
+ */
 class ThemeManager : public QObject
 {
     Q_OBJECT
 
 public:
+    /**
+     * @brief Dostępne warianty kolorystyczne aplikacji.
+     */
     enum class Theme
     {
+        /// Jasny motyw interfejsu.
         Light,
+        /// Ciemny motyw interfejsu.
         Dark
     };
 
+    /**
+     * @brief Tworzy manager i aplikuje zapamiętaną preferencję motywu.
+     * @param parent Opcjonalny rodzic obiektu Qt.
+     */
     explicit ThemeManager(QObject *parent = nullptr);
     ~ThemeManager() = default;
 
-    /// Returns the current theme
+    /**
+     * @brief Zwraca aktualnie aktywny motyw.
+     * @return Bieżący wariant Theme.
+     */
     Theme currentTheme() const { return m_currentTheme; }
 
-    /// Sets the theme and applies it to the application
+    /**
+     * @brief Ustawia i aplikuje wskazany motyw.
+     * @param theme Motyw, który ma zostać użyty globalnie.
+     */
     void setTheme(Theme theme);
 
-    /// Toggles between light and dark mode
+    /**
+     * @brief Przełącza aplikację między jasnym i ciemnym motywem.
+     */
     void toggleTheme() { setTheme(m_currentTheme == Theme::Light ? Theme::Dark : Theme::Light); }
 
-    /// Gets the stylesheet for the current theme
+    /**
+     * @brief Pobiera arkusz stylów dla aktualnego motywu.
+     * @return Qt stylesheet gotowy do ustawienia w QApplication.
+     */
     QString getCurrentStylesheet() const;
 
-    /// Gets the stylesheet for a specific theme
+    /**
+     * @brief Pobiera arkusz stylów dla wskazanego motywu.
+     * @param theme Motyw, dla którego ma zostać zwrócony stylesheet.
+     * @return Qt stylesheet zawierający style aplikacji.
+     */
     static QString getStylesheet(Theme theme);
 
-    /// Gets the palette for the current theme
+    /**
+     * @brief Buduje paletę Qt dla wskazanego motywu.
+     * @param theme Motyw, dla którego ma zostać zwrócona paleta.
+     * @return Paleta kolorów używana przez aplikację.
+     */
     static QPalette getPalette(Theme theme);
 
-    /// Applies a theme without checking if it's the same (used for initialization)
+    /**
+     * @brief Aplikuje motyw bez sprawdzania, czy jest już aktywny.
+     *
+     * Używane podczas inicjalizacji, gdy aplikacja musi otrzymać arkusz stylów
+     * nawet wtedy, gdy zapisany motyw to domyślny wariant jasny.
+     *
+     * @param theme Motyw do natychmiastowego zastosowania.
+     */
     void applyTheme(Theme theme);
 
 signals:
-    /// Emitted when theme changes
+    /**
+     * @brief Emitowany po zmianie motywu przez setTheme().
+     * @param theme Nowy aktywny motyw.
+     */
     void themeChanged(Theme theme);
 
 private:
-    /// Loads saved theme preference from settings
+    /**
+     * @brief Wczytuje zapamiętaną preferencję motywu z QSettings.
+     */
     void loadThemePreference();
 
-    /// Saves theme preference to settings
+    /**
+     * @brief Zapisuje preferencję motywu w QSettings.
+     * @param theme Motyw do zapamiętania.
+     */
     void saveThemePreference(Theme theme);
 
+    /// Aktualny motyw aplikacji.
     Theme m_currentTheme;
 };
