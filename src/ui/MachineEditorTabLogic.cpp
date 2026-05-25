@@ -41,7 +41,7 @@ void MachineEditorTab::onNumStatesChanged(int value)
         states.push_back("q" + std::to_string(i));
     }
 
-    // Update combos with signal blocking
+    // Aktualizuj listy wyboru przy zablokowanych sygnałach.
     initialStateCombo->blockSignals(true);
     initialStateCombo->clear();
 
@@ -57,7 +57,7 @@ void MachineEditorTab::onNumStatesChanged(int value)
     }
     initialStateCombo->blockSignals(false);
 
-    // Completely rebuild table because states logic needs new items
+    // Przebuduj całą tabelę, bo zmiana stanów wymaga nowych elementów.
     rebuildTransitionsTable();
 
     const bool rebuilt = rebuildMachineFromEditor();
@@ -229,7 +229,7 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
     alphabet.erase(std::remove(alphabet.begin(), alphabet.end(), blankSymbol), alphabet.end());
     alphabet.insert(alphabet.begin(), blankSymbol);
 
-    // Validation
+    // Walidacja.
     if (states.empty())
     {
         showValidationWarning("Please set the number of states");
@@ -254,11 +254,11 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
         return false;
     }
 
-    // Build machine
+    // Budowanie maszyny.
     machine = std::make_unique<TuringMachine>(blankSymbol);
     machine->setInitialState(initialState);
 
-    // Add transitions from map
+    // Dodaj przejścia z mapy.
     for (const auto &[key, value] : transitionMap)
     {
         std::string fromState = key.first;
@@ -343,7 +343,7 @@ bool MachineEditorTab::rebuildMachineFromEditor()
     return true;
 }
 
-// === Executor Slots ===
+// === SLOTY PANELU WYKONANIA ===
 
 void MachineEditorTab::onTapeInputChanged()
 {

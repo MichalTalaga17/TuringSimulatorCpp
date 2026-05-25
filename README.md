@@ -7,6 +7,7 @@ Aktualnie projekt zawiera:
 - graficzny interfejs Qt Widgets z kartami edytora,
 - zapis i odczyt maszyn z plików JSON,
 - zapis i odczyt maszyn z lokalnej bazy SQLite,
+- generowanie definicji maszyn przez Gemini API,
 - notację stanów w stylu `q0`, `q1`, `q2` itd.,
 - notację ruchów głowicy widoczną dla użytkownika: `L`, `P`, `_`, `STOP`.
 
@@ -16,7 +17,7 @@ Do uruchomienia projektu na innym komputerze potrzebne są:
 - `git`
 - `cmake` w wersji 3.20 lub nowszej
 - kompilator obsługujący C++17
-- Qt 6 z modułami `Core`, `Gui`, `Widgets` i `Sql`
+- Qt 6 z modułami `Core`, `Gui`, `Network`, `Widgets` i `Sql`
 
 Przykłady:
 - macOS: `clang++` z Xcode Command Line Tools
@@ -127,6 +128,28 @@ albo:
 ```powershell
 .\build\Release\TuringSimulatorCpp.exe
 ```
+
+## Generowanie maszyn z Gemini AI
+
+W edytorze dostępny jest przycisk `AI`, a na stronie startowej opcja `Start z AI`.
+Aplikacja poprosi o opis maszyny i wygeneruje tabelę przejść przez Gemini API.
+
+Klucze API ustawisz w menu `Maszyna -> Ustawienia Gemini API...`.
+Aplikacja przechowuje osobny klucz dla `Free tier` i osobny klucz dla `Pro tier`.
+Możesz też wcześniej ustawić zmienne środowiskowe:
+
+```bash
+export GEMINI_FREE_API_KEY="twój-klucz-free"
+export GEMINI_PRO_API_KEY="twój-klucz-pro"
+```
+
+Przed generowaniem aplikacja pokazuje jedno okno z opisem zadania, wyborem tieru
+oraz opcją myślenia. `Pro tier` używa modelu `gemini-3.5-flash`. `Free tier`
+najpierw używa `gemini-3.5-flash`, a jeśli model jest niedostępny lub limitowany,
+automatycznie próbuje fallbacku `gemini-3.1-flash-lite`.
+
+Aplikacja pyta również, czy włączyć myślenie modelu. Dla modeli Gemini 3 wysyła
+`thinkingLevel`: `high` albo `minimal`.
 
 ## Przykład startowy
 

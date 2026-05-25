@@ -12,7 +12,7 @@ namespace
 {
 constexpr int minimumTapeCellCount = 41;
 constexpr int tapeInputTailPadding = 4;
-} // namespace
+} // koniec przestrzeni nazw
 
 void MachineEditorTab::updateDisplay()
 {

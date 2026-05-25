@@ -50,7 +50,7 @@ int columnForSymbol(const std::vector<char> &orderedAlphabet, char symbol)
     return -1;
 }
 
-} // namespace
+} // koniec przestrzeni nazw
 
 void MachineEditorTab::rebuildTransitionsTable()
 {
@@ -70,7 +70,7 @@ void MachineEditorTab::rebuildTransitionsTable()
     transitionsTable->setRowCount(numRows);
     transitionsTable->setColumnCount(numCols);
 
-    // Set vertical headers (state names)
+    // Ustaw nagłówki pionowe z nazwami stanów.
     QStringList stateLabels;
     for (const auto &state : states)
     {
@@ -78,7 +78,7 @@ void MachineEditorTab::rebuildTransitionsTable()
     }
     transitionsTable->setVerticalHeaderLabels(stateLabels);
 
-    // Set horizontal headers (alphabet symbols) - with blank symbol always first
+    // Ustaw nagłówki poziome z symbolami alfabetu; symbol pusty jest zawsze pierwszy.
     QStringList alphabetLabels;
     std::vector<char> orderedAlpha = getOrderedAlphabet();
     for (char symbol : orderedAlpha)
@@ -87,7 +87,7 @@ void MachineEditorTab::rebuildTransitionsTable()
     }
     transitionsTable->setHorizontalHeaderLabels(alphabetLabels);
 
-    // Create cells using QTableWidgetItem instead of custom widgets to fix the lag
+    // Użyj QTableWidgetItem zamiast własnych widżetów, żeby uniknąć opóźnień.
     for (int row = 0; row < numRows; ++row)
     {
         transitionsTable->setRowHeight(row, 38);
@@ -98,7 +98,7 @@ void MachineEditorTab::rebuildTransitionsTable()
             
             QTableWidgetItem *item = new QTableWidgetItem();
             item->setTextAlignment(Qt::AlignCenter);
-            // Default rule: write = read, move = R, state = current
+            // Reguła domyślna: zapis = odczyt, ruch = R, stan = bieżący.
             QString defaultText = QString("%1, R, %2").arg(readSymbol).arg(defaultState);
             item->setText(defaultText);
             
@@ -108,13 +108,13 @@ void MachineEditorTab::rebuildTransitionsTable()
 
     transitionsTable->blockSignals(wasBlocked);
 
-    // Populate transition map with default values
+    // Wypełnij mapę przejść wartościami domyślnymi.
     populateTransitionMapWithDefaults();
 }
 
 std::vector<char> MachineEditorTab::getOrderedAlphabet() const
 {
-    // Return alphabet with blank symbol always first
+    // Zwróć alfabet z symbolem pustym zawsze na pierwszej pozycji.
     std::vector<char> result;
     result.push_back(blankSymbol);
     for (char c : alphabet)
@@ -154,7 +154,7 @@ void MachineEditorTab::populateTransitionMapWithDefaults()
     }
 }
 
-// === FILE I/O ===
+// === ODCZYT I ZAPIS PLIKÓW ===
 
 bool MachineEditorTab::saveToFile()
 {
@@ -187,7 +187,6 @@ bool MachineEditorTab::saveMachineToPath(const QString &filePath)
     const QString currentInitialState = initialStateCombo->currentText();
     const char currentBlank = blankSymbolField->text().isEmpty() ? '_' : blankSymbolField->text()[0].toLatin1();
 
-    // --- TUTAJ JEST ZMIANA - DODAJEMY states.size() i alphabet ---
     if (!saveInstructionsToFile(*machine, filePath, currentInitialState, currentBlank, states.size(), alphabet))
     {
         QMessageBox::warning(this, "Błąd", "Nie udało się zapisać pliku.");
@@ -261,11 +260,11 @@ bool MachineEditorTab::loadFromDatabase(const QString &machineName)
         return false;
     }
 
-    // 3. Używamy Twojej funkcji pomocniczej, która ustawia UI
+    // 3. Używamy funkcji pomocniczej, która ustawia UI
     // (blokuje sygnały, czyści tabelę, wypełnia ComboBoxy itp.)
     applyMachineData(data);
 
-    // 4. Przebudowujemy logikę maszyny (rebuild), żeby symulator wiedział co uruchomić
+    // 4. Przebudowujemy logikę maszyny, żeby symulator wiedział co uruchomić
     if (rebuildMachineFromEditor() && statusLabel) {
         statusLabel->setText("Wczytano z bazy: " + machineName);
     }
@@ -278,7 +277,7 @@ bool MachineEditorTab::loadFromDatabase(const QString &machineName)
     return true;
 }
 
-// Funkcja pomocnicza odwalająca brudną robotę w interfejsie
+// Funkcja pomocnicza stosująca dane maszyny w interfejsie.
 void MachineEditorTab::applyMachineData(const MachineData& data)
 {
     numStatesSpinBox->blockSignals(true);

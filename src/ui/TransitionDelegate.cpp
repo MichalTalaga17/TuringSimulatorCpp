@@ -60,7 +60,7 @@ QStringList splitTransitionText(const QString &text)
     }
     return parts;
 }
-} // namespace
+} // koniec przestrzeni nazw
 
 TransitionDelegate::TransitionDelegate(MachineEditorTab *tab, QObject *parent)
     : QStyledItemDelegate(parent), m_tab(tab)

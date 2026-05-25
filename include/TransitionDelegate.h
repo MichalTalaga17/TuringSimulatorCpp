@@ -2,7 +2,7 @@
 
 /**
  * @file TransitionDelegate.h
- * @brief Delegate Qt do edycji komórek tabeli przejść maszyny.
+ * @brief Delegat Qt do edycji komórek tabeli przejść maszyny.
  */
 
 #include <QStyledItemDelegate>
@@ -12,7 +12,7 @@ class MachineEditorTab;
 /**
  * @brief Rysuje i edytuje pojedyncze instrukcje przejścia w QTableWidget.
  *
- * Delegate tworzy kompaktowy edytor z trzema listami: symbol zapisu, ruch
+ * Delegat tworzy kompaktowy edytor z trzema listami: symbol zapisu, ruch
  * głowicy i następny stan. Obsługuje też wizualne podświetlenie aktywnej
  * instrukcji wykonywanej przez symulator.
  */
@@ -20,7 +20,7 @@ class TransitionDelegate : public QStyledItemDelegate
 {
 public:
     /**
-     * @brief Tworzy delegate powiązany z kartą edytora.
+     * @brief Tworzy delegata powiązanego z kartą edytora.
      * @param tab Karta dostarczająca alfabet i listę stanów.
      * @param parent Opcjonalny rodzic Qt.
      */

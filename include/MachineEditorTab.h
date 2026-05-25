@@ -87,6 +87,33 @@ public:
      * @return `true`, jeśli rekord został znaleziony i odtworzony w UI.
      */
     bool loadFromDatabase(const QString &machineName);
+    /**
+     * @brief Pyta o opis zadania i generuje maszynę przez Gemini API.
+     */
+    void generateMachineWithAi();
+    /**
+     * @brief Generuje maszynę przez Gemini API z gotową konfiguracją połączenia.
+     */
+    void generateMachineWithAi(
+        const QString &description,
+        const QString &apiKey,
+        const QString &modelName,
+        const QString &fallbackModelName,
+        bool thinkingEnabled);
+    /**
+     * @brief Wczytuje maszynę wygenerowaną poza kartą edytora.
+     */
+    void applyGeneratedMachineData(const MachineData &data);
+    /**
+     * @brief Pyta o opis maszyny, model i klucz API potrzebne do generowania.
+     */
+    static bool resolveGeminiGenerationRequest(
+        QWidget *parent,
+        QString *description,
+        QString *apiKey,
+        QString *modelName,
+        QString *fallbackModelName,
+        bool *thinkingEnabled);
 
 signals:
     /**
@@ -208,6 +235,7 @@ private:
     QLineEdit *alphabetInputField;
     QLineEdit *blankSymbolField;
     QComboBox *initialStateCombo;
+    QPushButton *aiGenerateButton;
     QTableWidget *transitionsTable;
     /// @}
 
@@ -257,6 +285,7 @@ private:
     bool startWithExample;
     int highlightedTransitionRow;
     int highlightedTransitionCol;
+    bool aiGenerationInProgress;
     /// @}
 public:
     /**
