@@ -9,16 +9,16 @@ ThemeManager::ThemeManager(QObject *parent)
     : QObject(parent), m_currentTheme(Theme::Light)
 {
     loadThemePreference();
-    // Force apply the loaded theme (even if it's Light, we need to apply it initially)
+    // Wymuś zastosowanie wczytanego motywu, także gdy jest to domyślny jasny.
     applyTheme(m_currentTheme);
 }
 
 void ThemeManager::applyTheme(Theme theme)
 {
-    // Apply palette
+    // Zastosuj paletę.
     qApp->setPalette(getPalette(theme));
 
-    // Apply stylesheet
+    // Zastosuj arkusz stylów.
     qApp->setStyleSheet(getStylesheet(theme));
 }
 
@@ -30,7 +30,7 @@ void ThemeManager::setTheme(Theme theme)
     m_currentTheme = theme;
     saveThemePreference(theme);
 
-    // Apply the theme
+    // Zastosuj motyw.
     applyTheme(theme);
 
     emit themeChanged(theme);
@@ -45,7 +45,7 @@ QString ThemeManager::getStylesheet(Theme theme)
 {
     if (theme == Theme::Dark)
     {
-        // Dark mode with mica effect
+        // Ciemny motyw z efektem mica.
         return R"(
         QMainWindow {
             background-color: #1a1a1a;
@@ -428,7 +428,7 @@ QString ThemeManager::getStylesheet(Theme theme)
     }
     else
     {
-        // Light mode with subtle mica effect
+        // Jasny motyw z subtelnym efektem mica.
         return R"(
         QMainWindow {
             background-color: #f5f5f5;

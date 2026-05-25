@@ -1,7 +1,11 @@
 #include "TuringSimulatorUI.h"
 
+#include "ui/GeminiApiKeysDialog.h"
+#include "ui/GeminiGenerationRunner.h"
+
 #include <QApplication>
 #include <QColor>
+#include <QDebug>
 #include <QFile>
 #include <QFileDialog>
 #include <QFontMetrics>
@@ -18,6 +22,7 @@
 #include <QPushButton>
 #include <QResizeEvent>
 #include <QScrollArea>
+#include <QSettings>
 #include <QStyleFactory>
 #include <QTabBar>
 #include <QVBoxLayout>
@@ -32,6 +37,8 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
       closeTabAction(nullptr),
       validateAction(nullptr),
       resetExampleAction(nullptr),
+      generateAiAction(nullptr),
+      geminiSettingsAction(nullptr),
       stepAction(nullptr),
       runAction(nullptr),
       resetAction(nullptr),
@@ -54,11 +61,10 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
 
 void TuringSimulatorUI::setupUI()
 {
-    // Apply Fusion style
     qApp->setStyle(QStyleFactory::create("Fusion"));
 
-    // Theme has already been initialized in constructor via themeManager
-    // No need to call setTheme again as it's already applied
+    // Motyw został już zainicjalizowany w konstruktorze przez themeManager.
+    // Nie trzeba ponownie wywoływać setTheme, bo motyw jest już zastosowany.
 
     machineTabs = new QTabWidget(this);
     machineTabs->setDocumentMode(true);
@@ -147,6 +153,13 @@ void TuringSimulatorUI::setupMenu()
 
     resetExampleAction = machineMenu->addAction("Przywróć przykład startowy");
     connect(resetExampleAction, &QAction::triggered, this, &TuringSimulatorUI::resetCurrentMachineToExample);
+
+    generateAiAction = machineMenu->addAction("Generuj z Gemini AI...");
+    bindShortcut(generateAiAction, QKeySequence(Qt::CTRL | Qt::Key_G));
+    connect(generateAiAction, &QAction::triggered, this, &TuringSimulatorUI::generateMachineWithAi);
+
+    geminiSettingsAction = machineMenu->addAction("Ustawienia Gemini API...");
+    connect(geminiSettingsAction, &QAction::triggered, this, &TuringSimulatorUI::showGeminiSettingsDialog);
 
     QMenu *simulationMenu = menuBar()->addMenu("Symulacja");
     stepAction = simulationMenu->addAction("Krok");
@@ -329,9 +342,8 @@ QWidget *TuringSimulatorUI::createStartPage()
     projectLayout->addWidget(exampleButton);
 
     QPushButton *aiButton = createActionButton("Start z AI");
-    aiButton->setToolTip("Niedostępne w tej wersji.");
-    aiButton->setEnabled(false);
-    aiButton->setCursor(Qt::ArrowCursor);
+    aiButton->setToolTip("Opisz maszynę, a Gemini AI wypełni edytor.");
+    connect(aiButton, &QPushButton::clicked, this, &TuringSimulatorUI::generateMachineWithAi);
     projectLayout->addWidget(aiButton);
     projectLayout->addStretch(1);
 
@@ -535,6 +547,68 @@ void TuringSimulatorUI::resetCurrentMachineToExample()
     }
 }
 
+void TuringSimulatorUI::generateMachineWithAi()
+{
+    MachineEditorTab *tab = currentMachineTab();
+    if (tab)
+    {
+        tab->generateMachineWithAi();
+        return;
+    }
+
+    qInfo().noquote() << "[GeminiAI] No machine tab active; asking before creating a new tab";
+
+    QString description;
+    QString apiKey;
+    QString modelName;
+    QString fallbackModelName;
+    bool thinkingEnabled = false;
+    if (!MachineEditorTab::resolveGeminiGenerationRequest(this, &description, &apiKey, &modelName, &fallbackModelName, &thinkingEnabled))
+    {
+        qInfo().noquote() << "[GeminiAI] Canceled before creating a new machine";
+        return;
+    }
+
+    qInfo().noquote() << "[GeminiAI] Requesting machine before creating a new tab";
+
+    GeminiGenerationRequest request{
+        description.trimmed(),
+        apiKey,
+        modelName,
+        fallbackModelName,
+        thinkingEnabled};
+
+    runGeminiGenerationWithProgress(
+        this,
+        request,
+        [this](const GeminiMachineGenerator::Result &result)
+        {
+            if (!result.success)
+            {
+                qWarning().noquote() << "[GeminiAI] New-tab generation failed:"
+                                     << result.errorMessage;
+                QMessageBox::warning(this, "Gemini AI", result.errorMessage);
+                return;
+            }
+
+            qInfo().noquote() << "[GeminiAI] Creating machine tab after Gemini response";
+            MachineEditorTab *generatedTab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), false, machineTabs);
+            addMachineTabFromStartPage(generatedTab);
+            generatedTab->applyGeneratedMachineData(result.machineData);
+            QMessageBox::information(this, "Gemini AI", "Maszyna została wygenerowana i wczytana do edytora.");
+        },
+        []()
+        {
+            qInfo().noquote() << "[GeminiAI] User canceled request before tab creation";
+        });
+}
+
+void TuringSimulatorUI::showGeminiSettingsDialog()
+{
+    QSettings settings;
+    GeminiApiKeysDialog::editStoredKeys(this, settings);
+}
+
 void TuringSimulatorUI::stepCurrentMachine()
 {
     if (MachineEditorTab *tab = currentMachineTab())
@@ -549,7 +623,7 @@ void TuringSimulatorUI::toggleTheme()
     {
         themeManager->toggleTheme();
 
-        // Update menu text based on new theme
+        // Zaktualizuj tekst menu na podstawie nowego motywu.
         if (toggleThemeAction)
         {
             QString newText = (themeManager->currentTheme() == ThemeManager::Theme::Dark)
@@ -611,6 +685,7 @@ void TuringSimulatorUI::updateMenuState()
     closeTabAction->setEnabled(hasCurrentTab);
     validateAction->setEnabled(hasTab);
     resetExampleAction->setEnabled(hasTab);
+    generateAiAction->setEnabled(true);
     stepAction->setEnabled(hasTab);
     runAction->setEnabled(hasTab);
     resetAction->setEnabled(hasTab);

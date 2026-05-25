@@ -69,7 +69,7 @@ MachineData failLoad(MachineData data, const QString &message)
     data.alphabet.clear();
     return data;
 }
-} // namespace
+} // koniec przestrzeni nazw
 
 bool saveInstructionsToFile(
     const TuringMachine &machine,
@@ -146,20 +146,14 @@ bool saveInstructionsToFile(
     return file.write(document.toJson()) != -1;
 }
 
-MachineData loadInstructionsFromFile(const QString &filePath)
+namespace
+{
+MachineData parseInstructionsDocument(const QJsonDocument &document)
 {
     MachineData data;
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly))
+    if (!document.isObject())
     {
-        return failLoad(data, "Nie można otworzyć pliku.");
-    }
-
-    QJsonParseError parseError;
-    const QJsonDocument document = QJsonDocument::fromJson(file.readAll(), &parseError);
-    if (parseError.error != QJsonParseError::NoError || !document.isObject())
-    {
-        return failLoad(data, "Niepoprawny JSON: " + parseError.errorString());
+        return failLoad(data, "Niepoprawny JSON: dokument nie jest obiektem.");
     }
 
     const QJsonObject root = document.object();
@@ -253,4 +247,28 @@ MachineData loadInstructionsFromFile(const QString &filePath)
 
     data.success = true;
     return data;
+}
+} // koniec przestrzeni nazw
+
+MachineData loadInstructionsFromFile(const QString &filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        return failLoad(MachineData{}, "Nie można otworzyć pliku.");
+    }
+
+    return loadInstructionsFromJson(file.readAll());
+}
+
+MachineData loadInstructionsFromJson(const QByteArray &jsonData)
+{
+    QJsonParseError parseError;
+    const QJsonDocument document = QJsonDocument::fromJson(jsonData, &parseError);
+    if (parseError.error != QJsonParseError::NoError)
+    {
+        return failLoad(MachineData{}, "Niepoprawny JSON: " + parseError.errorString());
+    }
+
+    return parseInstructionsDocument(document);
 }

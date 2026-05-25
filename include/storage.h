@@ -8,6 +8,7 @@
 
 #include <QStringList>
 #include <QString>
+#include <QByteArray>
 
 #include <string>
 #include <tuple>
@@ -62,6 +63,13 @@ bool saveInstructionsToFile(const TuringMachine& machine, const QString& filePat
  * @return MachineData z ustawionym `success` oraz ewentualnym `errorMessage`.
  */
 MachineData loadInstructionsFromFile(const QString& filePath);
+
+/**
+ * @brief Odtwarza definicję maszyny bezpośrednio z dokumentu JSON.
+ * @param jsonData Zawartość JSON w tym samym formacie, którego używają pliki zapisu.
+ * @return MachineData z ustawionym `success` oraz ewentualnym `errorMessage`.
+ */
+MachineData loadInstructionsFromJson(const QByteArray& jsonData);
 
 /**
  * @brief Zapisuje definicję maszyny w lokalnej bazie SQLite.

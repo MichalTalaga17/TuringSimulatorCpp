@@ -67,7 +67,7 @@ MachineData failLoad(MachineData data, const QString &message)
     data.alphabet.clear();
     return data;
 }
-} // namespace
+} // koniec przestrzeni nazw
 
 QStringList getMachineNamesFromDatabase()
 {

@@ -66,7 +66,7 @@ void stopTransitionHaltsAfterOneExecutedStep()
     assert(machine.isHalted());
     assert(machine.stepCount() == 1);
 }
-} // namespace
+} // koniec przestrzeni nazw
 
 int main()
 {

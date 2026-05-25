@@ -11,7 +11,7 @@ bool isAcceptingState(
     return acceptingStates.find(currentState) != acceptingStates.end();
 }
 
-} // namespace
+} // koniec przestrzeni nazw
 
 TuringMachine::TuringMachine(char blankSymbol) : tape_(blankSymbol) {}
 

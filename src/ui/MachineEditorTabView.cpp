@@ -21,11 +21,11 @@
 #include <tuple>
 
 MachineEditorTab::MachineEditorTab(const QString &untitledTitle, bool startWithExample, QWidget *parent)
-    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), previousBlankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample), highlightedTransitionRow(-1), highlightedTransitionCol(-1)
+    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), aiGenerateButton(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), previousBlankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample), highlightedTransitionRow(-1), highlightedTransitionCol(-1), aiGenerationInProgress(false)
 {
     setupUI();
 
-    // Connect timer for execution
+    // Podłącz timer wykonywania maszyny.
     connect(executionTimer.get(), &QTimer::timeout, this, &MachineEditorTab::onExecutionTimer);
     tapeDisplayRefreshTimer->setSingleShot(true);
     connect(tapeDisplayRefreshTimer.get(), &QTimer::timeout, this, &MachineEditorTab::updateTapeDisplay);
@@ -54,10 +54,10 @@ void MachineEditorTab::setupUI()
     pageLayout->setContentsMargins(16, 4, 16, 16);
     pageLayout->setSpacing(12);
 
-    // --- Executor Panel FIRST (so statusLabel is created early) ---
+    // --- PANEL WYKONANIA NAJPIERW (żeby statusLabel powstał wcześnie) ---
     pageLayout->addWidget(setupExecutorTab(), 0);
 
-    // --- Builder Panel SECOND (can safely use statusLabel) ---
+    // --- PANEL BUDOWANIA POTEM (może już bezpiecznie używać statusLabel) ---
     pageLayout->addWidget(setupBuilderTab(), 1);
 
     pageScrollArea->setWidget(pageWidget);
@@ -106,7 +106,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     configFieldsLayout->addWidget(new QLabel("Alphabet:"));
     alphabetInputField = new QLineEdit();
     alphabetInputField->setPlaceholderText("0,1");
-    // Restrict to standard printable ASCII characters (32 to 126)
+    // Ogranicz do standardowych drukowalnych znaków ASCII (32-126).
     alphabetInputField->setValidator(new QRegularExpressionValidator(QRegularExpression("[ -~]*"), this));
     alphabetInputField->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     configFieldsLayout->addWidget(alphabetInputField, 1);
@@ -114,7 +114,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     configFieldsLayout->addWidget(new QLabel("Blank:"));
     blankSymbolField = new QLineEdit();
     blankSymbolField->setText("_");
-    // Restrict to one standard printable ASCII character, excluding space
+    // Ogranicz do jednego standardowego drukowalnego znaku ASCII bez spacji.
     blankSymbolField->setValidator(new QRegularExpressionValidator(QRegularExpression("[!-~]"), this));
     blankSymbolField->setMaximumWidth(60);
     configFieldsLayout->addWidget(blankSymbolField);
@@ -155,6 +155,13 @@ QWidget *MachineEditorTab::setupBuilderTab()
     initialStateCombo->setMaximumWidth(120);
     configFieldsLayout->addWidget(initialStateCombo);
 
+    aiGenerateButton = new QPushButton("AI");
+    aiGenerateButton->setToolTip("Wygeneruj maszynę przez Gemini API.");
+    aiGenerateButton->setMinimumHeight(31);
+    aiGenerateButton->setMinimumWidth(46);
+    aiGenerateButton->setCursor(Qt::PointingHandCursor);
+    configFieldsLayout->addWidget(aiGenerateButton);
+
     logicEditorLayout->addLayout(configFieldsLayout);
 
     transitionsTable = new QTableWidget();
@@ -182,10 +189,12 @@ QWidget *MachineEditorTab::setupBuilderTab()
 
     builderLayout->addWidget(logicEditorGroup, 1);
 
-    // Connect signals (after all widgets are created)
+    // Podłącz sygnały po utworzeniu wszystkich widżetów.
     connect(numStatesSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &MachineEditorTab::onNumStatesChanged);
     connect(alphabetInputField, &QLineEdit::textChanged, this, &MachineEditorTab::onAlphabetChanged);
     connect(blankSymbolField, &QLineEdit::textChanged, this, &MachineEditorTab::onBlankSymbolChanged);
+    connect(aiGenerateButton, &QPushButton::clicked, this, [this]()
+            { generateMachineWithAi(); });
     connect(initialStateCombo, &QComboBox::currentTextChanged, this, [this](const QString &state)
             {
         initialState = state.toStdString();
@@ -195,7 +204,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     
     connect(transitionsTable, &QTableWidget::itemChanged, this, &MachineEditorTab::onTableItemChanged);
 
-    // Initialize with safe blocking
+    // Zainicjalizuj przy bezpiecznie zablokowanych sygnałach.
     transitionsTable->blockSignals(true);
     onNumStatesChanged(2);
     transitionsTable->blockSignals(false);
@@ -218,7 +227,7 @@ QWidget *MachineEditorTab::setupExecutorTab()
     QVBoxLayout *executorLayout = new QVBoxLayout(executorWidget);
     executorLayout->setSpacing(12);
 
-    // --- Status Panel ---
+    // --- PANEL STATUSU ---
     QGroupBox *statusGroup = new QGroupBox("Machine Status", executorWidget);
     QHBoxLayout *statusLayout = new QHBoxLayout(statusGroup);
     statusLayout->setSpacing(6);
@@ -261,8 +270,8 @@ QWidget *MachineEditorTab::setupExecutorTab()
     runButton = new QPushButton("Run");
     resetButton = new QPushButton("Reset");
 
-    // Don't set hardcoded styles - use theme defaults
-    // Theme stylesheets handle all button styling
+    // Nie ustawiaj stylów na sztywno; obsługuje je aktywny motyw.
+    // Arkusze stylów motywu zajmują się wyglądem przycisków.
 
     speedLabel = new QLabel("Speed:");
     speedLabel->setStyleSheet("font-size: 11px; font-weight: 600;");
@@ -283,7 +292,7 @@ QWidget *MachineEditorTab::setupExecutorTab()
 
     executorLayout->addWidget(statusGroup);
 
-    // --- Tape Input Section ---
+    // --- SEKCJA WEJŚCIA TAŚMY ---
     QGroupBox *inputGroup = new QGroupBox("Input Tape", executorWidget);
     QVBoxLayout *inputGroupLayout = new QVBoxLayout(inputGroup);
 
@@ -298,12 +307,12 @@ QWidget *MachineEditorTab::setupExecutorTab()
 
     tapeWarningLabel = new QLabel("Tape contains undefined symbols! Proceeding will halt the machine.", inputGroup);
     tapeWarningLabel->setStyleSheet("color: red; font-weight: bold;");
-    tapeWarningLabel->hide(); // hidden by default
+    tapeWarningLabel->hide(); // domyślnie ukryte
     inputGroupLayout->addWidget(tapeWarningLabel);
 
     executorLayout->addWidget(inputGroup);
 
-    // --- Tape Display ---
+    // --- WIDOK TAŚMY ---
     QGroupBox *tapeGroup = new QGroupBox("Tape Visualization", executorWidget);
     tapeGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     tapeGroup->setMaximumHeight(120);
@@ -336,7 +345,7 @@ QWidget *MachineEditorTab::setupExecutorTab()
     tapeLayout->addWidget(tapeScrollArea);
     executorLayout->addWidget(tapeGroup);
 
-    // Connect signals
+    // Podłącz sygnały.
     connect(tapeInputField, &QLineEdit::textChanged, this, &MachineEditorTab::onTapeInputChanged);
     connect(stepButton, &QPushButton::clicked, this, &MachineEditorTab::onStepClicked);
     connect(runButton, &QPushButton::clicked, this, &MachineEditorTab::onRunClicked);

@@ -64,6 +64,10 @@ private slots:
     void validateCurrentMachine();
     /// Przywraca przykład startowy w bieżącej karcie.
     void resetCurrentMachineToExample();
+    /// Generuje maszynę z użyciem Gemini AI w bieżącej albo nowej karcie.
+    void generateMachineWithAi();
+    /// Pokazuje ustawienia kluczy Gemini API.
+    void showGeminiSettingsDialog();
     /// Wykonuje pojedynczy krok bieżącej maszyny.
     void stepCurrentMachine();
     /// Przełącza tryb run/pause bieżącej maszyny.
@@ -118,6 +122,8 @@ private:
     QAction *closeTabAction;
     QAction *validateAction;
     QAction *resetExampleAction;
+    QAction *generateAiAction;
+    QAction *geminiSettingsAction;
     QAction *stepAction;
     QAction *runAction;
     QAction *resetAction;
@@ -127,6 +133,6 @@ private:
     /// @}
     /// Licznik tytułów nowych, niezapisanych kart.
     int untitledTabCounter;
-    /// Manager globalnego motywu aplikacji.
+    /// Menedżer globalnego motywu aplikacji.
     std::unique_ptr<ThemeManager> themeManager;
 };

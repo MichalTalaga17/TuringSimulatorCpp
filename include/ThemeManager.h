@@ -11,7 +11,7 @@
 /**
  * @brief Zarządza globalnym motywem aplikacji.
  *
- * Klasa wczytuje preferencję użytkownika z QSettings, aplikuje paletę i arkusz
+ * Klasa wczytuje preferencję użytkownika z QSettings, stosuje paletę i arkusz
  * stylów do QApplication oraz emituje sygnał po zmianie motywu.
  */
 class ThemeManager : public QObject
@@ -31,7 +31,7 @@ public:
     };
 
     /**
-     * @brief Tworzy manager i aplikuje zapamiętaną preferencję motywu.
+     * @brief Tworzy menedżera i stosuje zapamiętaną preferencję motywu.
      * @param parent Opcjonalny rodzic obiektu Qt.
      */
     explicit ThemeManager(QObject *parent = nullptr);
@@ -56,14 +56,14 @@ public:
 
     /**
      * @brief Pobiera arkusz stylów dla aktualnego motywu.
-     * @return Qt stylesheet gotowy do ustawienia w QApplication.
+     * @return Arkusz stylów Qt gotowy do ustawienia w QApplication.
      */
     QString getCurrentStylesheet() const;
 
     /**
      * @brief Pobiera arkusz stylów dla wskazanego motywu.
-     * @param theme Motyw, dla którego ma zostać zwrócony stylesheet.
-     * @return Qt stylesheet zawierający style aplikacji.
+     * @param theme Motyw, dla którego ma zostać zwrócony arkusz stylów.
+     * @return Arkusz stylów Qt zawierający style aplikacji.
      */
     static QString getStylesheet(Theme theme);
 
