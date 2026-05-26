@@ -2,32 +2,13 @@
 
 #include <utility>
 
-namespace {
-
-bool isAcceptingState(
-    const std::set<std::string>& acceptingStates,
-    const std::string& currentState
-) {
-    return acceptingStates.find(currentState) != acceptingStates.end();
-}
-
-} // koniec przestrzeni nazw
-
 TuringMachine::TuringMachine(char blankSymbol) : tape_(blankSymbol) {}
 
 void TuringMachine::setInitialState(std::string state) {
     initialState_ = std::move(state);
     currentState_ = initialState_;
     stepCount_ = 0;
-    updateHaltedForCurrentState();
-}
-
-void TuringMachine::addAcceptingState(std::string state) {
-    const bool acceptsCurrentState = state == currentState_;
-    acceptingStates_.insert(std::move(state));
-    if (acceptsCurrentState) {
-        halted_ = true;
-    }
+    halted_ = false;
 }
 
 void TuringMachine::addTransition(
@@ -47,7 +28,7 @@ void TuringMachine::reset() {
     currentState_ = initialState_;
     stepCount_ = 0;
     tape_.load(initialTapeInput_.value_or(""));
-    updateHaltedForCurrentState();
+    halted_ = false;
 }
 
 bool TuringMachine::step() {
@@ -71,8 +52,6 @@ bool TuringMachine::step() {
 
     if (transition.move == HeadMove::STOP) {
         halted_ = true;
-    } else {
-        updateHaltedForCurrentState();
     }
 
     return true;
@@ -80,10 +59,6 @@ bool TuringMachine::step() {
 
 bool TuringMachine::isHalted() const {
     return halted_;
-}
-
-bool TuringMachine::isAccepted() const {
-    return halted_ && isAcceptingState(acceptingStates_, currentState_);
 }
 
 const std::string& TuringMachine::currentState() const {
@@ -96,8 +71,4 @@ const Tape& TuringMachine::tape() const {
 
 std::size_t TuringMachine::stepCount() const {
     return stepCount_;
-}
-
-void TuringMachine::updateHaltedForCurrentState() {
-    halted_ = isAcceptingState(acceptingStates_, currentState_);
 }

@@ -23,8 +23,8 @@
 
 namespace
 {
-constexpr int requestTimeoutMs = 60000;
-constexpr int maxGeneratedStates = 20;
+constexpr int requestTimeoutMs = 90000;
+constexpr int maxGeneratedStates = 30;
 
 bool isAllowedSymbol(char symbol)
 {
