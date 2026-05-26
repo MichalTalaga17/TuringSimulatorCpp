@@ -1,8 +1,10 @@
 #include "TuringSimulatorUI.h"
 
+#include "LanguageManager.h"
 #include "ui/GeminiApiKeysDialog.h"
 #include "ui/GeminiGenerationRunner.h"
 
+#include <QActionGroup>
 #include <QApplication>
 #include <QDebug>
 #include <QFileDialog>
@@ -24,11 +26,29 @@
 #include <QTabBar>
 #include <QVBoxLayout>
 #include <algorithm>
+#include <vector>
 
 TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
     : QMainWindow(parent),
       machineTabs(nullptr),
       newTabButton(nullptr),
+      fileMenu(nullptr),
+      machineMenu(nullptr),
+      simulationMenu(nullptr),
+      viewMenu(nullptr),
+      languageMenu(nullptr),
+      helpMenu(nullptr),
+      newTabAction(nullptr),
+      exampleTabAction(nullptr),
+      openAction(nullptr),
+      openDbAction(nullptr),
+      saveDbAction(nullptr),
+      quitAction(nullptr),
+      aboutAction(nullptr),
+      aboutAuthorsAction(nullptr),
+      polishLanguageAction(nullptr),
+      englishLanguageAction(nullptr),
+      languageActionGroup(nullptr),
       saveAction(nullptr),
       saveAsAction(nullptr),
       closeTabAction(nullptr),
@@ -45,7 +65,7 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
       untitledTabCounter(1),
       themeManager(std::make_unique<ThemeManager>())
 {
-    setWindowTitle("Symulator maszyny Turinga");
+    setWindowTitle(LanguageManager::text("app_title"));
     setGeometry(100, 100, 1200, 850);
     setMinimumWidth(980);
     setMinimumHeight(720);
@@ -82,7 +102,7 @@ void TuringSimulatorUI::setupUI()
     newTabButton->setObjectName("tabAddButton");
     newTabButton->setCursor(Qt::PointingHandCursor);
     newTabButton->setFocusPolicy(Qt::NoFocus);
-    newTabButton->setToolTip("Nowa maszyna");
+    newTabButton->setToolTip(LanguageManager::text("new_tab_tooltip"));
     connect(newTabButton, &QPushButton::clicked, this, &TuringSimulatorUI::showStartPage);
     machineTabs->setCornerWidget(newTabButton, Qt::TopRightCorner);
 
@@ -100,97 +120,112 @@ void TuringSimulatorUI::setupMenu()
         addAction(action);
     };
 
-    QMenu *fileMenu = menuBar()->addMenu("Plik");
-    QAction *newTabAction = fileMenu->addAction("Zacznij od zera");
+    fileMenu = menuBar()->addMenu(LanguageManager::text("menu_file"));
+    newTabAction = fileMenu->addAction(LanguageManager::text("action_new_blank"));
     bindShortcut(newTabAction, QKeySequence(QKeySequence::New));
     connect(newTabAction, &QAction::triggered, this, &TuringSimulatorUI::createNewMachineTab);
 
-    QAction *exampleTabAction = fileMenu->addAction("Zacznij od przykładu");
+    exampleTabAction = fileMenu->addAction(LanguageManager::text("action_new_example"));
     connect(exampleTabAction, &QAction::triggered, this, &TuringSimulatorUI::createExampleMachineTab);
 
-    QAction *openAction = fileMenu->addAction("Wczytaj maszynę z pliku .json");
+    openAction = fileMenu->addAction(LanguageManager::text("action_open_json"));
     bindShortcut(openAction, QKeySequence(QKeySequence::Open));
     connect(openAction, &QAction::triggered, this, &TuringSimulatorUI::openMachineInNewTab);
 
     fileMenu->addSeparator();
 
-    saveAction = fileMenu->addAction("Zapisz");
+    saveAction = fileMenu->addAction(LanguageManager::text("action_save"));
     bindShortcut(saveAction, QKeySequence(QKeySequence::Save));
     connect(saveAction, &QAction::triggered, this, &TuringSimulatorUI::saveCurrentMachine);
 
-    saveAsAction = fileMenu->addAction("Zapisz jako...");
+    saveAsAction = fileMenu->addAction(LanguageManager::text("action_save_as"));
     bindShortcut(saveAsAction, QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
     connect(saveAsAction, &QAction::triggered, this, &TuringSimulatorUI::saveCurrentMachineAs);
 
     fileMenu->addSeparator();
 
-    QAction *openDbAction = fileMenu->addAction("Wczytaj z bazy danych...");
+    openDbAction = fileMenu->addAction(LanguageManager::text("action_open_db"));
     connect(openDbAction, &QAction::triggered, this, &TuringSimulatorUI::openMachineFromDatabase);
 
 
-    QAction *saveDbAction = fileMenu->addAction("Zapisz w bazie danych...");
+    saveDbAction = fileMenu->addAction(LanguageManager::text("action_save_db"));
     connect(saveDbAction, &QAction::triggered, this, &TuringSimulatorUI::saveCurrentMachineToDatabase);
 
     fileMenu->addSeparator();
 
-    closeTabAction = fileMenu->addAction("Zamknij kartę");
+    closeTabAction = fileMenu->addAction(LanguageManager::text("action_close_tab"));
     bindShortcut(closeTabAction, QKeySequence(QKeySequence::Close));
     connect(closeTabAction, &QAction::triggered, this, &TuringSimulatorUI::closeCurrentMachineTab);
 
     fileMenu->addSeparator();
 
-    QAction *quitAction = fileMenu->addAction("Zakończ");
+    quitAction = fileMenu->addAction(LanguageManager::text("action_quit"));
     bindShortcut(quitAction, QKeySequence(QKeySequence::Quit));
     connect(quitAction, &QAction::triggered, qApp, &QApplication::quit);
 
-    QMenu *machineMenu = menuBar()->addMenu("Maszyna");
-    validateAction = machineMenu->addAction("Waliduj i przebuduj");
+    machineMenu = menuBar()->addMenu(LanguageManager::text("menu_machine"));
+    validateAction = machineMenu->addAction(LanguageManager::text("action_validate"));
     bindShortcut(validateAction, QKeySequence(Qt::CTRL | Qt::Key_B));
     connect(validateAction, &QAction::triggered, this, &TuringSimulatorUI::validateCurrentMachine);
 
-    resetExampleAction = machineMenu->addAction("Przywróć przykład startowy");
+    resetExampleAction = machineMenu->addAction(LanguageManager::text("action_reset_example"));
     connect(resetExampleAction, &QAction::triggered, this, &TuringSimulatorUI::resetCurrentMachineToExample);
 
-    generateAiAction = machineMenu->addAction("Generuj z Gemini AI...");
+    generateAiAction = machineMenu->addAction(LanguageManager::text("action_generate_ai"));
     bindShortcut(generateAiAction, QKeySequence(Qt::CTRL | Qt::Key_G));
     connect(generateAiAction, &QAction::triggered, this, &TuringSimulatorUI::generateMachineWithAi);
 
-    geminiSettingsAction = machineMenu->addAction("Ustawienia Gemini API...");
+    geminiSettingsAction = machineMenu->addAction(LanguageManager::text("action_gemini_settings"));
     connect(geminiSettingsAction, &QAction::triggered, this, &TuringSimulatorUI::showGeminiSettingsDialog);
 
-    QMenu *simulationMenu = menuBar()->addMenu("Symulacja");
-    stepAction = simulationMenu->addAction("Krok");
+    simulationMenu = menuBar()->addMenu(LanguageManager::text("menu_simulation"));
+    stepAction = simulationMenu->addAction(LanguageManager::text("action_step"));
     bindShortcut(stepAction, QKeySequence(Qt::Key_F10));
     connect(stepAction, &QAction::triggered, this, &TuringSimulatorUI::stepCurrentMachine);
 
-    runAction = simulationMenu->addAction("Uruchom / pauza");
+    runAction = simulationMenu->addAction(LanguageManager::text("action_run_pause"));
     bindShortcut(runAction, QKeySequence(Qt::Key_F5));
     connect(runAction, &QAction::triggered, this, &TuringSimulatorUI::toggleCurrentMachineRun);
 
-    resetAction = simulationMenu->addAction("Resetuj");
+    resetAction = simulationMenu->addAction(LanguageManager::text("action_reset"));
     bindShortcut(resetAction, QKeySequence(Qt::CTRL | Qt::Key_R));
     connect(resetAction, &QAction::triggered, this, &TuringSimulatorUI::resetCurrentMachine);
 
-    QMenu *viewMenu = menuBar()->addMenu("Widok");
-    previousTabAction = viewMenu->addAction("Poprzednia karta");
+    viewMenu = menuBar()->addMenu(LanguageManager::text("menu_view"));
+    previousTabAction = viewMenu->addAction(LanguageManager::text("action_previous_tab"));
     bindShortcut(previousTabAction, QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab));
     connect(previousTabAction, &QAction::triggered, this, &TuringSimulatorUI::selectPreviousTab);
 
-    nextTabAction = viewMenu->addAction("Następna karta");
+    nextTabAction = viewMenu->addAction(LanguageManager::text("action_next_tab"));
     bindShortcut(nextTabAction, QKeySequence(Qt::CTRL | Qt::Key_Tab));
     connect(nextTabAction, &QAction::triggered, this, &TuringSimulatorUI::selectNextTab);
 
     viewMenu->addSeparator();
 
-    toggleThemeAction = viewMenu->addAction("Tryb ciemny");
+    toggleThemeAction = viewMenu->addAction(LanguageManager::text("action_dark_mode"));
     bindShortcut(toggleThemeAction, QKeySequence(Qt::CTRL | Qt::Key_M));
     connect(toggleThemeAction, &QAction::triggered, this, &TuringSimulatorUI::toggleTheme);
 
-    QMenu *helpMenu = menuBar()->addMenu("Pomoc");
-    QAction *aboutAction = helpMenu->addAction("O programie");
+    viewMenu->addSeparator();
+    languageMenu = viewMenu->addMenu(LanguageManager::text("menu_language"));
+    languageActionGroup = new QActionGroup(this);
+    languageActionGroup->setExclusive(true);
+    polishLanguageAction = languageMenu->addAction(LanguageManager::text("language_polish"));
+    englishLanguageAction = languageMenu->addAction(LanguageManager::text("language_english"));
+    polishLanguageAction->setCheckable(true);
+    englishLanguageAction->setCheckable(true);
+    languageActionGroup->addAction(polishLanguageAction);
+    languageActionGroup->addAction(englishLanguageAction);
+    polishLanguageAction->setChecked(LanguageManager::currentLanguage() == LanguageManager::Language::Polish);
+    englishLanguageAction->setChecked(LanguageManager::currentLanguage() == LanguageManager::Language::English);
+    connect(polishLanguageAction, &QAction::triggered, this, &TuringSimulatorUI::setPolishLanguage);
+    connect(englishLanguageAction, &QAction::triggered, this, &TuringSimulatorUI::setEnglishLanguage);
+
+    helpMenu = menuBar()->addMenu(LanguageManager::text("menu_help"));
+    aboutAction = helpMenu->addAction(LanguageManager::text("action_about_app"));
     connect(aboutAction, &QAction::triggered, this, &TuringSimulatorUI::showAboutDialog);
 
-    QAction* aboutAuthorsAction = helpMenu->addAction("O autorach");
+    aboutAuthorsAction = helpMenu->addAction(LanguageManager::text("action_about_authors"));
     connect(aboutAuthorsAction, &QAction::triggered, this, &TuringSimulatorUI::showAboutAuthorsDialog);
 }
 
@@ -267,12 +302,12 @@ QWidget *TuringSimulatorUI::createStartPage()
         return button;
     };
 
-    QGroupBox *databaseGroup = new QGroupBox("Zapisane maszyny", sectionsWidget);
+    QGroupBox *databaseGroup = new QGroupBox(LanguageManager::text("start_saved_machines"), sectionsWidget);
     databaseGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     QVBoxLayout *databaseLayout = new QVBoxLayout(databaseGroup);
     databaseLayout->setSpacing(10);
 
-    QLabel *databaseNote = new QLabel("Maszyny zapisane w lokalnej bazie danych.", databaseGroup);
+    QLabel *databaseNote = new QLabel(LanguageManager::text("start_saved_note"), databaseGroup);
     databaseNote->setWordWrap(true);
     databaseLayout->addWidget(databaseNote);
 
@@ -293,7 +328,7 @@ QWidget *TuringSimulatorUI::createStartPage()
 
     if (machineNames.isEmpty())
     {
-        QLabel *emptyNote = new QLabel("Brak zapisanych maszyn. Po zapisie do bazy pojawią się w tym miejscu.", databaseButtons);
+        QLabel *emptyNote = new QLabel(LanguageManager::text("start_empty_saved"), databaseButtons);
         emptyNote->setWordWrap(true);
         databaseButtonsLayout->addWidget(emptyNote);
     }
@@ -315,27 +350,27 @@ QWidget *TuringSimulatorUI::createStartPage()
     databaseScroll->setWidget(databaseButtons);
     databaseLayout->addWidget(databaseScroll);
 
-    QGroupBox *projectGroup = new QGroupBox("Nowy projekt", sectionsWidget);
+    QGroupBox *projectGroup = new QGroupBox(LanguageManager::text("start_new_project"), sectionsWidget);
     projectGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     QVBoxLayout *projectLayout = new QVBoxLayout(projectGroup);
     projectLayout->setSpacing(10);
 
-    QLabel *projectNote = new QLabel("Wybierz gotowy punkt startowy.", projectGroup);
+    QLabel *projectNote = new QLabel(LanguageManager::text("start_project_note"), projectGroup);
     projectNote->setWordWrap(true);
     projectLayout->addWidget(projectNote);
 
-    QPushButton *blankButton = createActionButton("Pusty projekt");
-    blankButton->setToolTip("Czysta konfiguracja maszyny do samodzielnego uzupełnienia.");
+    QPushButton *blankButton = createActionButton(LanguageManager::text("start_blank_project"));
+    blankButton->setToolTip(LanguageManager::text("start_blank_tooltip"));
     connect(blankButton, &QPushButton::clicked, this, &TuringSimulatorUI::createNewMachineTab);
     projectLayout->addWidget(blankButton);
 
-    QPushButton *exampleButton = createActionButton("Przykład");
-    exampleButton->setToolTip("Gotowa maszyna startowa do szybkiego testu symulacji.");
+    QPushButton *exampleButton = createActionButton(LanguageManager::text("start_example"));
+    exampleButton->setToolTip(LanguageManager::text("start_example_tooltip"));
     connect(exampleButton, &QPushButton::clicked, this, &TuringSimulatorUI::createExampleMachineTab);
     projectLayout->addWidget(exampleButton);
 
-    QPushButton *aiButton = createActionButton("Start z AI");
-    aiButton->setToolTip("Opisz maszynę, a Gemini AI wypełni edytor.");
+    QPushButton *aiButton = createActionButton(LanguageManager::text("start_ai"));
+    aiButton->setToolTip(LanguageManager::text("start_ai_tooltip"));
     connect(aiButton, &QPushButton::clicked, this, &TuringSimulatorUI::generateMachineWithAi);
     projectLayout->addWidget(aiButton);
     projectLayout->addStretch(1);
@@ -376,7 +411,7 @@ void TuringSimulatorUI::showStartPage()
         }
     }
 
-    addClosableTab(createStartPage(), "Start");
+    addClosableTab(createStartPage(), LanguageManager::text("tab_start"));
 }
 
 int TuringSimulatorUI::addClosableTab(QWidget *tab, const QString &title, int insertIndex)
@@ -388,6 +423,15 @@ int TuringSimulatorUI::addClosableTab(QWidget *tab, const QString &title, int in
     machineTabs->setCurrentIndex(index);
     updateNewTabButtonPosition();
 
+    installCloseButtonForTab(tab, index);
+
+    updateMenuState();
+    updateNewTabButtonPosition();
+    return index;
+}
+
+void TuringSimulatorUI::installCloseButtonForTab(QWidget *tab, int index)
+{
     QWidget *closeButtonWrapper = new QWidget(machineTabs);
     QHBoxLayout *closeButtonLayout = new QHBoxLayout(closeButtonWrapper);
     closeButtonLayout->setContentsMargins(0, 0, 6, 0);
@@ -397,7 +441,7 @@ int TuringSimulatorUI::addClosableTab(QWidget *tab, const QString &title, int in
     closeButton->setObjectName("tabCloseButton");
     closeButton->setCursor(Qt::PointingHandCursor);
     closeButton->setFocusPolicy(Qt::NoFocus);
-    closeButton->setToolTip("Zamknij kartę");
+    closeButton->setToolTip(LanguageManager::text("close_tab_tooltip"));
     closeButtonLayout->addWidget(closeButton);
     machineTabs->tabBar()->setTabButton(index, QTabBar::RightSide, closeButtonWrapper);
 
@@ -408,10 +452,6 @@ int TuringSimulatorUI::addClosableTab(QWidget *tab, const QString &title, int in
         {
             closeTabAt(tabIndex);
         } });
-
-    updateMenuState();
-    updateNewTabButtonPosition();
-    return index;
 }
 
 void TuringSimulatorUI::addMachineTab(MachineEditorTab *tab, int insertIndex)
@@ -450,25 +490,29 @@ void TuringSimulatorUI::addMachineTabFromStartPage(MachineEditorTab *tab)
 
 void TuringSimulatorUI::createNewMachineTab()
 {
-    MachineEditorTab *tab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), false, machineTabs);
+    MachineEditorTab *tab = new MachineEditorTab(LanguageManager::text("untitled_machine").arg(untitledTabCounter++), false, machineTabs);
     addMachineTabFromStartPage(tab);
 }
 
 void TuringSimulatorUI::createExampleMachineTab()
 {
-    MachineEditorTab *tab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), true, machineTabs);
+    MachineEditorTab *tab = new MachineEditorTab(LanguageManager::text("untitled_machine").arg(untitledTabCounter++), true, machineTabs);
     addMachineTabFromStartPage(tab);
 }
 
 void TuringSimulatorUI::openMachineInNewTab()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, "Wczytaj maszynę", "", "Pliki JSON (*.json)");
+    const QString filePath = QFileDialog::getOpenFileName(
+        this,
+        LanguageManager::text("dialog_open_machine"),
+        "",
+        LanguageManager::text("file_filter_json"));
     if (filePath.isEmpty())
     {
         return;
     }
 
-    MachineEditorTab *tab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), false, machineTabs);
+    MachineEditorTab *tab = new MachineEditorTab(LanguageManager::text("untitled_machine").arg(untitledTabCounter++), false, machineTabs);
     if (!tab->loadFromFile(filePath))
     {
         tab->deleteLater();
@@ -580,15 +624,15 @@ void TuringSimulatorUI::generateMachineWithAi()
             {
                 qWarning().noquote() << "[GeminiAI] Generowanie dla nowej karty nie powiodło się:"
                                      << result.errorMessage;
-                QMessageBox::warning(this, "Gemini AI", result.errorMessage);
+                QMessageBox::warning(this, LanguageManager::text("gemini_title"), result.errorMessage);
                 return;
             }
 
             qInfo().noquote() << "[GeminiAI] Tworzę kartę maszyny po odpowiedzi Gemini";
-            MachineEditorTab *generatedTab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), false, machineTabs);
+            MachineEditorTab *generatedTab = new MachineEditorTab(LanguageManager::text("untitled_machine").arg(untitledTabCounter++), false, machineTabs);
             addMachineTabFromStartPage(generatedTab);
             generatedTab->applyGeneratedMachineData(result.machineData);
-            QMessageBox::information(this, "Gemini AI", "Maszyna została wygenerowana i wczytana do edytora.");
+            QMessageBox::information(this, LanguageManager::text("gemini_title"), LanguageManager::text("gemini_generated_success"));
         },
         []()
         {
@@ -615,15 +659,7 @@ void TuringSimulatorUI::toggleTheme()
     if (themeManager)
     {
         themeManager->toggleTheme();
-
-        // Zaktualizuj tekst menu na podstawie nowego motywu.
-        if (toggleThemeAction)
-        {
-            QString newText = (themeManager->currentTheme() == ThemeManager::Theme::Dark)
-                ? "Tryb jasny"
-                : "Tryb ciemny";
-            toggleThemeAction->setText(newText);
-        }
+        retranslateUi();
     }
 }
 
@@ -667,6 +703,161 @@ void TuringSimulatorUI::selectNextTab()
     machineTabs->setCurrentIndex(nextIndex);
 }
 
+void TuringSimulatorUI::setPolishLanguage()
+{
+    setLanguage(LanguageManager::Language::Polish);
+}
+
+void TuringSimulatorUI::setEnglishLanguage()
+{
+    setLanguage(LanguageManager::Language::English);
+}
+
+void TuringSimulatorUI::setLanguage(LanguageManager::Language language)
+{
+    LanguageManager::setCurrentLanguage(language);
+
+    if (polishLanguageAction)
+    {
+        polishLanguageAction->setChecked(language == LanguageManager::Language::Polish);
+    }
+    if (englishLanguageAction)
+    {
+        englishLanguageAction->setChecked(language == LanguageManager::Language::English);
+    }
+
+    if (machineTabs)
+    {
+        for (int index = 0; index < machineTabs->count(); ++index)
+        {
+            if (MachineEditorTab *tab = qobject_cast<MachineEditorTab *>(machineTabs->widget(index)))
+            {
+                tab->retranslateUi();
+                machineTabs->setTabText(index, tab->tabTitle());
+            }
+        }
+    }
+
+    retranslateUi();
+    refreshStartPages();
+    updateMenuState();
+}
+
+void TuringSimulatorUI::retranslateUi()
+{
+    if (fileMenu) fileMenu->setTitle(LanguageManager::text("menu_file"));
+    if (machineMenu) machineMenu->setTitle(LanguageManager::text("menu_machine"));
+    if (simulationMenu) simulationMenu->setTitle(LanguageManager::text("menu_simulation"));
+    if (viewMenu) viewMenu->setTitle(LanguageManager::text("menu_view"));
+    if (languageMenu) languageMenu->setTitle(LanguageManager::text("menu_language"));
+    if (helpMenu) helpMenu->setTitle(LanguageManager::text("menu_help"));
+
+    if (newTabAction) newTabAction->setText(LanguageManager::text("action_new_blank"));
+    if (exampleTabAction) exampleTabAction->setText(LanguageManager::text("action_new_example"));
+    if (openAction) openAction->setText(LanguageManager::text("action_open_json"));
+    if (saveAction) saveAction->setText(LanguageManager::text("action_save"));
+    if (saveAsAction) saveAsAction->setText(LanguageManager::text("action_save_as"));
+    if (openDbAction) openDbAction->setText(LanguageManager::text("action_open_db"));
+    if (saveDbAction) saveDbAction->setText(LanguageManager::text("action_save_db"));
+    if (closeTabAction) closeTabAction->setText(LanguageManager::text("action_close_tab"));
+    if (quitAction) quitAction->setText(LanguageManager::text("action_quit"));
+    if (validateAction) validateAction->setText(LanguageManager::text("action_validate"));
+    if (resetExampleAction) resetExampleAction->setText(LanguageManager::text("action_reset_example"));
+    if (generateAiAction) generateAiAction->setText(LanguageManager::text("action_generate_ai"));
+    if (geminiSettingsAction) geminiSettingsAction->setText(LanguageManager::text("action_gemini_settings"));
+    if (stepAction) stepAction->setText(LanguageManager::text("action_step"));
+    if (runAction) runAction->setText(LanguageManager::text("action_run_pause"));
+    if (resetAction) resetAction->setText(LanguageManager::text("action_reset"));
+    if (previousTabAction) previousTabAction->setText(LanguageManager::text("action_previous_tab"));
+    if (nextTabAction) nextTabAction->setText(LanguageManager::text("action_next_tab"));
+    if (toggleThemeAction)
+    {
+        const bool darkTheme = themeManager && themeManager->currentTheme() == ThemeManager::Theme::Dark;
+        toggleThemeAction->setText(LanguageManager::text(darkTheme ? "action_light_mode" : "action_dark_mode"));
+    }
+    if (polishLanguageAction) polishLanguageAction->setText(LanguageManager::text("language_polish"));
+    if (englishLanguageAction) englishLanguageAction->setText(LanguageManager::text("language_english"));
+    if (aboutAction) aboutAction->setText(LanguageManager::text("action_about_app"));
+    if (aboutAuthorsAction) aboutAuthorsAction->setText(LanguageManager::text("action_about_authors"));
+
+    if (newTabButton)
+    {
+        newTabButton->setToolTip(LanguageManager::text("new_tab_tooltip"));
+    }
+
+    if (machineTabs)
+    {
+        for (int index = 0; index < machineTabs->count(); ++index)
+        {
+            if (isStartPage(machineTabs->widget(index)))
+            {
+                machineTabs->setTabText(index, LanguageManager::text("tab_start"));
+            }
+
+            QWidget *closeButtonWrapper = machineTabs->tabBar()->tabButton(index, QTabBar::RightSide);
+            if (closeButtonWrapper)
+            {
+                if (QPushButton *closeButton = closeButtonWrapper->findChild<QPushButton *>())
+                {
+                    closeButton->setToolTip(LanguageManager::text("close_tab_tooltip"));
+                }
+            }
+        }
+    }
+}
+
+void TuringSimulatorUI::refreshStartPages()
+{
+    if (!machineTabs)
+    {
+        return;
+    }
+
+    QWidget *currentWidgetBeforeRefresh = machineTabs->currentWidget();
+    QWidget *replacementCurrentWidget = nullptr;
+    std::vector<int> startPageIndexes;
+    for (int index = 0; index < machineTabs->count(); ++index)
+    {
+        if (isStartPage(machineTabs->widget(index)))
+        {
+            startPageIndexes.push_back(index);
+        }
+    }
+
+    for (auto iterator = startPageIndexes.rbegin(); iterator != startPageIndexes.rend(); ++iterator)
+    {
+        const int index = *iterator;
+        QWidget *oldStartPage = machineTabs->widget(index);
+        const bool wasCurrentWidget = oldStartPage == currentWidgetBeforeRefresh;
+
+        machineTabs->removeTab(index);
+        oldStartPage->deleteLater();
+
+        QWidget *newStartPage = createStartPage();
+        const int newIndex = machineTabs->insertTab(index, newStartPage, LanguageManager::text("tab_start"));
+        installCloseButtonForTab(newStartPage, newIndex);
+        if (wasCurrentWidget)
+        {
+            replacementCurrentWidget = newStartPage;
+        }
+    }
+
+    if (replacementCurrentWidget)
+    {
+        machineTabs->setCurrentWidget(replacementCurrentWidget);
+    }
+    else if (currentWidgetBeforeRefresh && machineTabs->indexOf(currentWidgetBeforeRefresh) >= 0)
+    {
+        machineTabs->setCurrentWidget(currentWidgetBeforeRefresh);
+    }
+    else if (machineTabs->count() == 0)
+    {
+        showStartPage();
+    }
+
+    updateNewTabButtonPosition();
+}
+
 void TuringSimulatorUI::updateMenuState()
 {
     const bool hasTab = currentMachineTab() != nullptr;
@@ -684,7 +875,7 @@ void TuringSimulatorUI::updateMenuState()
     previousTabAction->setEnabled(hasMultipleTabs);
     nextTabAction->setEnabled(hasMultipleTabs);
 
-    QString title = "Symulator maszyny Turinga";
+    QString title = LanguageManager::text("app_title");
     if (MachineEditorTab *tab = currentMachineTab())
     {
         title += " - " + tab->tabTitle();
@@ -696,10 +887,8 @@ void TuringSimulatorUI::showAboutDialog()
 {
     QMessageBox::about(
         this,
-        "O programie",
-        "Symulator maszyny Turinga\n\n"
-        "Edytuj definicję maszyny, otwieraj wiele plików w osobnych kartach "
-        "i uruchamiaj symulację bez przełączania okien.");
+        LanguageManager::text("action_about_app"),
+        LanguageManager::text("about_text"));
 }
 
 
@@ -707,21 +896,28 @@ void TuringSimulatorUI::showAboutAuthorsDialog()
 {
     QMessageBox::about(
         this,
-        "O autorach",
-        "Program został stworzony przez studentów Politechniki Śląskiej z wydziału matematyki stosowanej\n\nRadosław Kadela, Michał Talaga, Jonatan Turski");
+        LanguageManager::text("action_about_authors"),
+        LanguageManager::text("authors_text"));
 }
 void TuringSimulatorUI::openMachineFromDatabase()
 {
     // 1. Pobieramy listę dostępnych nazw maszyn z bazy
     QStringList names = getMachineNamesFromDatabase();
     if (names.isEmpty()) {
-        QMessageBox::information(this, "Baza danych", "Baza danych jest pusta. Zapisz najpierw jakąś maszynę.");
+        QMessageBox::information(this, LanguageManager::text("database_title"), LanguageManager::text("database_empty_text"));
         return;
     }
 
     // 2. Wyświetlamy okno wyboru
     bool ok;
-    QString chosenName = QInputDialog::getItem(this, "Wczytaj z bazy", "Wybierz maszynę:", names, 0, false, &ok);
+    QString chosenName = QInputDialog::getItem(
+        this,
+        LanguageManager::text("database_load_title"),
+        LanguageManager::text("database_choose_machine"),
+        names,
+        0,
+        false,
+        &ok);
 
     if (ok && !chosenName.isEmpty()) {
         openMachineFromDatabaseName(chosenName);

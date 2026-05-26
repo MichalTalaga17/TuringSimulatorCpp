@@ -62,6 +62,7 @@ add_executable(TuringSimulatorCpp
     MACOSX_BUNDLE
     main.cpp
     src/GeminiMachineGenerator.cpp
+    src/LanguageManager.cpp
     src/ui/GeminiApiKeysDialog.cpp
     src/ui/GeminiDialogStyle.cpp
     src/ui/GeminiGenerationRunner.cpp
@@ -76,6 +77,7 @@ add_executable(TuringSimulatorCpp
     src/ThemeManager.cpp
     include/TransitionDelegate.h
     include/GeminiMachineGenerator.h
+    include/LanguageManager.h
     include/MachineEditorTab.h
     include/TuringSimulatorUI.h
     include/ThemeManager.h

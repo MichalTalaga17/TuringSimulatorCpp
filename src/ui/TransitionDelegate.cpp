@@ -1,5 +1,6 @@
 #include "TransitionDelegate.h"
 
+#include "LanguageManager.h"
 #include "MachineEditorTab.h"
 #include "ui/TransitionTableRoles.h"
 
@@ -64,19 +65,7 @@ QStringList splitTransitionText(const QString &text)
 QString normalizedMoveText(QString moveText)
 {
     moveText = moveText.trimmed();
-    if (moveText == "R")
-    {
-        return "P";
-    }
-    if (moveText == "_" || moveText == "Stay")
-    {
-        return "Bez ruchu";
-    }
-    if (moveText == "STOP")
-    {
-        return "Stop";
-    }
-    return moveText;
+    return LanguageManager::localizedMoveText(moveText);
 }
 } // koniec przestrzeni nazw
 
@@ -114,7 +103,11 @@ QWidget *TransitionDelegate::createEditor(QWidget *parent, const QStyleOptionVie
         editor->writeCombo->addItem(QString(symbol));
     }
 
-    editor->moveCombo->addItems({"L", "P", "Bez ruchu", "Stop"});
+    editor->moveCombo->addItems({
+        LanguageManager::moveLeftText(),
+        LanguageManager::moveRightText(),
+        LanguageManager::moveStayText(),
+        LanguageManager::moveStopText()});
 
     for (const auto &state : m_tab->getStatesList())
     {

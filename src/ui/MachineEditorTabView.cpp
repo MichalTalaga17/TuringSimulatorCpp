@@ -1,4 +1,5 @@
 #include "MachineEditorTab.h"
+#include "LanguageManager.h"
 #include "TransitionDelegate.h"
 
 #include <QAbstractSpinBox>
@@ -8,14 +9,58 @@
 #include <QHBoxLayout>
 #include <QListView>
 #include <QResizeEvent>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 #include <QScrollArea>
+#include <QSignalBlocker>
 #include <QSpinBox>
 #include <QTableWidget>
 #include <QVBoxLayout>
-#include <QRegularExpressionValidator>
 
 MachineEditorTab::MachineEditorTab(const QString &untitledTitle, bool startWithExample, QWidget *parent)
-    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), aiGenerateButton(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample), highlightedTransitionRow(-1), highlightedTransitionCol(-1), aiGenerationInProgress(false)
+    : QWidget(parent),
+      numStatesSpinBox(nullptr),
+      alphabetInputField(nullptr),
+      blankSymbolField(nullptr),
+      initialStateCombo(nullptr),
+      aiGenerateButton(nullptr),
+      transitionsTable(nullptr),
+      logicEditorGroup(nullptr),
+      statesLabel(nullptr),
+      alphabetLabel(nullptr),
+      blankLabel(nullptr),
+      initialLabel(nullptr),
+      machineStateLabel(nullptr),
+      stepCountLabel(nullptr),
+      stepMetricTitleLabel(nullptr),
+      stateMetricTitleLabel(nullptr),
+      modeMetricTitleLabel(nullptr),
+      tapeScrollArea(nullptr),
+      tapeDisplay(nullptr),
+      tapeInputField(nullptr),
+      tapeWarningLabel(nullptr),
+      stepButton(nullptr),
+      runButton(nullptr),
+      resetButton(nullptr),
+      speedSlider(nullptr),
+      speedLabel(nullptr),
+      statusLabel(nullptr),
+      tapeInputLabel(nullptr),
+      statusGroup(nullptr),
+      inputGroup(nullptr),
+      tapeGroup(nullptr),
+      machine(nullptr),
+      blankSymbol('_'),
+      isRunning(false),
+      executionSpeed(500),
+      executionTimer(std::make_unique<QTimer>()),
+      tapeDisplayRefreshTimer(std::make_unique<QTimer>()),
+      untitledTitle(untitledTitle),
+      startWithExample(startWithExample),
+      highlightedTransitionRow(-1),
+      highlightedTransitionCol(-1),
+      aiGenerationInProgress(false),
+      currentStatusKey("status_ready")
 {
     setupUI();
 
@@ -78,7 +123,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     builderLayout->setSpacing(12);
     builderLayout->setContentsMargins(0, 0, 0, 0);
 
-    QGroupBox *logicEditorGroup = new QGroupBox("Edytor logiki", builderWidget);
+    logicEditorGroup = new QGroupBox(LanguageManager::text("group_logic_editor"), builderWidget);
     logicEditorGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QVBoxLayout *logicEditorLayout = new QVBoxLayout(logicEditorGroup);
     logicEditorLayout->setSpacing(10);
@@ -86,7 +131,8 @@ QWidget *MachineEditorTab::setupBuilderTab()
     QHBoxLayout *configFieldsLayout = new QHBoxLayout();
     configFieldsLayout->setSpacing(10);
 
-    configFieldsLayout->addWidget(new QLabel("Stany:"));
+    statesLabel = new QLabel(LanguageManager::text("label_states"));
+    configFieldsLayout->addWidget(statesLabel);
     numStatesSpinBox = new QSpinBox();
     numStatesSpinBox->setObjectName("numStatesSpinBox");
     numStatesSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
@@ -97,7 +143,8 @@ QWidget *MachineEditorTab::setupBuilderTab()
     numStatesSpinBox->setMaximumWidth(72);
     configFieldsLayout->addWidget(numStatesSpinBox);
 
-    configFieldsLayout->addWidget(new QLabel("Alfabet:"));
+    alphabetLabel = new QLabel(LanguageManager::text("label_alphabet"));
+    configFieldsLayout->addWidget(alphabetLabel);
     alphabetInputField = new QLineEdit();
     alphabetInputField->setPlaceholderText("0,1");
     // Ogranicz do standardowych drukowalnych znaków ASCII (32-126).
@@ -105,7 +152,8 @@ QWidget *MachineEditorTab::setupBuilderTab()
     alphabetInputField->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     configFieldsLayout->addWidget(alphabetInputField, 1);
 
-    configFieldsLayout->addWidget(new QLabel("Pusty:"));
+    blankLabel = new QLabel(LanguageManager::text("label_blank"));
+    configFieldsLayout->addWidget(blankLabel);
     blankSymbolField = new QLineEdit();
     blankSymbolField->setText("_");
     // Ogranicz do jednego standardowego drukowalnego znaku ASCII bez spacji.
@@ -113,7 +161,8 @@ QWidget *MachineEditorTab::setupBuilderTab()
     blankSymbolField->setMaximumWidth(60);
     configFieldsLayout->addWidget(blankSymbolField);
 
-    configFieldsLayout->addWidget(new QLabel("Start:"));
+    initialLabel = new QLabel(LanguageManager::text("label_start"));
+    configFieldsLayout->addWidget(initialLabel);
     initialStateCombo = new QComboBox();
     initialStateCombo->setObjectName("initialStateCombo");
     QListView *initialStatePopup = new QListView(initialStateCombo);
@@ -150,7 +199,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     configFieldsLayout->addWidget(initialStateCombo);
 
     aiGenerateButton = new QPushButton("AI");
-    aiGenerateButton->setToolTip("Wygeneruj maszynę przez Gemini API.");
+    aiGenerateButton->setToolTip(LanguageManager::text("ai_button_tooltip"));
     aiGenerateButton->setMinimumHeight(31);
     aiGenerateButton->setMinimumWidth(46);
     aiGenerateButton->setCursor(Qt::PointingHandCursor);
@@ -192,8 +241,8 @@ QWidget *MachineEditorTab::setupBuilderTab()
     connect(initialStateCombo, &QComboBox::currentTextChanged, this, [this](const QString &state)
             {
         initialState = state.toStdString();
-        if (rebuildMachineFromEditor() && statusLabel) {
-            statusLabel->setText("Przebudowano");
+        if (rebuildMachineFromEditor()) {
+            setStatusText("status_rebuilt");
         } });
     
     connect(transitionsTable, &QTableWidget::itemChanged, this, &MachineEditorTab::onTableItemChanged);
@@ -222,11 +271,11 @@ QWidget *MachineEditorTab::setupExecutorTab()
     executorLayout->setSpacing(12);
 
     // --- PANEL STATUSU ---
-    QGroupBox *statusGroup = new QGroupBox("Stan maszyny", executorWidget);
+    statusGroup = new QGroupBox(LanguageManager::text("group_machine_state"), executorWidget);
     QHBoxLayout *statusLayout = new QHBoxLayout(statusGroup);
     statusLayout->setSpacing(6);
 
-    auto createStatusMetric = [statusGroup](const QString &title, QLabel *&valueLabel, const QString &value, int minWidth)
+    auto createStatusMetric = [this](const QString &title, QLabel *&titleLabel, QLabel *&valueLabel, const QString &value, int minWidth)
     {
         QWidget *metricWidget = new QWidget(statusGroup);
         metricWidget->setMinimumWidth(minWidth);
@@ -235,7 +284,7 @@ QWidget *MachineEditorTab::setupExecutorTab()
         metricLayout->setContentsMargins(0, 0, 0, 0);
         metricLayout->setSpacing(0);
 
-        QLabel *titleLabel = new QLabel(title, metricWidget);
+        titleLabel = new QLabel(title, metricWidget);
         titleLabel->setAlignment(Qt::AlignLeft);
         titleLabel->setStyleSheet("font-size: 9px; font-weight: 700;");
 
@@ -248,9 +297,9 @@ QWidget *MachineEditorTab::setupExecutorTab()
         return metricWidget;
     };
 
-    statusLayout->addWidget(createStatusMetric("KROK", stepCountLabel, "0", 46));
-    statusLayout->addWidget(createStatusMetric("STAN", machineStateLabel, "q0", 54));
-    statusLayout->addWidget(createStatusMetric("TRYB", statusLabel, "Gotowe", 76));
+    statusLayout->addWidget(createStatusMetric(LanguageManager::text("metric_step"), stepMetricTitleLabel, stepCountLabel, "0", 46));
+    statusLayout->addWidget(createStatusMetric(LanguageManager::text("metric_state"), stateMetricTitleLabel, machineStateLabel, "q0", 54));
+    statusLayout->addWidget(createStatusMetric(LanguageManager::text("metric_mode"), modeMetricTitleLabel, statusLabel, LanguageManager::text("status_ready"), 76));
 
     statusLayout->addStretch();
 
@@ -260,14 +309,14 @@ QWidget *MachineEditorTab::setupExecutorTab()
     statusControlLayout->setContentsMargins(8, 4, 8, 4);
     statusControlLayout->setSpacing(6);
 
-     stepButton = new QPushButton("Krok");
-    runButton = new QPushButton("Start");
-    resetButton = new QPushButton("Resetuj");
+    stepButton = new QPushButton(LanguageManager::text("button_step"));
+    runButton = new QPushButton(LanguageManager::text("button_run_start"));
+    resetButton = new QPushButton(LanguageManager::text("button_reset"));
 
     // Nie ustawiaj stylów na sztywno; obsługuje je aktywny motyw.
     // Arkusze stylów motywu zajmują się wyglądem przycisków.
 
-    speedLabel = new QLabel("Szybkość:");
+    speedLabel = new QLabel(LanguageManager::text("label_speed"));
     speedLabel->setStyleSheet("font-size: 11px; font-weight: 600;");
     speedSlider = new QSlider(Qt::Horizontal);
     speedSlider->setMinimum(100);
@@ -287,19 +336,20 @@ QWidget *MachineEditorTab::setupExecutorTab()
     executorLayout->addWidget(statusGroup);
 
     // --- SEKCJA WEJŚCIA TAŚMY ---
-    QGroupBox *inputGroup = new QGroupBox("Taśma wejściowa", executorWidget);
+    inputGroup = new QGroupBox(LanguageManager::text("group_input_tape"), executorWidget);
     QVBoxLayout *inputGroupLayout = new QVBoxLayout(inputGroup);
 
     QHBoxLayout *inputLayout = new QHBoxLayout();
-    inputLayout->addWidget(new QLabel("Taśma:"));
+    tapeInputLabel = new QLabel(LanguageManager::text("label_tape"));
+    inputLayout->addWidget(tapeInputLabel);
     tapeInputField = new QLineEdit();
     tapeInputField->setValidator(new QRegularExpressionValidator(QRegularExpression("[ -~]*"), this));
-    tapeInputField->setPlaceholderText("np. 1001");
+    tapeInputField->setPlaceholderText(LanguageManager::text("tape_placeholder"));
     inputLayout->addWidget(tapeInputField);
 
     inputGroupLayout->addLayout(inputLayout);
 
-    tapeWarningLabel = new QLabel("Taśma zawiera symbole spoza alfabetu. Wykonanie zatrzyma maszynę.", inputGroup);
+    tapeWarningLabel = new QLabel(LanguageManager::text("tape_warning"), inputGroup);
     tapeWarningLabel->setStyleSheet("color: red; font-weight: bold;");
     tapeWarningLabel->hide(); // domyślnie ukryte
     inputGroupLayout->addWidget(tapeWarningLabel);
@@ -307,7 +357,7 @@ QWidget *MachineEditorTab::setupExecutorTab()
     executorLayout->addWidget(inputGroup);
 
     // --- WIDOK TAŚMY ---
-    QGroupBox *tapeGroup = new QGroupBox("Podgląd taśmy", executorWidget);
+    tapeGroup = new QGroupBox(LanguageManager::text("group_tape_preview"), executorWidget);
     tapeGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     tapeGroup->setMaximumHeight(120);
     QVBoxLayout *tapeLayout = new QVBoxLayout(tapeGroup);
@@ -347,4 +397,108 @@ QWidget *MachineEditorTab::setupExecutorTab()
     connect(speedSlider, QOverload<int>::of(&QSlider::valueChanged), this, &MachineEditorTab::onSpeedChanged);
 
     return executorWidget;
+}
+
+void MachineEditorTab::setStatusText(const char *key)
+{
+    currentStatusKey = QString::fromLatin1(key);
+    currentStatusArgument.clear();
+    updateStatusLabelText();
+}
+
+void MachineEditorTab::setStatusText(const char *key, const QString &argument)
+{
+    currentStatusKey = QString::fromLatin1(key);
+    currentStatusArgument = argument;
+    updateStatusLabelText();
+}
+
+void MachineEditorTab::updateStatusLabelText()
+{
+    if (!statusLabel || currentStatusKey.isEmpty())
+    {
+        return;
+    }
+
+    QString statusText = LanguageManager::text(currentStatusKey);
+    if (!currentStatusArgument.isEmpty())
+    {
+        statusText = statusText.arg(currentStatusArgument);
+    }
+
+    statusLabel->setText(statusText);
+}
+
+void MachineEditorTab::retranslateTransitionMoves()
+{
+    if (!transitionsTable)
+    {
+        return;
+    }
+
+    QSignalBlocker blockTableSignals(transitionsTable);
+    for (int row = 0; row < transitionsTable->rowCount(); ++row)
+    {
+        for (int column = 0; column < transitionsTable->columnCount(); ++column)
+        {
+            QTableWidgetItem *item = transitionsTable->item(row, column);
+            if (!item)
+            {
+                continue;
+            }
+
+            QStringList parts = item->text().split(",");
+            if (parts.size() != 3)
+            {
+                continue;
+            }
+
+            for (QString &part : parts)
+            {
+                part = part.trimmed();
+            }
+
+            parts[1] = LanguageManager::localizedMoveText(parts[1]);
+            item->setText(QString("%1, %2, %3").arg(parts[0], parts[1], parts[2]));
+        }
+    }
+
+    populateTransitionMapWithDefaults();
+}
+
+void MachineEditorTab::retranslateUi()
+{
+    if (logicEditorGroup) logicEditorGroup->setTitle(LanguageManager::text("group_logic_editor"));
+    if (statesLabel) statesLabel->setText(LanguageManager::text("label_states"));
+    if (alphabetLabel) alphabetLabel->setText(LanguageManager::text("label_alphabet"));
+    if (blankLabel) blankLabel->setText(LanguageManager::text("label_blank"));
+    if (initialLabel) initialLabel->setText(LanguageManager::text("label_start"));
+    if (aiGenerateButton) aiGenerateButton->setToolTip(LanguageManager::text("ai_button_tooltip"));
+    if (statusGroup) statusGroup->setTitle(LanguageManager::text("group_machine_state"));
+    if (stepMetricTitleLabel) stepMetricTitleLabel->setText(LanguageManager::text("metric_step"));
+    if (stateMetricTitleLabel) stateMetricTitleLabel->setText(LanguageManager::text("metric_state"));
+    if (modeMetricTitleLabel) modeMetricTitleLabel->setText(LanguageManager::text("metric_mode"));
+    if (stepButton) stepButton->setText(LanguageManager::text("button_step"));
+    if (runButton) runButton->setText(LanguageManager::text(isRunning ? "button_stop" : "button_run_start"));
+    if (resetButton) resetButton->setText(LanguageManager::text("button_reset"));
+    if (speedLabel) speedLabel->setText(LanguageManager::text("label_speed"));
+    if (inputGroup) inputGroup->setTitle(LanguageManager::text("group_input_tape"));
+    if (tapeInputLabel) tapeInputLabel->setText(LanguageManager::text("label_tape"));
+    if (tapeInputField) tapeInputField->setPlaceholderText(LanguageManager::text("tape_placeholder"));
+    if (tapeWarningLabel) tapeWarningLabel->setText(LanguageManager::text("tape_warning"));
+    if (tapeGroup) tapeGroup->setTitle(LanguageManager::text("group_tape_preview"));
+
+    if (currentFilePath.isEmpty())
+    {
+        const QRegularExpression generatedTitleRegex("^(Maszyna|Machine)\\s+(\\d+)$");
+        const QRegularExpressionMatch match = generatedTitleRegex.match(untitledTitle);
+        if (match.hasMatch())
+        {
+            untitledTitle = LanguageManager::text("untitled_machine").arg(match.captured(2));
+            emit titleChanged(tabTitle());
+        }
+    }
+
+    updateStatusLabelText();
+    retranslateTransitionMoves();
 }

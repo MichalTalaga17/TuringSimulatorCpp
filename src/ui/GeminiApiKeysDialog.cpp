@@ -1,5 +1,6 @@
 #include "ui/GeminiApiKeysDialog.h"
 
+#include "LanguageManager.h"
 #include "ui/GeminiDialogStyle.h"
 
 #include <QDialogButtonBox>
@@ -58,7 +59,7 @@ GeminiApiKeysDialog::GeminiApiKeysDialog(
       proApiKeyField(new QLineEdit(this))
 {
     setObjectName("geminiApiKeysDialog");
-    setWindowTitle("Ustawienia Gemini API");
+    setWindowTitle(LanguageManager::text("gemini_api_settings_title"));
     setModal(true);
     setMinimumWidth(560);
 
@@ -66,11 +67,11 @@ GeminiApiKeysDialog::GeminiApiKeysDialog(
     layout->setContentsMargins(22, 20, 22, 18);
     layout->setSpacing(14);
 
-    auto *titleLabel = new QLabel("Klucze Gemini API", this);
+    auto *titleLabel = new QLabel(LanguageManager::text("gemini_api_keys_title"), this);
     titleLabel->setObjectName("dialogTitle");
     layout->addWidget(titleLabel);
 
-    auto *subtitleLabel = new QLabel("Zapisz osobne klucze dla wariantu Free i wariantu Pro.", this);
+    auto *subtitleLabel = new QLabel(LanguageManager::text("gemini_api_keys_subtitle"), this);
     subtitleLabel->setObjectName("dialogSubtitle");
     subtitleLabel->setWordWrap(true);
     layout->addWidget(subtitleLabel);
@@ -81,21 +82,21 @@ GeminiApiKeysDialog::GeminiApiKeysDialog(
 
     freeApiKeyField->setText(initialFreeApiKey);
     freeApiKeyField->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-    freeApiKeyField->setPlaceholderText("Klucz API wariantu Free");
-    formLayout->addRow("Wariant Free:", freeApiKeyField);
+    freeApiKeyField->setPlaceholderText(LanguageManager::text("gemini_free_key_placeholder"));
+    formLayout->addRow(LanguageManager::text("tier_free") + ":", freeApiKeyField);
 
     proApiKeyField->setText(initialProApiKey);
     proApiKeyField->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-    proApiKeyField->setPlaceholderText("Klucz API wariantu Pro");
-    formLayout->addRow("Wariant Pro:", proApiKeyField);
+    proApiKeyField->setPlaceholderText(LanguageManager::text("gemini_pro_key_placeholder"));
+    formLayout->addRow(LanguageManager::text("tier_pro") + ":", proApiKeyField);
 
     layout->addLayout(formLayout);
     layout->addStretch(1);
 
     auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-    buttonBox->button(QDialogButtonBox::Ok)->setText("Zapisz");
+    buttonBox->button(QDialogButtonBox::Ok)->setText(LanguageManager::text("button_save"));
     buttonBox->button(QDialogButtonBox::Ok)->setObjectName("primaryButton");
-    buttonBox->button(QDialogButtonBox::Cancel)->setText("Anuluj");
+    buttonBox->button(QDialogButtonBox::Cancel)->setText(LanguageManager::text("button_cancel"));
     buttonBox->button(QDialogButtonBox::Cancel)->setObjectName("secondaryButton");
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);

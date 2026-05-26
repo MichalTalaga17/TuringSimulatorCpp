@@ -1,5 +1,6 @@
 #include "storage.h"
 
+#include "LanguageManager.h"
 #include "TuringMachine.h"
 
 #include <QDir>
@@ -65,7 +66,7 @@ bool readSingleDatabaseChar(const QString &text, const QString &fieldName, char 
 {
     if (text.size() != 1)
     {
-        data.errorMessage = QString("Niepoprawna wartość pola %1 w bazie danych.").arg(fieldName);
+        data.errorMessage = LanguageManager::text("db_invalid_field").arg(fieldName);
         return false;
     }
 
@@ -222,7 +223,7 @@ MachineData loadMachineFromDatabase(const QString &machineName)
     QSqlDatabase db = getDatabase();
     if (!db.open())
     {
-        return failLoad(data, "Nie można otworzyć bazy danych.");
+        return failLoad(data, LanguageManager::text("db_open_failed"));
     }
 
     auto failAndClose = [&db](MachineData currentData, const QString &message)
@@ -233,7 +234,7 @@ MachineData loadMachineFromDatabase(const QString &machineName)
 
     if (!ensureMachineTables(db))
     {
-        return failAndClose(data, "Nie można przygotować tabel bazy danych.");
+        return failAndClose(data, LanguageManager::text("db_tables_failed"));
     }
 
     QSqlQuery query(db);
@@ -241,12 +242,12 @@ MachineData loadMachineFromDatabase(const QString &machineName)
     query.addBindValue(machineName);
     if (!query.exec())
     {
-        return failAndClose(data, "Nie udało się odczytać maszyny z bazy danych.");
+        return failAndClose(data, LanguageManager::text("db_machine_read_failed"));
     }
 
     if (!query.next())
     {
-        return failAndClose(data, "Nie znaleziono maszyny w bazie danych.");
+        return failAndClose(data, LanguageManager::text("db_machine_not_found"));
     }
 
     const int machineId = query.value(0).toInt();
@@ -271,7 +272,7 @@ MachineData loadMachineFromDatabase(const QString &machineName)
     transitionsQuery.addBindValue(machineId);
     if (!transitionsQuery.exec())
     {
-        return failAndClose(data, "Nie udało się odczytać instrukcji z bazy danych.");
+        return failAndClose(data, LanguageManager::text("db_transitions_read_failed"));
     }
 
     while (transitionsQuery.next())
