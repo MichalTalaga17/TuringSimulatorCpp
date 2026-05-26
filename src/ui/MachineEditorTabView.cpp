@@ -2,26 +2,20 @@
 #include "TransitionDelegate.h"
 
 #include <QAbstractSpinBox>
-#include <QApplication>
 #include <QFrame>
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QHBoxLayout>
 #include <QListView>
-#include <QPalette>
 #include <QResizeEvent>
 #include <QScrollArea>
-#include <QScrollBar>
 #include <QSpinBox>
-#include <QStyleFactory>
 #include <QTableWidget>
 #include <QVBoxLayout>
 #include <QRegularExpressionValidator>
 
-#include <tuple>
-
 MachineEditorTab::MachineEditorTab(const QString &untitledTitle, bool startWithExample, QWidget *parent)
-    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), aiGenerateButton(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), previousBlankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample), highlightedTransitionRow(-1), highlightedTransitionCol(-1), aiGenerationInProgress(false)
+    : QWidget(parent), numStatesSpinBox(nullptr), alphabetInputField(nullptr), blankSymbolField(nullptr), initialStateCombo(nullptr), aiGenerateButton(nullptr), transitionsTable(nullptr), machineStateLabel(nullptr), stepCountLabel(nullptr), tapeScrollArea(nullptr), tapeDisplay(nullptr), tapeInputField(nullptr), stepButton(nullptr), runButton(nullptr), resetButton(nullptr), speedSlider(nullptr), speedLabel(nullptr), statusLabel(nullptr), machine(nullptr), blankSymbol('_'), isRunning(false), executionSpeed(500), executionTimer(std::make_unique<QTimer>()), tapeDisplayRefreshTimer(std::make_unique<QTimer>()), untitledTitle(untitledTitle), startWithExample(startWithExample), highlightedTransitionRow(-1), highlightedTransitionCol(-1), aiGenerationInProgress(false)
 {
     setupUI();
 
@@ -84,7 +78,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     builderLayout->setSpacing(12);
     builderLayout->setContentsMargins(0, 0, 0, 0);
 
-    QGroupBox *logicEditorGroup = new QGroupBox("Logic Editor", builderWidget);
+    QGroupBox *logicEditorGroup = new QGroupBox("Edytor logiki", builderWidget);
     logicEditorGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QVBoxLayout *logicEditorLayout = new QVBoxLayout(logicEditorGroup);
     logicEditorLayout->setSpacing(10);
@@ -92,7 +86,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     QHBoxLayout *configFieldsLayout = new QHBoxLayout();
     configFieldsLayout->setSpacing(10);
 
-    configFieldsLayout->addWidget(new QLabel("States:"));
+    configFieldsLayout->addWidget(new QLabel("Stany:"));
     numStatesSpinBox = new QSpinBox();
     numStatesSpinBox->setObjectName("numStatesSpinBox");
     numStatesSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
@@ -103,7 +97,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     numStatesSpinBox->setMaximumWidth(72);
     configFieldsLayout->addWidget(numStatesSpinBox);
 
-    configFieldsLayout->addWidget(new QLabel("Alphabet:"));
+    configFieldsLayout->addWidget(new QLabel("Alfabet:"));
     alphabetInputField = new QLineEdit();
     alphabetInputField->setPlaceholderText("0,1");
     // Ogranicz do standardowych drukowalnych znaków ASCII (32-126).
@@ -111,7 +105,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     alphabetInputField->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     configFieldsLayout->addWidget(alphabetInputField, 1);
 
-    configFieldsLayout->addWidget(new QLabel("Blank:"));
+    configFieldsLayout->addWidget(new QLabel("Pusty:"));
     blankSymbolField = new QLineEdit();
     blankSymbolField->setText("_");
     // Ogranicz do jednego standardowego drukowalnego znaku ASCII bez spacji.
@@ -119,7 +113,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     blankSymbolField->setMaximumWidth(60);
     configFieldsLayout->addWidget(blankSymbolField);
 
-    configFieldsLayout->addWidget(new QLabel("Initial:"));
+    configFieldsLayout->addWidget(new QLabel("Start:"));
     initialStateCombo = new QComboBox();
     initialStateCombo->setObjectName("initialStateCombo");
     QListView *initialStatePopup = new QListView(initialStateCombo);
@@ -199,7 +193,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
             {
         initialState = state.toStdString();
         if (rebuildMachineFromEditor() && statusLabel) {
-            statusLabel->setText("Rebuilt");
+            statusLabel->setText("Przebudowano");
         } });
     
     connect(transitionsTable, &QTableWidget::itemChanged, this, &MachineEditorTab::onTableItemChanged);
@@ -228,7 +222,7 @@ QWidget *MachineEditorTab::setupExecutorTab()
     executorLayout->setSpacing(12);
 
     // --- PANEL STATUSU ---
-    QGroupBox *statusGroup = new QGroupBox("Machine Status", executorWidget);
+    QGroupBox *statusGroup = new QGroupBox("Stan maszyny", executorWidget);
     QHBoxLayout *statusLayout = new QHBoxLayout(statusGroup);
     statusLayout->setSpacing(6);
 
@@ -254,9 +248,9 @@ QWidget *MachineEditorTab::setupExecutorTab()
         return metricWidget;
     };
 
-    statusLayout->addWidget(createStatusMetric("STEP", stepCountLabel, "0", 46));
-    statusLayout->addWidget(createStatusMetric("STATE", machineStateLabel, "q0", 54));
-    statusLayout->addWidget(createStatusMetric("STATUS", statusLabel, "Ready", 76));
+    statusLayout->addWidget(createStatusMetric("KROK", stepCountLabel, "0", 46));
+    statusLayout->addWidget(createStatusMetric("STAN", machineStateLabel, "q0", 54));
+    statusLayout->addWidget(createStatusMetric("TRYB", statusLabel, "Gotowe", 76));
 
     statusLayout->addStretch();
 
@@ -266,14 +260,14 @@ QWidget *MachineEditorTab::setupExecutorTab()
     statusControlLayout->setContentsMargins(8, 4, 8, 4);
     statusControlLayout->setSpacing(6);
 
-     stepButton = new QPushButton("Step");
-    runButton = new QPushButton("Run");
-    resetButton = new QPushButton("Reset");
+     stepButton = new QPushButton("Krok");
+    runButton = new QPushButton("Start");
+    resetButton = new QPushButton("Resetuj");
 
     // Nie ustawiaj stylów na sztywno; obsługuje je aktywny motyw.
     // Arkusze stylów motywu zajmują się wyglądem przycisków.
 
-    speedLabel = new QLabel("Speed:");
+    speedLabel = new QLabel("Szybkość:");
     speedLabel->setStyleSheet("font-size: 11px; font-weight: 600;");
     speedSlider = new QSlider(Qt::Horizontal);
     speedSlider->setMinimum(100);
@@ -293,19 +287,19 @@ QWidget *MachineEditorTab::setupExecutorTab()
     executorLayout->addWidget(statusGroup);
 
     // --- SEKCJA WEJŚCIA TAŚMY ---
-    QGroupBox *inputGroup = new QGroupBox("Input Tape", executorWidget);
+    QGroupBox *inputGroup = new QGroupBox("Taśma wejściowa", executorWidget);
     QVBoxLayout *inputGroupLayout = new QVBoxLayout(inputGroup);
 
     QHBoxLayout *inputLayout = new QHBoxLayout();
-    inputLayout->addWidget(new QLabel("Tape:"));
+    inputLayout->addWidget(new QLabel("Taśma:"));
     tapeInputField = new QLineEdit();
     tapeInputField->setValidator(new QRegularExpressionValidator(QRegularExpression("[ -~]*"), this));
-    tapeInputField->setPlaceholderText("e.g., 1001");
+    tapeInputField->setPlaceholderText("np. 1001");
     inputLayout->addWidget(tapeInputField);
 
     inputGroupLayout->addLayout(inputLayout);
 
-    tapeWarningLabel = new QLabel("Tape contains undefined symbols! Proceeding will halt the machine.", inputGroup);
+    tapeWarningLabel = new QLabel("Taśma zawiera symbole spoza alfabetu. Wykonanie zatrzyma maszynę.", inputGroup);
     tapeWarningLabel->setStyleSheet("color: red; font-weight: bold;");
     tapeWarningLabel->hide(); // domyślnie ukryte
     inputGroupLayout->addWidget(tapeWarningLabel);
@@ -313,7 +307,7 @@ QWidget *MachineEditorTab::setupExecutorTab()
     executorLayout->addWidget(inputGroup);
 
     // --- WIDOK TAŚMY ---
-    QGroupBox *tapeGroup = new QGroupBox("Tape Visualization", executorWidget);
+    QGroupBox *tapeGroup = new QGroupBox("Podgląd taśmy", executorWidget);
     tapeGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     tapeGroup->setMaximumHeight(120);
     QVBoxLayout *tapeLayout = new QVBoxLayout(tapeGroup);
@@ -353,360 +347,4 @@ QWidget *MachineEditorTab::setupExecutorTab()
     connect(speedSlider, QOverload<int>::of(&QSlider::valueChanged), this, &MachineEditorTab::onSpeedChanged);
 
     return executorWidget;
-}
-
-void MachineEditorTab::applyModernStyle()
-{
-    qApp->setStyle(QStyleFactory::create("Fusion"));
-
-    QPalette darkPalette;
-    darkPalette.setColor(QPalette::Window, QColor(243, 243, 243));
-    darkPalette.setColor(QPalette::WindowText, QColor(32, 32, 32));
-    darkPalette.setColor(QPalette::Base, QColor(255, 255, 255));
-    darkPalette.setColor(QPalette::AlternateBase, QColor(245, 245, 245));
-    darkPalette.setColor(QPalette::ToolTipBase, QColor(255, 255, 255));
-    darkPalette.setColor(QPalette::ToolTipText, QColor(32, 32, 32));
-    darkPalette.setColor(QPalette::Text, QColor(32, 32, 32));
-    darkPalette.setColor(QPalette::Button, QColor(243, 243, 243));
-    darkPalette.setColor(QPalette::ButtonText, QColor(32, 32, 32));
-    darkPalette.setColor(QPalette::BrightText, QColor(255, 255, 255));
-    darkPalette.setColor(QPalette::Link, QColor(0, 120, 212));
-    darkPalette.setColor(QPalette::Highlight, QColor(0, 120, 212));
-    darkPalette.setColor(QPalette::HighlightedText, QColor(255, 255, 255));
-
-    qApp->setPalette(darkPalette);
-
-    QString styleSheet = R"(
-        QMainWindow {
-            background-color: #f3f3f3;
-        }
-        QMenuBar {
-            background-color: #ffffff;
-            color: #202020;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 2px 6px;
-            font-size: 12px;
-        }
-        QMenuBar::item {
-            background: transparent;
-            border-radius: 6px;
-            padding: 6px 10px;
-        }
-        QMenuBar::item:selected {
-            background-color: #eaf4ff;
-            color: #005a9e;
-        }
-        QMenu {
-            background-color: #ffffff;
-            color: #202020;
-            border: 1px solid #d0d0d0;
-            border-radius: 8px;
-            padding: 6px;
-        }
-        QMenu::item {
-            border-radius: 6px;
-            padding: 7px 28px 7px 12px;
-        }
-        QMenu::item:selected {
-            background-color: #eaf4ff;
-            color: #005a9e;
-        }
-        QMenu::separator {
-            height: 1px;
-            background-color: #eeeeee;
-            margin: 5px 6px;
-        }
-        QTabWidget::pane {
-            border: none;
-            background-color: #f3f3f3;
-            top: 0;
-        }
-        QTabWidget::tab-bar {
-            left: 8px;
-        }
-        QTabBar {
-            background: qlineargradient(
-                x1: 0, y1: 0, x2: 0, y2: 1,
-                stop: 0 #f7f9fc,
-                stop: 1 #edf3fb
-            );
-        }
-        QTabBar::base {
-            border: none;
-            height: 0;
-        }
-        QTabBar::tab {
-            background-color: transparent;
-            color: #505050;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            min-width: 96px;
-            min-height: 22px;
-            padding: 3px 30px 3px 12px;
-            margin: 5px 3px 5px 0;
-        }
-        QTabBar::tab:selected {
-            background-color: #dfeaff;
-            color: #174ea6;
-            border-color: #3f74d8;
-            font-weight: 700;
-        }
-        QTabBar::tab:hover:!selected {
-            background-color: #eaf2ff;
-            color: #174ea6;
-            border-color: #b8ccf2;
-        }
-        QPushButton#tabCloseButton {
-            background-color: transparent;
-            color: #667085;
-            border: 1px solid transparent;
-            border-radius: 6px;
-            min-width: 14px;
-            max-width: 14px;
-            min-height: 14px;
-            max-height: 14px;
-            padding: 0;
-            font-size: 10px;
-            font-weight: 700;
-        }
-        QPushButton#tabCloseButton:hover {
-            color: #174ea6;
-        }
-        QPushButton#tabCloseButton:pressed {
-            color: #0f3f8f;
-        }
-        QPushButton#tabAddButton {
-            background-color: transparent;
-            color: #174ea6;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            min-width: 24px;
-            max-width: 24px;
-            min-height: 24px;
-            max-height: 24px;
-            padding: 0;
-            margin: 5px 10px 5px 4px;
-            font-size: 18px;
-            font-weight: 600;
-        }
-        QPushButton#tabAddButton:hover {
-            color: #0f3f8f;
-            background-color: #eaf2ff;
-            border-color: #b8ccf2;
-        }
-        QPushButton#tabAddButton:pressed {
-            color: #0f3f8f;
-            background-color: #dfeaff;
-            border-color: #3f74d8;
-        }
-        QFrame#tabContentFade {
-            border: none;
-            background: qlineargradient(
-                x1: 0, y1: 0, x2: 0, y2: 1,
-                stop: 0 #edf3fb,
-                stop: 0.45 #f1f5fa,
-                stop: 1 #f3f3f3
-            );
-        }
-        QGroupBox {
-            color: #202020;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            margin-top: 8px;
-            padding-top: 8px;
-            font-weight: bold;
-        }
-        QGroupBox::title {
-            subcontrol-origin: margin;
-            left: 10px;
-            padding: 0 3px 0 3px;
-        }
-        QPushButton {
-            background-color: #0078d4;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 16px;
-            font-size: 11px;
-            font-weight: bold;
-            outline: none;
-            min-width: 70px;
-            min-height: 32px;
-        }
-        QPushButton:hover {
-            background-color: #106ebe;
-        }
-        QPushButton:pressed {
-            background-color: #005a9e;
-        }
-        QPushButton:focus {
-            outline: 2px solid #0078d4;
-            outline-offset: 2px;
-        }
-        QPushButton:disabled {
-            background-color: #cccccc;
-            color: #808080;
-        }
-        QLineEdit, QTextEdit, QComboBox, QSpinBox {
-            border: 1px solid #d0d0d0;
-            border-radius: 6px;
-            padding: 6px 8px;
-            background-color: white;
-            color: #202020;
-            font-size: 11px;
-            selection-background-color: #cfe8ff;
-        }
-        QLineEdit:hover, QTextEdit:hover, QComboBox:hover, QSpinBox:hover {
-            border-color: #a8c7e8;
-            background-color: #f7fbff;
-        }
-        QLineEdit:focus, QTextEdit:focus, QComboBox:focus, QSpinBox:focus {
-            border: 2px solid #0078d4;
-            background-color: white;
-        }
-        QComboBox::drop-down, QSpinBox::up-button, QSpinBox::down-button {
-            border: none;
-            border-left: 1px solid #e0e0e0;
-            background-color: #f7f7f7;
-            width: 20px;
-        }
-        QComboBox::drop-down {
-            border-top-right-radius: 6px;
-            border-bottom-right-radius: 6px;
-        }
-        QSpinBox::up-button {
-            border-top-right-radius: 6px;
-        }
-        QSpinBox::down-button {
-            border-bottom-right-radius: 6px;
-        }
-        QSpinBox#numStatesSpinBox {
-            padding-right: 8px;
-        }
-        QSpinBox#numStatesSpinBox::up-button,
-        QSpinBox#numStatesSpinBox::down-button {
-            width: 0;
-            border: none;
-            background: transparent;
-        }
-        QComboBox#initialStateCombo {
-            padding-right: 8px;
-        }
-        QComboBox#initialStateCombo::drop-down {
-            width: 0;
-            border: none;
-            background: transparent;
-        }
-        QComboBox#initialStateCombo::down-arrow {
-            image: none;
-            width: 0;
-            height: 0;
-        }
-        QTableWidget#transitionsTable {
-            border: 1px solid #d0d0d0;
-            border-radius: 8px;
-            background-color: #ffffff;
-            alternate-background-color: #fbfbfb;
-            gridline-color: #ececec;
-            outline: 0;
-            selection-background-color: transparent;
-        }
-        QTableWidget#transitionsTable::viewport {
-            background-color: #ffffff;
-            border-radius: 8px;
-        }
-        QTableWidget#transitionsTable::item {
-            padding: 4px;
-            border: none;
-            background-color: transparent;
-        }
-        QTableWidget#transitionsTable::item:selected {
-            background-color: #eaf4ff;
-            color: #005a9e;
-        }
-        QTableWidget#transitionsTable QHeaderView {
-            background-color: #f7f7f7;
-        }
-        QTableWidget#transitionsTable QHeaderView::section {
-            background-color: #f7f7f7;
-            color: #505050;
-            padding: 7px 8px;
-            border: none;
-            border-right: 1px solid #e5e5e5;
-            border-bottom: 1px solid #e5e5e5;
-            font-size: 11px;
-            font-weight: 700;
-        }
-        QTableCornerButton::section {
-            background-color: #f7f7f7;
-            border: none;
-            border-right: 1px solid #e5e5e5;
-            border-bottom: 1px solid #e5e5e5;
-        }
-        QTableWidget#transitionsTable QScrollBar:vertical,
-        QTableWidget#transitionsTable QScrollBar:horizontal {
-            background-color: #f7f7f7;
-            border: none;
-            margin: 0;
-        }
-        QTableWidget#transitionsTable QScrollBar:vertical {
-            width: 10px;
-        }
-        QTableWidget#transitionsTable QScrollBar:horizontal {
-            height: 10px;
-        }
-        QTableWidget#transitionsTable QScrollBar::handle:vertical,
-        QTableWidget#transitionsTable QScrollBar::handle:horizontal {
-            background-color: #cfcfcf;
-            border-radius: 5px;
-            min-height: 28px;
-            min-width: 28px;
-        }
-        QTableWidget#transitionsTable QScrollBar::handle:vertical:hover,
-        QTableWidget#transitionsTable QScrollBar::handle:horizontal:hover {
-            background-color: #a8c7e8;
-        }
-        QTableWidget#transitionsTable QScrollBar::add-line,
-        QTableWidget#transitionsTable QScrollBar::sub-line,
-        QTableWidget#transitionsTable QScrollBar::add-page,
-        QTableWidget#transitionsTable QScrollBar::sub-page {
-            background: transparent;
-            border: none;
-            width: 0;
-            height: 0;
-        }
-        QLabel {
-            color: #202020;
-        }
-        QSlider::groove:horizontal {
-            border: none;
-            height: 4px;
-            background: #dedede;
-            margin: 7px 0;
-            border-radius: 8px;
-        }
-        QSlider::handle:horizontal {
-            background: #ffffff;
-            border: 1px solid #eeeeee;
-            width: 16px;
-            margin: -6px 0;
-            border-radius: 8px;
-        }
-        QSlider::handle:horizontal:hover {
-            border-color: #d7d7d7;
-        }
-        QSlider::handle:horizontal:pressed {
-            border-color: #c9c9c9;
-        }
-        QSlider::sub-page:horizontal {
-            background: #0078d4;
-            border-radius: 8px;
-        }
-        QSlider::add-page:horizontal {
-            background: #dedede;
-            border-radius: 8px;
-        }
-    )";
-
-    qApp->setStyleSheet(styleSheet);
 }

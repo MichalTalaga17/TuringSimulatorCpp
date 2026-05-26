@@ -32,13 +32,6 @@ void ThemeManager::setTheme(Theme theme)
 
     // Zastosuj motyw.
     applyTheme(theme);
-
-    emit themeChanged(theme);
-}
-
-QString ThemeManager::getCurrentStylesheet() const
-{
-    return getStylesheet(m_currentTheme);
 }
 
 QString ThemeManager::getStylesheet(Theme theme)
@@ -234,9 +227,6 @@ QString ThemeManager::getStylesheet(Theme theme)
             border: none;
             background: transparent;
         }
-        QComboBox::down-arrow {
-            image: url(:/arrow_down.png);
-        }
         QComboBox[isCompact="true"] {
             padding: 1px 4px;
         }
@@ -278,32 +268,6 @@ QString ThemeManager::getStylesheet(Theme theme)
             color: #707070;
             border: 1px solid rgba(100, 100, 100, 0.4);
         }
-        QStatusBar QPushButton {
-            background-color: rgba(32, 32, 32, 0.85);
-            color: #e8e8e8;
-            border: 1px solid rgba(100, 180, 255, 0.4);
-            border-radius: 8px;
-            padding: 4px 10px;
-            font-size: 11px;
-            font-weight: 700;
-            min-width: 58px;
-            min-height: 28px;
-        }
-        QStatusBar QPushButton:hover {
-            background-color: rgba(45, 45, 45, 0.95);
-            border: 1px solid rgba(100, 180, 255, 0.6);
-            color: #ffffff;
-        }
-        QStatusBar QPushButton:pressed {
-            background-color: rgba(50, 50, 50, 0.95);
-            border: 1px solid rgba(100, 180, 255, 0.7);
-            color: #ffffff;
-        }
-        QStatusBar QPushButton:disabled {
-            background-color: rgba(30, 30, 30, 0.85);
-            border: 1px solid rgba(100, 100, 100, 0.3);
-            color: #606060;
-        }
         QTableWidget#transitionsTable {
             border: 1px solid #2a2a2a;
             border-radius: 8px;
@@ -312,15 +276,6 @@ QString ThemeManager::getStylesheet(Theme theme)
             gridline-color: #252525;
             outline: 0;
             selection-background-color: transparent;
-        }
-        QFrame[isTransitionCell="true"] {
-            background-color: transparent;
-            border: 1px solid #333333;
-            border-radius: 6px;
-        }
-        QFrame[isTransitionCell="true"][isHighlight="true"] {
-            background-color: rgba(63, 116, 216, 0.3);
-            border: 1px solid #7ec4ff;
         }
         QTableWidget#transitionsTable::viewport {
             background-color: rgba(32, 32, 32, 0.95);
@@ -617,9 +572,6 @@ QString ThemeManager::getStylesheet(Theme theme)
             border: none;
             background: transparent;
         }
-        QComboBox::down-arrow {
-            image: url(:/arrow_down.png);
-        }
         QComboBox[isCompact="true"] {
             padding: 1px 4px;
         }
@@ -658,32 +610,6 @@ QString ThemeManager::getStylesheet(Theme theme)
             background-color: #e0e0e0;
             color: #9e9e9e;
         }
-        QStatusBar QPushButton {
-            background-color: #ffffff;
-            color: #202020;
-            border: 1px solid #d0d0d0;
-            border-radius: 8px;
-            padding: 4px 10px;
-            font-size: 11px;
-            font-weight: 700;
-            min-width: 58px;
-            min-height: 28px;
-        }
-        QStatusBar QPushButton:hover {
-            background-color: #eaf4ff;
-            border: 1px solid #0078d4;
-            color: #005a9e;
-        }
-        QStatusBar QPushButton:pressed {
-            background-color: #d8ecff;
-            border: 1px solid #005a9e;
-            color: #005a9e;
-        }
-        QStatusBar QPushButton:disabled {
-            background-color: #f0f0f0;
-            border: 1px solid #dddddd;
-            color: #888888;
-        }
         QTableWidget#transitionsTable {
             border: 1px solid #d0d0d0;
             border-radius: 8px;
@@ -692,15 +618,6 @@ QString ThemeManager::getStylesheet(Theme theme)
             gridline-color: #ececec;
             outline: 0;
             selection-background-color: transparent;
-        }
-        QFrame[isTransitionCell="true"] {
-            background-color: transparent;
-            border: 1px solid #cfcfcf;
-            border-radius: 6px;
-        }
-        QFrame[isTransitionCell="true"][isHighlight="true"] {
-            background-color: #eaf2ff;
-            border: 1px solid #3f74d8;
         }
         QTableWidget#transitionsTable::viewport {
             background-color: rgba(255, 255, 255, 0.95);

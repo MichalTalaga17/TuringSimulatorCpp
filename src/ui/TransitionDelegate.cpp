@@ -60,6 +60,24 @@ QStringList splitTransitionText(const QString &text)
     }
     return parts;
 }
+
+QString normalizedMoveText(QString moveText)
+{
+    moveText = moveText.trimmed();
+    if (moveText == "R")
+    {
+        return "P";
+    }
+    if (moveText == "_" || moveText == "Stay")
+    {
+        return "Bez ruchu";
+    }
+    if (moveText == "STOP")
+    {
+        return "Stop";
+    }
+    return moveText;
+}
 } // koniec przestrzeni nazw
 
 TransitionDelegate::TransitionDelegate(MachineEditorTab *tab, QObject *parent)
@@ -96,7 +114,7 @@ QWidget *TransitionDelegate::createEditor(QWidget *parent, const QStyleOptionVie
         editor->writeCombo->addItem(QString(symbol));
     }
 
-    editor->moveCombo->addItems({"L", "R", "Stay", "Stop"});
+    editor->moveCombo->addItems({"L", "P", "Bez ruchu", "Stop"});
 
     for (const auto &state : m_tab->getStatesList())
     {
@@ -132,7 +150,7 @@ void TransitionDelegate::setEditorData(QWidget *widget, const QModelIndex &index
     if (parts.size() == 3)
     {
         editor->writeCombo->setCurrentText(parts[0]);
-        editor->moveCombo->setCurrentText(parts[1]);
+        editor->moveCombo->setCurrentText(normalizedMoveText(parts[1]));
         editor->stateCombo->setCurrentText(parts[2]);
     }
 }

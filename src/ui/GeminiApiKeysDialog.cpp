@@ -70,7 +70,7 @@ GeminiApiKeysDialog::GeminiApiKeysDialog(
     titleLabel->setObjectName("dialogTitle");
     layout->addWidget(titleLabel);
 
-    auto *subtitleLabel = new QLabel("Zapisz osobne klucze dla Free tier i Pro tier.", this);
+    auto *subtitleLabel = new QLabel("Zapisz osobne klucze dla wariantu Free i wariantu Pro.", this);
     subtitleLabel->setObjectName("dialogSubtitle");
     subtitleLabel->setWordWrap(true);
     layout->addWidget(subtitleLabel);
@@ -81,13 +81,13 @@ GeminiApiKeysDialog::GeminiApiKeysDialog(
 
     freeApiKeyField->setText(initialFreeApiKey);
     freeApiKeyField->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-    freeApiKeyField->setPlaceholderText("Free tier API key");
-    formLayout->addRow("Free tier:", freeApiKeyField);
+    freeApiKeyField->setPlaceholderText("Klucz API wariantu Free");
+    formLayout->addRow("Wariant Free:", freeApiKeyField);
 
     proApiKeyField->setText(initialProApiKey);
     proApiKeyField->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-    proApiKeyField->setPlaceholderText("Pro tier API key");
-    formLayout->addRow("Pro tier:", proApiKeyField);
+    proApiKeyField->setPlaceholderText("Klucz API wariantu Pro");
+    formLayout->addRow("Wariant Pro:", proApiKeyField);
 
     layout->addLayout(formLayout);
     layout->addStretch(1);
@@ -135,6 +135,6 @@ bool GeminiApiKeysDialog::editStoredKeys(QWidget *parent, QSettings &settings)
 
     settings.setValue("gemini/freeApiKey", dialog.freeApiKey());
     settings.setValue("gemini/proApiKey", dialog.proApiKey());
-    qInfo().noquote() << "[GeminiAI] Gemini API keys saved in QSettings";
+    qInfo().noquote() << "[GeminiAI] Klucze Gemini API zapisane w QSettings";
     return true;
 }

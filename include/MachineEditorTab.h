@@ -18,7 +18,6 @@
 
 #include <map>
 #include <memory>
-#include <set>
 #include <tuple>
 #include <vector>
 #include "storage.h"
@@ -180,8 +179,6 @@ private:
     QWidget *setupBuilderTab();
     /// Tworzy panel uruchamiania symulacji oraz widok taśmy.
     QWidget *setupExecutorTab();
-    /// Nakłada wspólny styl wizualny na całą aplikację.
-    void applyModernStyle();
     /// Odświeża wszystkie elementy prezentujące bieżący stan maszyny.
     void updateDisplay();
     /// Podświetla komórkę tabeli przejść odpowiadająca aktualnie wykonywanej instrukcji.
@@ -220,8 +217,6 @@ private:
     bool buildMachineFromCurrentConfiguration(bool showSuccessDialog);
     /// Przebudowuje tabelę przejść po zmianie liczby stanów lub alfabetu.
     void rebuildTransitionsTable();
-    /// Zmienia symbol w kolumnie bez przebudowania całej tabeli (dla zmiany symbolu pustego).
-    void changeColumnSymbol(int col, char oldSymbol, char newSymbol);
     /// Synchronizuje mapę przejść z aktualną zawartością tabeli.
     void populateTransitionMapWithDefaults();
     /// Zapisuje aktualną definicję maszyny do wskazanej ścieżki.
@@ -264,13 +259,11 @@ private:
     std::vector<std::string> states;
     std::vector<char> alphabet;
     std::string initialState;
-    std::set<std::string> acceptingStates;
 
     /// Mapa przejść: `(stan, symbol odczytu) -> (symbol zapisu, ruch, następny stan)`.
     std::map<std::pair<std::string, char>, std::tuple<char, std::string, std::string>> transitionMap;
 
     char blankSymbol;
-    char previousBlankSymbol;
 
     bool isRunning;
     int executionSpeed;

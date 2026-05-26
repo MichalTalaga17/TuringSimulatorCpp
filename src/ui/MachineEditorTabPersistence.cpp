@@ -5,7 +5,6 @@
 #include <QMessageBox>
 #include <QTableWidget>
 #include <QInputDialog>
-#include <QDebug>
 
 #include <algorithm>
 
@@ -29,13 +28,13 @@ QString moveToUiText(const std::string &move)
     }
     if (move == "P" || move == "R")
     {
-        return "R";
+        return "P";
     }
     if (move == "STOP" || move == "Stop")
     {
         return "Stop";
     }
-    return "Stay";
+    return "Bez ruchu";
 }
 
 int columnForSymbol(const std::vector<char> &orderedAlphabet, char symbol)
@@ -98,8 +97,8 @@ void MachineEditorTab::rebuildTransitionsTable()
             
             QTableWidgetItem *item = new QTableWidgetItem();
             item->setTextAlignment(Qt::AlignCenter);
-            // Reguła domyślna: zapis = odczyt, ruch = R, stan = bieżący.
-            QString defaultText = QString("%1, R, %2").arg(readSymbol).arg(defaultState);
+            // Reguła domyślna: zapis = odczyt, ruch = P, stan = bieżący.
+            QString defaultText = QString("%1, P, %2").arg(readSymbol).arg(defaultState);
             item->setText(defaultText);
             
             transitionsTable->setItem(row, col, item);
@@ -168,7 +167,7 @@ bool MachineEditorTab::saveToFile()
 
 bool MachineEditorTab::saveToFileAs()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "Zapisz maszynę", currentFilePath, "JSON Files (*.json)");
+    QString filePath = QFileDialog::getSaveFileName(this, "Zapisz maszynę", currentFilePath, "Pliki JSON (*.json)");
     if (filePath.isEmpty())
     {
         return false;
@@ -287,7 +286,6 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
     transitionsTable->blockSignals(true);
 
     blankSymbol = data.blankSymbol;
-    previousBlankSymbol = data.blankSymbol;
     const int stateCount = std::max(1, data.numStates);
 
     blankSymbolField->setText(QString(QChar(blankSymbol)));

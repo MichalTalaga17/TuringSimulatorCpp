@@ -55,12 +55,6 @@ public:
     void toggleTheme() { setTheme(m_currentTheme == Theme::Light ? Theme::Dark : Theme::Light); }
 
     /**
-     * @brief Pobiera arkusz stylów dla aktualnego motywu.
-     * @return Arkusz stylów Qt gotowy do ustawienia w QApplication.
-     */
-    QString getCurrentStylesheet() const;
-
-    /**
      * @brief Pobiera arkusz stylów dla wskazanego motywu.
      * @param theme Motyw, dla którego ma zostać zwrócony arkusz stylów.
      * @return Arkusz stylów Qt zawierający style aplikacji.
@@ -83,13 +77,6 @@ public:
      * @param theme Motyw do natychmiastowego zastosowania.
      */
     void applyTheme(Theme theme);
-
-signals:
-    /**
-     * @brief Emitowany po zmianie motywu przez setTheme().
-     * @param theme Nowy aktywny motyw.
-     */
-    void themeChanged(Theme theme);
 
 private:
     /**

@@ -63,7 +63,7 @@ void MachineEditorTab::onNumStatesChanged(int value)
     const bool rebuilt = rebuildMachineFromEditor();
     if (statusLabel)
     {
-        statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
+        statusLabel->setText(rebuilt ? "Przebudowano" : "Edycja");
     }
 }
 
@@ -89,7 +89,7 @@ void MachineEditorTab::onAlphabetChanged()
         }
         filteredAlphaStr += alphaStr[i];
 
-        if (c != ',' && c != ' ' && c != 0 && c != currentBlank)
+        if (c != ',' && c != ' ' && c != 0)
         {
             if (std::find(newAlphabet.begin(), newAlphabet.end(), c) == newAlphabet.end()) {
                 newAlphabet.push_back(c);
@@ -115,7 +115,7 @@ void MachineEditorTab::onAlphabetChanged()
     const bool rebuilt = rebuildMachineFromEditor();
     if (statusLabel)
     {
-        statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
+        statusLabel->setText(rebuilt ? "Przebudowano" : "Edycja");
     }
 }
 
@@ -139,7 +139,6 @@ void MachineEditorTab::onBlankSymbolChanged()
     }
 
     char oldBlank = blankSymbol;
-    previousBlankSymbol = blankSymbol;
     blankSymbol = newBlank;
 
     std::vector<char> newAlphabet;
@@ -158,7 +157,7 @@ void MachineEditorTab::onBlankSymbolChanged()
     const bool rebuilt = rebuildMachineFromEditor();
     if (statusLabel)
     {
-        statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
+        statusLabel->setText(rebuilt ? "Przebudowano" : "Edycja");
     }
 }
 
@@ -198,7 +197,7 @@ void MachineEditorTab::onTableItemChanged(QTableWidgetItem *item)
 
     if (rebuildMachineFromEditor() && statusLabel)
     {
-        statusLabel->setText("Rebuilt");
+        statusLabel->setText("Przebudowano");
     }
 }
 
@@ -208,7 +207,7 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
     {
         if (showSuccessDialog)
         {
-            QMessageBox::warning(this, "Validation Error", message);
+            QMessageBox::warning(this, "Błąd walidacji", message);
         }
     };
 
@@ -232,25 +231,19 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
     // Walidacja.
     if (states.empty())
     {
-        showValidationWarning("Please set the number of states");
-        return false;
-    }
-
-    if (alphabet.empty())
-    {
-        showValidationWarning("Please define the alphabet");
+        showValidationWarning("Ustaw liczbę stanów.");
         return false;
     }
 
     if (initialState.empty())
     {
-        showValidationWarning("Please select an initial state");
+        showValidationWarning("Wybierz stan początkowy.");
         return false;
     }
 
     if (transitionMap.empty())
     {
-        showValidationWarning("Please define at least one transition");
+        showValidationWarning("Zdefiniuj co najmniej jedno przejście.");
         return false;
     }
 
@@ -273,6 +266,8 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
             move = HeadMove::L;
         else if (moveStr == "R" || moveStr == "P")
             move = HeadMove::R;
+        else if (moveStr == "Bez ruchu" || moveStr == "Stay" || moveStr == "_")
+            move = HeadMove::Stay;
         else if (moveStr == "Stop" || moveStr == "STOP")
             move = HeadMove::STOP;
 
@@ -281,8 +276,8 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
 
     if (showSuccessDialog)
     {
-        statusLabel->setText("Built");
-        QMessageBox::information(this, "Success", "Machine built successfully! You can run it above.");
+        statusLabel->setText("Zbudowano");
+        QMessageBox::information(this, "Sukces", "Maszyna została poprawnie zbudowana. Możesz ją uruchomić w panelu powyżej.");
     }
 
     return true;
@@ -313,10 +308,10 @@ bool MachineEditorTab::executeMachineStep()
     if (!executedStep || machine->isHalted())
     {
         isRunning = false;
-        runButton->setText("Run");
+        runButton->setText("Start");
         stepButton->setEnabled(true);
         executionTimer->stop();
-        statusLabel->setText(machine->isAccepted() ? "Accepted" : "Halted");
+        statusLabel->setText("Zatrzymano");
         return false;
     }
 
@@ -329,7 +324,7 @@ bool MachineEditorTab::rebuildMachineFromEditor()
     {
         isRunning = false;
         executionTimer->stop();
-        runButton->setText("Run");
+        runButton->setText("Start");
         stepButton->setEnabled(true);
     }
 
@@ -353,7 +348,7 @@ void MachineEditorTab::onTapeInputChanged()
 
     if (rebuildMachineFromEditor() && statusLabel)
     {
-        statusLabel->setText("Rebuilt");
+        statusLabel->setText("Przebudowano");
     }
 }
 
@@ -378,7 +373,7 @@ void MachineEditorTab::onStepClicked()
 {
     if (!machine)
     {
-        QMessageBox::warning(this, "Error", "Please build a machine first");
+        QMessageBox::warning(this, "Błąd", "Najpierw zbuduj maszynę.");
         return;
     }
 
@@ -391,7 +386,7 @@ void MachineEditorTab::onRunClicked()
 {
     if (!machine)
     {
-        QMessageBox::warning(this, "Error", "Please build a machine first");
+        QMessageBox::warning(this, "Błąd", "Najpierw zbuduj maszynę.");
         return;
     }
 
@@ -401,12 +396,12 @@ void MachineEditorTab::onRunClicked()
     }
 
     isRunning = !isRunning;
-    runButton->setText(isRunning ? "Stop" : "Run");
+    runButton->setText(isRunning ? "Zatrzymaj" : "Start");
     stepButton->setEnabled(!isRunning);
 
     if (isRunning)
     {
-        statusLabel->setText("Running");
+        statusLabel->setText("Działa");
         if (executeMachineStep())
         {
             executionTimer->start(2001 - executionSpeed);
@@ -414,7 +409,7 @@ void MachineEditorTab::onRunClicked()
     }
     else
     {
-        statusLabel->setText("Paused");
+        statusLabel->setText("Pauza");
         executionTimer->stop();
     }
 }
@@ -429,11 +424,11 @@ void MachineEditorTab::onResetClicked()
     {
         machine->reset();
         isRunning = false;
-        runButton->setText("Run");
+        runButton->setText("Start");
         stepButton->setEnabled(true);
         executionTimer->stop();
         updateDisplay();
-        statusLabel->setText("Reset");
+        statusLabel->setText("Zresetowano");
     }
 }
 
@@ -495,15 +490,15 @@ void MachineEditorTab::applyDefaultExample()
         }
     };
 
-    setTransitionCell(zeroColumn, '1', "R", "q0");
-    setTransitionCell(oneColumn, '0', "R", "q0");
+    setTransitionCell(zeroColumn, '1', "P", "q0");
+    setTransitionCell(oneColumn, '0', "P", "q0");
     setTransitionCell(blankColumn, '_', "Stop", "q0");
 
     populateTransitionMapWithDefaults();
 
     if (rebuildMachineFromEditor())
     {
-        statusLabel->setText("Ready");
+        statusLabel->setText("Gotowe");
     }
 }
 
@@ -518,6 +513,6 @@ void MachineEditorTab::applyBlankMachine()
 
     if (rebuildMachineFromEditor())
     {
-        statusLabel->setText("Ready");
+        statusLabel->setText("Gotowe");
     }
 }
