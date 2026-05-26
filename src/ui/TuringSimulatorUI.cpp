@@ -5,7 +5,6 @@
 
 #include <QApplication>
 #include <QDebug>
-#include <QFile>
 #include <QFileDialog>
 #include <QFontMetrics>
 #include <QFrame>
@@ -46,7 +45,7 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
       untitledTabCounter(1),
       themeManager(std::make_unique<ThemeManager>())
 {
-    setWindowTitle("Turing Machine Simulator");
+    setWindowTitle("Symulator maszyny Turinga");
     setGeometry(100, 100, 1200, 850);
     setMinimumWidth(980);
     setMinimumHeight(720);
@@ -168,7 +167,7 @@ void TuringSimulatorUI::setupMenu()
     bindShortcut(runAction, QKeySequence(Qt::Key_F5));
     connect(runAction, &QAction::triggered, this, &TuringSimulatorUI::toggleCurrentMachineRun);
 
-    resetAction = simulationMenu->addAction("Reset");
+    resetAction = simulationMenu->addAction("Resetuj");
     bindShortcut(resetAction, QKeySequence(Qt::CTRL | Qt::Key_R));
     connect(resetAction, &QAction::triggered, this, &TuringSimulatorUI::resetCurrentMachine);
 
@@ -289,11 +288,7 @@ QWidget *TuringSimulatorUI::createStartPage()
     databaseButtonsLayout->setContentsMargins(0, 0, 0, 0);
     databaseButtonsLayout->setSpacing(8);
 
-    QStringList machineNames;
-    if (QFile::exists("machines.db"))
-    {
-        machineNames = getMachineNamesFromDatabase();
-    }
+    QStringList machineNames = getMachineNamesFromDatabase();
     machineNames.sort(Qt::CaseInsensitive);
 
     if (machineNames.isEmpty())
@@ -467,7 +462,7 @@ void TuringSimulatorUI::createExampleMachineTab()
 
 void TuringSimulatorUI::openMachineInNewTab()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, "Wczytaj maszynę", "", "JSON Files (*.json)");
+    const QString filePath = QFileDialog::getOpenFileName(this, "Wczytaj maszynę", "", "Pliki JSON (*.json)");
     if (filePath.isEmpty())
     {
         return;
@@ -554,7 +549,7 @@ void TuringSimulatorUI::generateMachineWithAi()
         return;
     }
 
-    qInfo().noquote() << "[GeminiAI] No machine tab active; asking before creating a new tab";
+    qInfo().noquote() << "[GeminiAI] Brak aktywnej karty maszyny; pytam przed utworzeniem nowej karty";
 
     QString description;
     QString apiKey;
@@ -563,11 +558,11 @@ void TuringSimulatorUI::generateMachineWithAi()
     bool thinkingEnabled = false;
     if (!MachineEditorTab::resolveGeminiGenerationRequest(this, &description, &apiKey, &modelName, &fallbackModelName, &thinkingEnabled))
     {
-        qInfo().noquote() << "[GeminiAI] Canceled before creating a new machine";
+        qInfo().noquote() << "[GeminiAI] Anulowano przed utworzeniem nowej maszyny";
         return;
     }
 
-    qInfo().noquote() << "[GeminiAI] Requesting machine before creating a new tab";
+    qInfo().noquote() << "[GeminiAI] Pobieram maszynę przed utworzeniem nowej karty";
 
     GeminiGenerationRequest request{
         description.trimmed(),
@@ -583,13 +578,13 @@ void TuringSimulatorUI::generateMachineWithAi()
         {
             if (!result.success)
             {
-                qWarning().noquote() << "[GeminiAI] New-tab generation failed:"
+                qWarning().noquote() << "[GeminiAI] Generowanie dla nowej karty nie powiodło się:"
                                      << result.errorMessage;
                 QMessageBox::warning(this, "Gemini AI", result.errorMessage);
                 return;
             }
 
-            qInfo().noquote() << "[GeminiAI] Creating machine tab after Gemini response";
+            qInfo().noquote() << "[GeminiAI] Tworzę kartę maszyny po odpowiedzi Gemini";
             MachineEditorTab *generatedTab = new MachineEditorTab(QString("Maszyna %1").arg(untitledTabCounter++), false, machineTabs);
             addMachineTabFromStartPage(generatedTab);
             generatedTab->applyGeneratedMachineData(result.machineData);
@@ -597,7 +592,7 @@ void TuringSimulatorUI::generateMachineWithAi()
         },
         []()
         {
-            qInfo().noquote() << "[GeminiAI] User canceled request before tab creation";
+            qInfo().noquote() << "[GeminiAI] Użytkownik anulował żądanie przed utworzeniem karty";
         });
 }
 
@@ -689,7 +684,7 @@ void TuringSimulatorUI::updateMenuState()
     previousTabAction->setEnabled(hasMultipleTabs);
     nextTabAction->setEnabled(hasMultipleTabs);
 
-    QString title = "Turing Machine Simulator";
+    QString title = "Symulator maszyny Turinga";
     if (MachineEditorTab *tab = currentMachineTab())
     {
         title += " - " + tab->tabTitle();

@@ -2,6 +2,8 @@
 
 #include "TuringMachine.h"
 
+#include <QDir>
+#include <QStandardPaths>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QVariant>
@@ -16,7 +18,20 @@ QSqlDatabase getDatabase()
     }
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "turing_connection");
-    db.setDatabaseName("machines.db");
+
+    QString dataDirPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    if (dataDirPath.isEmpty())
+    {
+        dataDirPath = QDir::currentPath();
+    }
+
+    QDir dataDir(dataDirPath);
+    if (!dataDir.exists())
+    {
+        dataDir.mkpath(".");
+    }
+
+    db.setDatabaseName(dataDir.filePath("machines.db"));
     return db;
 }
 

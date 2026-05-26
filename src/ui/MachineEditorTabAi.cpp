@@ -47,7 +47,7 @@ bool MachineEditorTab::resolveGeminiGenerationRequest(
     GeminiSettingsDialog settingsDialog(*description, initialTier, previousThinking, parent);
     if (settingsDialog.exec() != QDialog::Accepted)
     {
-        qInfo().noquote() << "[GeminiAI] Canceled: generation dialog rejected";
+        qInfo().noquote() << "[GeminiAI] Anulowano: odrzucono okno generowania";
         return false;
     }
 
@@ -59,23 +59,23 @@ bool MachineEditorTab::resolveGeminiGenerationRequest(
     *thinkingEnabled = settingsDialog.thinkingEnabled();
     if (description->isEmpty())
     {
-        qInfo().noquote() << "[GeminiAI] Canceled: empty description";
+        qInfo().noquote() << "[GeminiAI] Anulowano: pusty opis";
         return false;
     }
     if (tierId.isEmpty() || modelName->isEmpty())
     {
-        qInfo().noquote() << "[GeminiAI] Canceled: tier not selected";
+        qInfo().noquote() << "[GeminiAI] Anulowano: nie wybrano wariantu";
         return false;
     }
 
     *apiKey = GeminiApiKeysDialog::apiKeyForTier(tierId, settings);
     if (apiKey->isEmpty())
     {
-        qInfo().noquote() << "[GeminiAI] API key source:"
-                          << "settings dialog required";
+        qInfo().noquote() << "[GeminiAI] Źródło klucza API:"
+                          << "wymagane okno ustawień";
         if (!GeminiApiKeysDialog::editStoredKeys(parent, settings))
         {
-            qInfo().noquote() << "[GeminiAI] Canceled: API keys not configured";
+            qInfo().noquote() << "[GeminiAI] Anulowano: klucze API nie są skonfigurowane";
             return false;
         }
 
@@ -83,13 +83,13 @@ bool MachineEditorTab::resolveGeminiGenerationRequest(
     }
     else
     {
-        qInfo().noquote() << "[GeminiAI] API key source:"
-                          << (tierId == "free" ? "Free tier" : "Pro tier");
+        qInfo().noquote() << "[GeminiAI] Źródło klucza API:"
+                          << (tierId == "free" ? "wariant Free" : "wariant Pro");
     }
 
     if (apiKey->isEmpty())
     {
-        qInfo().noquote() << "[GeminiAI] Canceled: selected tier API key missing";
+        qInfo().noquote() << "[GeminiAI] Anulowano: brakuje klucza API dla wybranego wariantu";
         QMessageBox::warning(
             parent,
             "Gemini API",
@@ -100,26 +100,26 @@ bool MachineEditorTab::resolveGeminiGenerationRequest(
 
     settings.setValue("gemini/selectedTier", tierId);
     settings.setValue("gemini/thinkingEnabled", *thinkingEnabled);
-    qInfo().noquote() << "[GeminiAI] Description accepted"
-                      << "description=\"" + shortLogText(*description) + "\"";
-    qInfo().noquote() << "[GeminiAI] Tier selected:" << tierConfig.displayName;
-    qInfo().noquote() << "[GeminiAI] Model selected:" << *modelName;
+    qInfo().noquote() << "[GeminiAI] Opis zaakceptowany"
+                      << "opis=\"" + shortLogText(*description) + "\"";
+    qInfo().noquote() << "[GeminiAI] Wybrany wariant:" << tierConfig.displayName;
+    qInfo().noquote() << "[GeminiAI] Wybrany model:" << *modelName;
     if (!fallbackModelName->isEmpty())
     {
-        qInfo().noquote() << "[GeminiAI] Fallback model:" << *fallbackModelName;
+        qInfo().noquote() << "[GeminiAI] Model zapasowy:" << *fallbackModelName;
     }
-    qInfo().noquote() << "[GeminiAI] Thinking selected:"
-                      << (*thinkingEnabled ? "on" : "off");
+    qInfo().noquote() << "[GeminiAI] Wybrane myślenie:"
+                      << (*thinkingEnabled ? "włączone" : "wyłączone");
     return true;
 }
 
 void MachineEditorTab::generateMachineWithAi()
 {
-    qInfo().noquote() << "[GeminiAI] UI action triggered";
+    qInfo().noquote() << "[GeminiAI] Uruchomiono akcję interfejsu";
 
     if (aiGenerationInProgress)
     {
-        qInfo().noquote() << "[GeminiAI] Ignored: generation already in progress";
+        qInfo().noquote() << "[GeminiAI] Zignorowano: generowanie już trwa";
         QMessageBox::information(this, "Gemini AI", "Generowanie maszyny jest już w toku.");
         return;
     }
@@ -146,7 +146,7 @@ void MachineEditorTab::generateMachineWithAi(
 {
     if (aiGenerationInProgress)
     {
-        qInfo().noquote() << "[GeminiAI] Ignored: generation already in progress";
+        qInfo().noquote() << "[GeminiAI] Zignorowano: generowanie już trwa";
         QMessageBox::information(this, "Gemini AI", "Generowanie maszyny jest już w toku.");
         return;
     }
@@ -158,26 +158,26 @@ void MachineEditorTab::generateMachineWithAi(
 
     if (trimmedDescription.isEmpty())
     {
-        qInfo().noquote() << "[GeminiAI] Canceled: empty description";
+        qInfo().noquote() << "[GeminiAI] Anulowano: pusty opis";
         return;
     }
 
     if (trimmedApiKey.isEmpty())
     {
-        qInfo().noquote() << "[GeminiAI] Canceled: empty API key";
+        qInfo().noquote() << "[GeminiAI] Anulowano: pusty klucz API";
         return;
     }
 
     if (selectedModel.isEmpty())
     {
-        qInfo().noquote() << "[GeminiAI] Canceled: empty model";
+        qInfo().noquote() << "[GeminiAI] Anulowano: pusty model";
         return;
     }
 
-    qInfo().noquote() << "[GeminiAI] Starting generation in editor"
+    qInfo().noquote() << "[GeminiAI] Start generowania w edytorze"
                       << "model=" + selectedModel
-                      << "thinking=" + QString(thinkingEnabled ? "on" : "off")
-                      << "description=\"" + shortLogText(trimmedDescription) + "\"";
+                      << "myślenie=" + QString(thinkingEnabled ? "włączone" : "wyłączone")
+                      << "opis=\"" + shortLogText(trimmedDescription) + "\"";
 
     aiGenerationInProgress = true;
     if (aiGenerateButton)
@@ -218,7 +218,7 @@ void MachineEditorTab::generateMachineWithAi(
 
             if (!result.success)
             {
-                qWarning().noquote() << "[GeminiAI] UI received failure:"
+                qWarning().noquote() << "[GeminiAI] Interfejs odebrał błąd:"
                                      << result.errorMessage;
                 if (statusLabel)
                 {
@@ -230,9 +230,9 @@ void MachineEditorTab::generateMachineWithAi(
 
             currentFilePath.clear();
             applyMachineData(result.machineData);
-            qInfo().noquote() << "[GeminiAI] Machine applied to editor"
-                              << "states=" + QString::number(result.machineData.numStates)
-                              << "transitions=" + QString::number(static_cast<int>(result.machineData.transitions.size()));
+            qInfo().noquote() << "[GeminiAI] Maszyna zastosowana w edytorze"
+                              << "stany=" + QString::number(result.machineData.numStates)
+                              << "przejścia=" + QString::number(static_cast<int>(result.machineData.transitions.size()));
             if (rebuildMachineFromEditor() && statusLabel)
             {
                 statusLabel->setText("Wygenerowano AI");

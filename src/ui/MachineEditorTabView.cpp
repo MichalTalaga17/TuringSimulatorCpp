@@ -78,7 +78,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     builderLayout->setSpacing(12);
     builderLayout->setContentsMargins(0, 0, 0, 0);
 
-    QGroupBox *logicEditorGroup = new QGroupBox("Logic Editor", builderWidget);
+    QGroupBox *logicEditorGroup = new QGroupBox("Edytor logiki", builderWidget);
     logicEditorGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QVBoxLayout *logicEditorLayout = new QVBoxLayout(logicEditorGroup);
     logicEditorLayout->setSpacing(10);
@@ -86,7 +86,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     QHBoxLayout *configFieldsLayout = new QHBoxLayout();
     configFieldsLayout->setSpacing(10);
 
-    configFieldsLayout->addWidget(new QLabel("States:"));
+    configFieldsLayout->addWidget(new QLabel("Stany:"));
     numStatesSpinBox = new QSpinBox();
     numStatesSpinBox->setObjectName("numStatesSpinBox");
     numStatesSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
@@ -97,7 +97,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     numStatesSpinBox->setMaximumWidth(72);
     configFieldsLayout->addWidget(numStatesSpinBox);
 
-    configFieldsLayout->addWidget(new QLabel("Alphabet:"));
+    configFieldsLayout->addWidget(new QLabel("Alfabet:"));
     alphabetInputField = new QLineEdit();
     alphabetInputField->setPlaceholderText("0,1");
     // Ogranicz do standardowych drukowalnych znaków ASCII (32-126).
@@ -105,7 +105,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     alphabetInputField->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     configFieldsLayout->addWidget(alphabetInputField, 1);
 
-    configFieldsLayout->addWidget(new QLabel("Blank:"));
+    configFieldsLayout->addWidget(new QLabel("Pusty:"));
     blankSymbolField = new QLineEdit();
     blankSymbolField->setText("_");
     // Ogranicz do jednego standardowego drukowalnego znaku ASCII bez spacji.
@@ -113,7 +113,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
     blankSymbolField->setMaximumWidth(60);
     configFieldsLayout->addWidget(blankSymbolField);
 
-    configFieldsLayout->addWidget(new QLabel("Initial:"));
+    configFieldsLayout->addWidget(new QLabel("Start:"));
     initialStateCombo = new QComboBox();
     initialStateCombo->setObjectName("initialStateCombo");
     QListView *initialStatePopup = new QListView(initialStateCombo);
@@ -193,7 +193,7 @@ QWidget *MachineEditorTab::setupBuilderTab()
             {
         initialState = state.toStdString();
         if (rebuildMachineFromEditor() && statusLabel) {
-            statusLabel->setText("Rebuilt");
+            statusLabel->setText("Przebudowano");
         } });
     
     connect(transitionsTable, &QTableWidget::itemChanged, this, &MachineEditorTab::onTableItemChanged);
@@ -222,7 +222,7 @@ QWidget *MachineEditorTab::setupExecutorTab()
     executorLayout->setSpacing(12);
 
     // --- PANEL STATUSU ---
-    QGroupBox *statusGroup = new QGroupBox("Machine Status", executorWidget);
+    QGroupBox *statusGroup = new QGroupBox("Stan maszyny", executorWidget);
     QHBoxLayout *statusLayout = new QHBoxLayout(statusGroup);
     statusLayout->setSpacing(6);
 
@@ -248,9 +248,9 @@ QWidget *MachineEditorTab::setupExecutorTab()
         return metricWidget;
     };
 
-    statusLayout->addWidget(createStatusMetric("STEP", stepCountLabel, "0", 46));
-    statusLayout->addWidget(createStatusMetric("STATE", machineStateLabel, "q0", 54));
-    statusLayout->addWidget(createStatusMetric("STATUS", statusLabel, "Ready", 76));
+    statusLayout->addWidget(createStatusMetric("KROK", stepCountLabel, "0", 46));
+    statusLayout->addWidget(createStatusMetric("STAN", machineStateLabel, "q0", 54));
+    statusLayout->addWidget(createStatusMetric("TRYB", statusLabel, "Gotowe", 76));
 
     statusLayout->addStretch();
 
@@ -260,14 +260,14 @@ QWidget *MachineEditorTab::setupExecutorTab()
     statusControlLayout->setContentsMargins(8, 4, 8, 4);
     statusControlLayout->setSpacing(6);
 
-     stepButton = new QPushButton("Step");
-    runButton = new QPushButton("Run");
-    resetButton = new QPushButton("Reset");
+     stepButton = new QPushButton("Krok");
+    runButton = new QPushButton("Start");
+    resetButton = new QPushButton("Resetuj");
 
     // Nie ustawiaj stylów na sztywno; obsługuje je aktywny motyw.
     // Arkusze stylów motywu zajmują się wyglądem przycisków.
 
-    speedLabel = new QLabel("Speed:");
+    speedLabel = new QLabel("Szybkość:");
     speedLabel->setStyleSheet("font-size: 11px; font-weight: 600;");
     speedSlider = new QSlider(Qt::Horizontal);
     speedSlider->setMinimum(100);
@@ -287,19 +287,19 @@ QWidget *MachineEditorTab::setupExecutorTab()
     executorLayout->addWidget(statusGroup);
 
     // --- SEKCJA WEJŚCIA TAŚMY ---
-    QGroupBox *inputGroup = new QGroupBox("Input Tape", executorWidget);
+    QGroupBox *inputGroup = new QGroupBox("Taśma wejściowa", executorWidget);
     QVBoxLayout *inputGroupLayout = new QVBoxLayout(inputGroup);
 
     QHBoxLayout *inputLayout = new QHBoxLayout();
-    inputLayout->addWidget(new QLabel("Tape:"));
+    inputLayout->addWidget(new QLabel("Taśma:"));
     tapeInputField = new QLineEdit();
     tapeInputField->setValidator(new QRegularExpressionValidator(QRegularExpression("[ -~]*"), this));
-    tapeInputField->setPlaceholderText("e.g., 1001");
+    tapeInputField->setPlaceholderText("np. 1001");
     inputLayout->addWidget(tapeInputField);
 
     inputGroupLayout->addLayout(inputLayout);
 
-    tapeWarningLabel = new QLabel("Tape contains undefined symbols! Proceeding will halt the machine.", inputGroup);
+    tapeWarningLabel = new QLabel("Taśma zawiera symbole spoza alfabetu. Wykonanie zatrzyma maszynę.", inputGroup);
     tapeWarningLabel->setStyleSheet("color: red; font-weight: bold;");
     tapeWarningLabel->hide(); // domyślnie ukryte
     inputGroupLayout->addWidget(tapeWarningLabel);
@@ -307,7 +307,7 @@ QWidget *MachineEditorTab::setupExecutorTab()
     executorLayout->addWidget(inputGroup);
 
     // --- WIDOK TAŚMY ---
-    QGroupBox *tapeGroup = new QGroupBox("Tape Visualization", executorWidget);
+    QGroupBox *tapeGroup = new QGroupBox("Podgląd taśmy", executorWidget);
     tapeGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     tapeGroup->setMaximumHeight(120);
     QVBoxLayout *tapeLayout = new QVBoxLayout(tapeGroup);

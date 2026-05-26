@@ -38,7 +38,7 @@ GeminiSettingsDialog::GeminiSettingsDialog(
     titleLabel->setObjectName("dialogTitle");
     layout->addWidget(titleLabel);
 
-    auto *subtitleLabel = new QLabel("Opisz zadanie, wybierz tier API i ustaw tryb myślenia.", this);
+    auto *subtitleLabel = new QLabel("Opisz zadanie, wybierz wariant API i ustaw tryb myślenia.", this);
     subtitleLabel->setObjectName("dialogSubtitle");
     subtitleLabel->setWordWrap(true);
     layout->addWidget(subtitleLabel);
@@ -71,7 +71,7 @@ GeminiSettingsDialog::GeminiSettingsDialog(
     }
     tierCombo->setCurrentIndex(tiers.indexOf(selectedInitialTier));
     tierCombo->setMinimumWidth(260);
-    formLayout->addRow("Tier:", tierCombo);
+    formLayout->addRow("Wariant:", tierCombo);
 
     thinkingCheckBox->setChecked(initialThinking);
     formLayout->addRow("Myślenie:", thinkingCheckBox);

@@ -323,8 +323,8 @@ GeminiMachineGenerator::GeminiMachineGenerator(QObject *parent)
 QList<GeminiMachineGenerator::TierConfig> GeminiMachineGenerator::tierConfigs()
 {
     return {
-        {"pro", "Pro tier", "gemini-3.5-flash", {}},
-        {"free", "Free tier", "gemini-3.5-flash", "gemini-3.1-flash-lite"}};
+        {"pro", "Wariant Pro", "gemini-3.5-flash", {}},
+        {"free", "Wariant Free", "gemini-3.5-flash", "gemini-3.1-flash-lite"}};
 }
 
 GeminiMachineGenerator::TierConfig GeminiMachineGenerator::tierConfig(const QString &tierId)
@@ -387,10 +387,10 @@ QNetworkReply *GeminiMachineGenerator::generate(
     const QString encodedModel = QString::fromLatin1(QUrl::toPercentEncoding(model));
     const QUrl url(QString("https://generativelanguage.googleapis.com/v1beta/models/%1:generateContent").arg(encodedModel));
 
-    qInfo().noquote() << "[GeminiAI] Start request"
+    qInfo().noquote() << "[GeminiAI] Start żądania"
                       << "model=" + model
-                      << "thinking=" + QString(thinkingEnabled ? "on" : "off")
-                      << "description=\"" + shortLogText(taskDescription) + "\"";
+                      << "myślenie=" + QString(thinkingEnabled ? "włączone" : "wyłączone")
+                      << "opis=\"" + shortLogText(taskDescription) + "\"";
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -412,15 +412,15 @@ QNetworkReply *GeminiMachineGenerator::generate(
     QJsonObject thinkingConfig;
     thinkingConfig["thinkingLevel"] = thinkingEnabled ? "high" : "minimal";
     generationConfig["thinkingConfig"] = thinkingConfig;
-    qInfo().noquote() << "[GeminiAI] Thinking config"
-                      << "thinkingLevel=" + thinkingConfig.value("thinkingLevel").toString();
+    qInfo().noquote() << "[GeminiAI] Konfiguracja myślenia"
+                      << "poziomMyślenia=" + thinkingConfig.value("thinkingLevel").toString();
 
     QJsonObject body;
     body["contents"] = QJsonArray{content};
     body["generationConfig"] = generationConfig;
 
     QNetworkReply *reply = networkManager->post(request, QJsonDocument(body).toJson(QJsonDocument::Compact));
-    qInfo().noquote() << "[GeminiAI] Request sent to" << url.toString(QUrl::RemoveQuery);
+    qInfo().noquote() << "[GeminiAI] Żądanie wysłane do" << url.toString(QUrl::RemoveQuery);
     QTimer *timeoutTimer = new QTimer(reply);
     timeoutTimer->setSingleShot(true);
 
@@ -438,13 +438,13 @@ QNetworkReply *GeminiMachineGenerator::generate(
         if (*timedOut)
         {
             result.errorMessage = "Przekroczono czas oczekiwania na odpowiedź Gemini.";
-            qWarning().noquote() << "[GeminiAI] Request timed out";
+            qWarning().noquote() << "[GeminiAI] Przekroczono czas żądania";
         }
         else if (reply->error() != QNetworkReply::NoError)
         {
             const QByteArray responseBody = reply->readAll();
             const int httpStatus = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            qWarning().noquote() << "[GeminiAI] Network/API error"
+            qWarning().noquote() << "[GeminiAI] Błąd sieci/API"
                                  << "httpStatus=" + QString::number(httpStatus)
                                  << "qtError=\"" + reply->errorString() + "\"";
             if (responseBody.isEmpty())
@@ -464,7 +464,7 @@ QNetworkReply *GeminiMachineGenerator::generate(
         {
             const QByteArray responseBody = reply->readAll();
             const int httpStatus = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            qInfo().noquote() << "[GeminiAI] Response received"
+            qInfo().noquote() << "[GeminiAI] Odebrano odpowiedź"
                               << "httpStatus=" + QString::number(httpStatus)
                               << "bytes=" + QString::number(responseBody.size());
             result = parseResponse(responseBody, httpStatus);
@@ -472,19 +472,19 @@ QNetworkReply *GeminiMachineGenerator::generate(
 
         if (result.success)
         {
-            qInfo().noquote() << "[GeminiAI] Machine parsed"
-                              << "states=" + QString::number(result.machineData.numStates)
-                              << "alphabetSize=" + QString::number(static_cast<int>(result.machineData.alphabet.size()))
-                              << "transitions=" + QString::number(static_cast<int>(result.machineData.transitions.size()));
+            qInfo().noquote() << "[GeminiAI] Maszyna sparsowana"
+                              << "stany=" + QString::number(result.machineData.numStates)
+                              << "rozmiarAlfabetu=" + QString::number(static_cast<int>(result.machineData.alphabet.size()))
+                              << "przejścia=" + QString::number(static_cast<int>(result.machineData.transitions.size()));
         }
         if (!result.rawResponse.trimmed().isEmpty())
         {
-            qInfo().noquote() << "[GeminiAI] Model response:\n" + result.rawResponse.trimmed();
+            qInfo().noquote() << "[GeminiAI] Odpowiedź modelu:\n" + result.rawResponse.trimmed();
         }
         if (!result.success)
         {
-            qWarning().noquote() << "[GeminiAI] Generation failed"
-                                 << "error=\"" + result.errorMessage + "\"";
+            qWarning().noquote() << "[GeminiAI] Generowanie nie powiodło się"
+                                 << "błąd=\"" + result.errorMessage + "\"";
         }
 
         if (onFinished)
@@ -588,7 +588,7 @@ GeminiMachineGenerator::Result GeminiMachineGenerator::parseResponse(const QByte
         finishReason = candidates.first().toObject().value("finishReason").toString();
         if (!finishReason.isEmpty())
         {
-            qInfo().noquote() << "[GeminiAI] Finish reason:" << finishReason;
+            qInfo().noquote() << "[GeminiAI] Powód zakończenia:" << finishReason;
         }
     }
 

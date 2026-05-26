@@ -37,7 +37,7 @@ public:
             }
 
             userCanceled = true;
-            qInfo().noquote() << "[GeminiAI] Cancel requested by user";
+            qInfo().noquote() << "[GeminiAI] Użytkownik zażądał anulowania";
             if (currentReply)
             {
                 currentReply->abort();
@@ -55,7 +55,7 @@ private:
     {
         if (fallbackUsed && progressDialog)
         {
-            progressDialog->setLabelText("Gemini generuje maszynę przez model fallback...");
+            progressDialog->setLabelText("Gemini generuje maszynę przez model zapasowy...");
         }
 
         currentReply = generator->generate(
@@ -71,28 +71,10 @@ private:
 
     void handleResult(const GeminiMachineGenerator::Result &result)
     {
-        if (!result.success &&
-            !fallbackUsed &&
-            !request.fallbackModelName.isEmpty() &&
-            GeminiMachineGenerator::shouldTryFallback(result))
-        {
-            fallbackUsed = true;
-            qWarning().noquote() << "[GeminiAI] Primary Free tier model failed, retrying fallback:"
-                                 << request.fallbackModelName
-                                 << "reason=\"" + result.errorMessage + "\"";
-            startRequest(request.fallbackModelName);
-            return;
-        }
-
-        if (progressDialog)
-        {
-            closingProgressDialog = true;
-            progressDialog->close();
-        }
-
         if (userCanceled)
         {
-            qInfo().noquote() << "[GeminiAI] User canceled request";
+            closeProgressDialog();
+            qInfo().noquote() << "[GeminiAI] Użytkownik anulował żądanie";
             if (onCanceled)
             {
                 onCanceled();
@@ -101,12 +83,36 @@ private:
             return;
         }
 
+        if (!result.success &&
+            !fallbackUsed &&
+            !request.fallbackModelName.isEmpty() &&
+            GeminiMachineGenerator::shouldTryFallback(result))
+        {
+            fallbackUsed = true;
+            qWarning().noquote() << "[GeminiAI] Główny model wariantu Free nie zadziałał, ponawiam przez model zapasowy:"
+                                 << request.fallbackModelName
+                                 << "powód=\"" + result.errorMessage + "\"";
+            startRequest(request.fallbackModelName);
+            return;
+        }
+
+        closeProgressDialog();
+
         if (onFinished)
         {
             onFinished(result);
         }
 
         deleteLater();
+    }
+
+    void closeProgressDialog()
+    {
+        if (progressDialog)
+        {
+            closingProgressDialog = true;
+            progressDialog->close();
+        }
     }
 
     GeminiGenerationRequest request;
