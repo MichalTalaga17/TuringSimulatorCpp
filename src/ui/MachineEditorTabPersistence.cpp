@@ -5,7 +5,6 @@
 #include <QMessageBox>
 #include <QTableWidget>
 #include <QInputDialog>
-#include <QDebug>
 
 #include <algorithm>
 
@@ -287,7 +286,6 @@ void MachineEditorTab::applyMachineData(const MachineData& data)
     transitionsTable->blockSignals(true);
 
     blankSymbol = data.blankSymbol;
-    previousBlankSymbol = data.blankSymbol;
     const int stateCount = std::max(1, data.numStates);
 
     blankSymbolField->setText(QString(QChar(blankSymbol)));

@@ -84,11 +84,6 @@ public:
      */
     int headPosition() const;
     /**
-     * @brief Zwraca symbol traktowany jako pusty.
-     * @return Symbol pustej komórki.
-     */
-    char blank() const;
-    /**
      * @brief Buduje wycinek taśmy z przedziału domkniętego `<from, to>`.
      * @param from Pierwsza pozycja wycinka.
      * @param to Ostatnia pozycja wycinka.

@@ -68,10 +68,6 @@ int Tape::headPosition() const {
     return headPosition_;
 }
 
-char Tape::blank() const {
-    return blankSymbol_;
-}
-
 std::string Tape::snapshot(int from, int to) const {
     std::string result;
     if (to < from) {

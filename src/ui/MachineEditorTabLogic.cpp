@@ -89,7 +89,7 @@ void MachineEditorTab::onAlphabetChanged()
         }
         filteredAlphaStr += alphaStr[i];
 
-        if (c != ',' && c != ' ' && c != 0 && c != currentBlank)
+        if (c != ',' && c != ' ' && c != 0)
         {
             if (std::find(newAlphabet.begin(), newAlphabet.end(), c) == newAlphabet.end()) {
                 newAlphabet.push_back(c);
@@ -139,7 +139,6 @@ void MachineEditorTab::onBlankSymbolChanged()
     }
 
     char oldBlank = blankSymbol;
-    previousBlankSymbol = blankSymbol;
     blankSymbol = newBlank;
 
     std::vector<char> newAlphabet;
@@ -236,12 +235,6 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
         return false;
     }
 
-    if (alphabet.empty())
-    {
-        showValidationWarning("Please define the alphabet");
-        return false;
-    }
-
     if (initialState.empty())
     {
         showValidationWarning("Please select an initial state");
@@ -316,7 +309,7 @@ bool MachineEditorTab::executeMachineStep()
         runButton->setText("Run");
         stepButton->setEnabled(true);
         executionTimer->stop();
-        statusLabel->setText(machine->isAccepted() ? "Accepted" : "Halted");
+        statusLabel->setText("Halted");
         return false;
     }
 

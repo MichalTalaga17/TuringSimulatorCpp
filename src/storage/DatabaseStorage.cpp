@@ -3,7 +3,6 @@
 #include "TuringMachine.h"
 
 #include <QSqlDatabase>
-#include <QSqlError>
 #include <QSqlQuery>
 #include <QVariant>
 

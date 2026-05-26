@@ -111,7 +111,7 @@ public:
      * @brief Udostępnia zdefiniowane przejścia do zapisu w pliku lub bazie.
      * @return Niemodyfikowalna mapa przejść.
      */
-    const TransitionMap &getTransitions() const { return transitions_; };
+    const TransitionMap &getTransitions() const { return transitions_; }
 
 private:
     /// Klucz mapy przejść: aktualny stan i symbol odczytany z taśmy.

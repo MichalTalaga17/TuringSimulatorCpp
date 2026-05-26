@@ -4,7 +4,6 @@
 #include "ui/GeminiGenerationRunner.h"
 
 #include <QApplication>
-#include <QColor>
 #include <QDebug>
 #include <QFile>
 #include <QFileDialog>
@@ -18,7 +17,6 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
-#include <QPalette>
 #include <QPushButton>
 #include <QResizeEvent>
 #include <QScrollArea>
@@ -685,7 +683,6 @@ void TuringSimulatorUI::updateMenuState()
     closeTabAction->setEnabled(hasCurrentTab);
     validateAction->setEnabled(hasTab);
     resetExampleAction->setEnabled(hasTab);
-    generateAiAction->setEnabled(true);
     stepAction->setEnabled(hasTab);
     runAction->setEnabled(hasTab);
     resetAction->setEnabled(hasTab);
