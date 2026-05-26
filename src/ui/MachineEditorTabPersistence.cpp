@@ -94,17 +94,34 @@ void MachineEditorTab::rebuildTransitionsTable()
         for (int col = 0; col < numCols; ++col)
         {
             char readSymbol = orderedAlpha[col];
-            QString defaultState = QString::fromStdString(states[row]);
-            
+            std::string state = states[row];
+
             QTableWidgetItem *item = new QTableWidgetItem();
             item->setTextAlignment(Qt::AlignCenter);
-            // Reguła domyślna: zapis = odczyt, ruch = P, stan = bieżący.
-            QString defaultText = QString("%1, %2, %3")
-                                      .arg(readSymbol)
-                                      .arg(LanguageManager::moveRightText())
-                                      .arg(defaultState);
-            item->setText(defaultText);
-            
+
+            // Sprawdź, czy mamy już to przejście w mapie.
+            auto it = transitionMap.find({state, readSymbol});
+            if (it != transitionMap.end())
+            {
+                char writeSymbol = std::get<0>(it->second);
+                std::string move = std::get<1>(it->second);
+                std::string nextState = std::get<2>(it->second);
+
+                item->setText(QString("%1, %2, %3")
+                                  .arg(writeSymbol)
+                                  .arg(QString::fromStdString(move))
+                                  .arg(QString::fromStdString(nextState)));
+            }
+            else
+            {
+                // Reguła domyślna: zapis = odczyt, ruch = P, stan = bieżący.
+                QString defaultText = QString("%1, %2, %3")
+                                          .arg(readSymbol)
+                                          .arg(LanguageManager::moveRightText())
+                                          .arg(QString::fromStdString(state));
+                item->setText(defaultText);
+            }
+
             transitionsTable->setItem(row, col, item);
         }
     }

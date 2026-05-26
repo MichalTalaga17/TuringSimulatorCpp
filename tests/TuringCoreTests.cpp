@@ -43,18 +43,6 @@ void loadTapeResetsExecutionState()
     assert(machine.tape().headPosition() == 0);
 }
 
-void acceptingInitialStateHaltsImmediately()
-{
-    TuringMachine machine('_');
-    machine.setInitialState("qa");
-    machine.addAcceptingState("qa");
-    machine.loadTape("");
-
-    assert(machine.isHalted());
-    assert(machine.isAccepted());
-    assert(!machine.step());
-}
-
 void stopTransitionHaltsAfterOneExecutedStep()
 {
     TuringMachine machine('_');
@@ -72,7 +60,6 @@ int main()
 {
     tapeReadsSparseCells();
     loadTapeResetsExecutionState();
-    acceptingInitialStateHaltsImmediately();
     stopTransitionHaltsAfterOneExecutedStep();
     return 0;
 }

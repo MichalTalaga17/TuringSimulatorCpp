@@ -47,11 +47,6 @@ public:
      */
     void setInitialState(std::string state);
     /**
-     * @brief Rejestruje stan kończący obliczenia z wynikiem akceptacji.
-     * @param state Nazwa stanu akceptującego.
-     */
-    void addAcceptingState(std::string state);
-    /**
      * @brief Dodaje regułę dla pary: aktualny stan i odczytany symbol.
      * @param state Stan, w którym reguła ma zostać użyta.
      * @param readSymbol Symbol wymagany pod głowicą.
@@ -82,11 +77,6 @@ public:
      * @return `true`, jeśli maszyna jest zatrzymana.
      */
     bool isHalted() const;
-    /**
-     * @brief Informuje, czy zatrzymanie nastąpiło w stanie akceptującym.
-     * @return `true`, jeśli maszyna zatrzymała się w stanie akceptującym.
-     */
-    bool isAccepted() const;
 
     /**
      * @brief Zwraca nazwę aktualnego stanu sterowania.
@@ -125,17 +115,10 @@ private:
     Tape tape_;
     /// Deterministyczna funkcja przejścia.
     std::map<TransitionKey, Transition> transitions_;
-    /// Stany zatrzymujące obliczenia z wynikiem akceptacji.
-    std::set<std::string> acceptingStates_;
     /// Wejście używane do odtworzenia taśmy podczas resetu.
     std::optional<std::string> initialTapeInput_;
     /// Liczba przejść wykonanych od ostatniego resetu.
     std::size_t stepCount_ = 0;
     /// Flaga oznaczająca, że maszyna nie wykona kolejnego kroku.
     bool halted_ = false;
-
-    /**
-     * @brief Aktualizuje stan zatrzymania na podstawie bieżącego stanu sterowania.
-     */
-    void updateHaltedForCurrentState();
 };
