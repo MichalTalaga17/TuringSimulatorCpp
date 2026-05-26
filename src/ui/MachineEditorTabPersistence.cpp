@@ -194,7 +194,7 @@ bool MachineEditorTab::saveMachineToPath(const QString &filePath)
     }
 
     currentFilePath = filePath;
-    statusLabel->setText("Zapisano maszynę");
+    setMachineStatus("Zapisano maszynę");
     emit titleChanged(tabTitle());
     QMessageBox::information(this, "Sukces", "Zapisano pomyślnie do pliku.");
     return true;
@@ -213,7 +213,7 @@ bool MachineEditorTab::loadFromFile(const QString &filePath)
 
     if (rebuildMachineFromEditor() && statusLabel)
     {
-        statusLabel->setText("Wczytano z pliku");
+        setMachineStatus("Wczytano z pliku");
     }
 
     currentFilePath = filePath;
@@ -241,7 +241,7 @@ bool MachineEditorTab::saveToDatabase()
         return false;
     }
 
-    statusLabel->setText("Zapisano w bazie");
+    setMachineStatus("Zapisano w bazie");
     currentFilePath.clear();
     untitledTitle = machineName;
     emit titleChanged(tabTitle());
@@ -266,7 +266,7 @@ bool MachineEditorTab::loadFromDatabase(const QString &machineName)
 
     // 4. Przebudowujemy logikę maszyny, żeby symulator wiedział co uruchomić
     if (rebuildMachineFromEditor() && statusLabel) {
-        statusLabel->setText("Wczytano z bazy: " + machineName);
+        setMachineStatus("Wczytano z bazy: " + machineName);
     }
 
     // 5. Aktualizujemy nazwę karty na tę wczytaną z bazy

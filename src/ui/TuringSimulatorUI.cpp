@@ -2,6 +2,7 @@
 
 #include "ui/GeminiApiKeysDialog.h"
 #include "ui/GeminiGenerationRunner.h"
+#include "LanguageManager.h"
 
 #include <QApplication>
 #include <QColor>
@@ -35,7 +36,6 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
       saveAction(nullptr),
       saveAsAction(nullptr),
       closeTabAction(nullptr),
-      validateAction(nullptr),
       resetExampleAction(nullptr),
       generateAiAction(nullptr),
       geminiSettingsAction(nullptr),
@@ -48,7 +48,7 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
       untitledTabCounter(1),
       themeManager(std::make_unique<ThemeManager>())
 {
-    setWindowTitle("Turing Machine Simulator");
+    setWindowTitle(TR("main_window_title"));
     setGeometry(100, 100, 1200, 850);
     setMinimumWidth(980);
     setMinimumHeight(720);
@@ -57,6 +57,8 @@ TuringSimulatorUI::TuringSimulatorUI(QWidget *parent)
     setupUI();
     showStartPage();
     updateMenuState();
+
+    connect(&LanguageManager::instance(), &LanguageManager::languageChanged, this, &TuringSimulatorUI::retranslateUi);
 }
 
 void TuringSimulatorUI::setupUI()
@@ -85,7 +87,7 @@ void TuringSimulatorUI::setupUI()
     newTabButton->setObjectName("tabAddButton");
     newTabButton->setCursor(Qt::PointingHandCursor);
     newTabButton->setFocusPolicy(Qt::NoFocus);
-    newTabButton->setToolTip("Nowa maszyna");
+    newTabButton->setToolTip(TR("new_machine_tooltip"));
     connect(newTabButton, &QPushButton::clicked, this, &TuringSimulatorUI::showStartPage);
     machineTabs->setCornerWidget(newTabButton, Qt::TopRightCorner);
 
@@ -103,98 +105,162 @@ void TuringSimulatorUI::setupMenu()
         addAction(action);
     };
 
-    QMenu *fileMenu = menuBar()->addMenu("Plik");
-    QAction *newTabAction = fileMenu->addAction("Zacznij od zera");
+    fileMenu = menuBar()->addMenu(TR("menu_file"));
+    newTabAction = fileMenu->addAction(TR("menu_file_new"));
     bindShortcut(newTabAction, QKeySequence(QKeySequence::New));
     connect(newTabAction, &QAction::triggered, this, &TuringSimulatorUI::createNewMachineTab);
 
-    QAction *exampleTabAction = fileMenu->addAction("Zacznij od przykładu");
+    exampleTabAction = fileMenu->addAction(TR("menu_file_example"));
     connect(exampleTabAction, &QAction::triggered, this, &TuringSimulatorUI::createExampleMachineTab);
 
-    QAction *openAction = fileMenu->addAction("Wczytaj maszynę z pliku .json");
+    openAction = fileMenu->addAction(TR("menu_file_open"));
     bindShortcut(openAction, QKeySequence(QKeySequence::Open));
     connect(openAction, &QAction::triggered, this, &TuringSimulatorUI::openMachineInNewTab);
 
     fileMenu->addSeparator();
 
-    saveAction = fileMenu->addAction("Zapisz");
+    saveAction = fileMenu->addAction(TR("menu_file_save"));
     bindShortcut(saveAction, QKeySequence(QKeySequence::Save));
     connect(saveAction, &QAction::triggered, this, &TuringSimulatorUI::saveCurrentMachine);
 
-    saveAsAction = fileMenu->addAction("Zapisz jako...");
+    saveAsAction = fileMenu->addAction(TR("menu_file_save_as"));
     bindShortcut(saveAsAction, QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
     connect(saveAsAction, &QAction::triggered, this, &TuringSimulatorUI::saveCurrentMachineAs);
 
     fileMenu->addSeparator();
 
-    QAction *openDbAction = fileMenu->addAction("Wczytaj z bazy danych...");
+    openDbAction = fileMenu->addAction(TR("menu_file_open_db"));
     connect(openDbAction, &QAction::triggered, this, &TuringSimulatorUI::openMachineFromDatabase);
 
 
-    QAction *saveDbAction = fileMenu->addAction("Zapisz w bazie danych...");
+    saveDbAction = fileMenu->addAction(TR("menu_file_save_db"));
     connect(saveDbAction, &QAction::triggered, this, &TuringSimulatorUI::saveCurrentMachineToDatabase);
 
     fileMenu->addSeparator();
 
-    closeTabAction = fileMenu->addAction("Zamknij kartę");
+    closeTabAction = fileMenu->addAction(TR("menu_file_close_tab"));
     bindShortcut(closeTabAction, QKeySequence(QKeySequence::Close));
     connect(closeTabAction, &QAction::triggered, this, &TuringSimulatorUI::closeCurrentMachineTab);
 
     fileMenu->addSeparator();
 
-    QAction *quitAction = fileMenu->addAction("Zakończ");
+    quitAction = fileMenu->addAction(TR("menu_file_quit"));
     bindShortcut(quitAction, QKeySequence(QKeySequence::Quit));
     connect(quitAction, &QAction::triggered, qApp, &QApplication::quit);
 
-    QMenu *machineMenu = menuBar()->addMenu("Maszyna");
-    validateAction = machineMenu->addAction("Waliduj i przebuduj");
-    bindShortcut(validateAction, QKeySequence(Qt::CTRL | Qt::Key_B));
-    connect(validateAction, &QAction::triggered, this, &TuringSimulatorUI::validateCurrentMachine);
+    machineMenu = menuBar()->addMenu(TR("menu_machine"));
 
-    resetExampleAction = machineMenu->addAction("Przywróć przykład startowy");
+    resetExampleAction = machineMenu->addAction(TR("menu_machine_reset_example"));
     connect(resetExampleAction, &QAction::triggered, this, &TuringSimulatorUI::resetCurrentMachineToExample);
 
-    generateAiAction = machineMenu->addAction("Generuj z Gemini AI...");
+    generateAiAction = machineMenu->addAction(TR("menu_machine_generate_ai"));
     bindShortcut(generateAiAction, QKeySequence(Qt::CTRL | Qt::Key_G));
     connect(generateAiAction, &QAction::triggered, this, &TuringSimulatorUI::generateMachineWithAi);
 
-    geminiSettingsAction = machineMenu->addAction("Ustawienia Gemini API...");
+    geminiSettingsAction = machineMenu->addAction(TR("menu_machine_gemini_settings"));
     connect(geminiSettingsAction, &QAction::triggered, this, &TuringSimulatorUI::showGeminiSettingsDialog);
 
-    QMenu *simulationMenu = menuBar()->addMenu("Symulacja");
-    stepAction = simulationMenu->addAction("Krok");
+    simulationMenu = menuBar()->addMenu(TR("menu_simulation"));
+    stepAction = simulationMenu->addAction(TR("menu_simulation_step"));
     bindShortcut(stepAction, QKeySequence(Qt::Key_F10));
     connect(stepAction, &QAction::triggered, this, &TuringSimulatorUI::stepCurrentMachine);
 
-    runAction = simulationMenu->addAction("Uruchom / pauza");
+    runAction = simulationMenu->addAction(TR("menu_simulation_run_pause"));
     bindShortcut(runAction, QKeySequence(Qt::Key_F5));
     connect(runAction, &QAction::triggered, this, &TuringSimulatorUI::toggleCurrentMachineRun);
 
-    resetAction = simulationMenu->addAction("Reset");
+    resetAction = simulationMenu->addAction(TR("menu_simulation_reset"));
     bindShortcut(resetAction, QKeySequence(Qt::CTRL | Qt::Key_R));
     connect(resetAction, &QAction::triggered, this, &TuringSimulatorUI::resetCurrentMachine);
 
-    QMenu *viewMenu = menuBar()->addMenu("Widok");
-    previousTabAction = viewMenu->addAction("Poprzednia karta");
+    viewMenu = menuBar()->addMenu(TR("menu_view"));
+    previousTabAction = viewMenu->addAction(TR("menu_view_prev_tab"));
     bindShortcut(previousTabAction, QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab));
     connect(previousTabAction, &QAction::triggered, this, &TuringSimulatorUI::selectPreviousTab);
 
-    nextTabAction = viewMenu->addAction("Następna karta");
+    nextTabAction = viewMenu->addAction(TR("menu_view_next_tab"));
     bindShortcut(nextTabAction, QKeySequence(Qt::CTRL | Qt::Key_Tab));
     connect(nextTabAction, &QAction::triggered, this, &TuringSimulatorUI::selectNextTab);
 
     viewMenu->addSeparator();
 
-    toggleThemeAction = viewMenu->addAction("Tryb ciemny");
+    toggleThemeAction = viewMenu->addAction(TR("menu_view_dark_mode"));
     bindShortcut(toggleThemeAction, QKeySequence(Qt::CTRL | Qt::Key_M));
     connect(toggleThemeAction, &QAction::triggered, this, &TuringSimulatorUI::toggleTheme);
 
-    QMenu *helpMenu = menuBar()->addMenu("Pomoc");
-    QAction *aboutAction = helpMenu->addAction("O programie");
+    helpMenu = menuBar()->addMenu(TR("menu_help"));
+    aboutAction = helpMenu->addAction(TR("menu_help_about"));
     connect(aboutAction, &QAction::triggered, this, &TuringSimulatorUI::showAboutDialog);
 
-    QAction* aboutAuthorsAction = helpMenu->addAction("O autorach");
+    aboutAuthorsAction = helpMenu->addAction(TR("menu_help_authors"));
     connect(aboutAuthorsAction, &QAction::triggered, this, &TuringSimulatorUI::showAboutAuthorsDialog);
+
+    QWidget* spacer = new QWidget();
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    menuBar()->setCornerWidget(spacer, Qt::TopRightCorner);
+
+    langButton = new QPushButton(menuBar());
+    langButton->setFlat(true);
+    langButton->setCursor(Qt::PointingHandCursor);
+    QString currentLangIcon = LanguageManager::instance().currentLanguage() == LanguageManager::Language::Polish ? "🇵🇱" : "🇬🇧";
+    langButton->setText(currentLangIcon);
+    connect(langButton, &QPushButton::clicked, this, &TuringSimulatorUI::toggleLanguage);
+
+    // Add the button to the right of the menubar native corner widget.
+    menuBar()->setCornerWidget(langButton, Qt::TopRightCorner);
+}
+
+void TuringSimulatorUI::retranslateUi()
+{
+    setWindowTitle(TR("main_window_title"));
+    if (newTabButton) {
+        newTabButton->setToolTip(TR("new_machine_tooltip"));
+    }
+
+    if (fileMenu) fileMenu->setTitle(TR("menu_file"));
+    if (newTabAction) newTabAction->setText(TR("menu_file_new"));
+    if (exampleTabAction) exampleTabAction->setText(TR("menu_file_example"));
+    if (openAction) openAction->setText(TR("menu_file_open"));
+    if (openDbAction) openDbAction->setText(TR("menu_file_open_db"));
+    if (saveDbAction) saveDbAction->setText(TR("menu_file_save_db"));
+    if (saveAction) saveAction->setText(TR("menu_file_save"));
+    if (saveAsAction) saveAsAction->setText(TR("menu_file_save_as"));
+    if (closeTabAction) closeTabAction->setText(TR("menu_file_close_tab"));
+    if (quitAction) quitAction->setText(TR("menu_file_quit"));
+
+    if (machineMenu) machineMenu->setTitle(TR("menu_machine"));
+    if (resetExampleAction) resetExampleAction->setText(TR("menu_machine_reset_example"));
+    if (generateAiAction) generateAiAction->setText(TR("menu_machine_generate_ai"));
+    if (geminiSettingsAction) geminiSettingsAction->setText(TR("menu_machine_gemini_settings"));
+
+    if (simulationMenu) simulationMenu->setTitle(TR("menu_simulation"));
+    if (stepAction) stepAction->setText(TR("menu_simulation_step"));
+    if (runAction) runAction->setText(TR("menu_simulation_run_pause"));
+    if (resetAction) resetAction->setText(TR("menu_simulation_reset"));
+
+    if (viewMenu) viewMenu->setTitle(TR("menu_view"));
+    if (previousTabAction) previousTabAction->setText(TR("menu_view_prev_tab"));
+    if (nextTabAction) nextTabAction->setText(TR("menu_view_next_tab"));
+    if (toggleThemeAction) toggleThemeAction->setText(TR("menu_view_dark_mode"));
+
+    if (helpMenu) helpMenu->setTitle(TR("menu_help"));
+    if (aboutAction) aboutAction->setText(TR("menu_help_about"));
+    if (aboutAuthorsAction) aboutAuthorsAction->setText(TR("menu_help_authors"));
+
+    if (langButton) {
+        QString currentLangIcon = LanguageManager::instance().currentLanguage() == LanguageManager::Language::Polish ? "🇵🇱" : "🇬🇧";
+        langButton->setText(currentLangIcon);
+    }
+}
+
+void TuringSimulatorUI::toggleLanguage()
+{
+    auto& lm = LanguageManager::instance();
+    auto newLang = (lm.currentLanguage() == LanguageManager::Language::Polish) 
+                   ? LanguageManager::Language::English 
+                   : LanguageManager::Language::Polish;
+
+    lm.setLanguage(newLang);
 }
 
 MachineEditorTab *TuringSimulatorUI::currentMachineTab() const
@@ -531,14 +597,6 @@ void TuringSimulatorUI::closeTabAt(int index)
     updateNewTabButtonPosition();
 }
 
-void TuringSimulatorUI::validateCurrentMachine()
-{
-    if (MachineEditorTab *tab = currentMachineTab())
-    {
-        tab->validateMachine();
-    }
-}
-
 void TuringSimulatorUI::resetCurrentMachineToExample()
 {
     if (MachineEditorTab *tab = currentMachineTab())
@@ -683,7 +741,6 @@ void TuringSimulatorUI::updateMenuState()
     saveAction->setEnabled(hasTab);
     saveAsAction->setEnabled(hasTab);
     closeTabAction->setEnabled(hasCurrentTab);
-    validateAction->setEnabled(hasTab);
     resetExampleAction->setEnabled(hasTab);
     generateAiAction->setEnabled(true);
     stepAction->setEnabled(hasTab);

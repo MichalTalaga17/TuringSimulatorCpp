@@ -68,11 +68,6 @@ public:
      */
     bool saveToFileAs();
     /**
-     * @brief Przebudowuje maszynę i pokazuje wynik walidacji.
-     * @return `true`, jeśli aktualna konfiguracja jest poprawna.
-     */
-    bool validateMachine();
-    /**
      * @brief Przywraca przykład startowy w bieżącej karcie.
      */
     void resetToDefaultExample();
@@ -216,8 +211,8 @@ private:
     bool rebuildMachineFromEditor();
     /// Wykonuje jeden krok i spójnie kończy/pauzuje UI, jeśli maszyna się zatrzyma.
     bool executeMachineStep();
-    /// Buduje maszynę z aktualnej konfiguracji formularza i opcjonalnie pokazuje komunikat sukcesu.
-    bool buildMachineFromCurrentConfiguration(bool showSuccessDialog);
+    /// Buduje maszynę z aktualnej konfiguracji formularza.
+    bool buildMachineFromCurrentConfiguration();
     /// Przebudowuje tabelę przejść po zmianie liczby stanów lub alfabetu.
     void rebuildTransitionsTable();
     /// Zmienia symbol w kolumnie bez przebudowania całej tabeli (dla zmiany symbolu pustego).

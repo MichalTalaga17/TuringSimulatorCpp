@@ -1,4 +1,5 @@
 #include "MachineEditorTab.h"
+#include <LanguageManager.h>
 
 #include <QFileInfo>
 #include <QMessageBox>
@@ -13,17 +14,6 @@ QString MachineEditorTab::tabTitle() const
     }
 
     return untitledTitle;
-}
-
-bool MachineEditorTab::validateMachine()
-{
-    const bool isValid = buildMachineFromCurrentConfiguration(true);
-    if (isValid && machine)
-    {
-        machine->loadTape(tapeInputField->text().trimmed().toStdString());
-        updateDisplay();
-    }
-    return isValid;
 }
 
 void MachineEditorTab::resetToDefaultExample()
@@ -60,11 +50,7 @@ void MachineEditorTab::onNumStatesChanged(int value)
     // Przebuduj całą tabelę, bo zmiana stanów wymaga nowych elementów.
     rebuildTransitionsTable();
 
-    const bool rebuilt = rebuildMachineFromEditor();
-    if (statusLabel)
-    {
-        statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
-    }
+    rebuildMachineFromEditor();
 }
 
 void MachineEditorTab::onAlphabetChanged()
@@ -112,11 +98,7 @@ void MachineEditorTab::onAlphabetChanged()
         rebuildTransitionsTable();
     }
 
-    const bool rebuilt = rebuildMachineFromEditor();
-    if (statusLabel)
-    {
-        statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
-    }
+    rebuildMachineFromEditor();
 }
 
 void MachineEditorTab::onBlankSymbolChanged()
@@ -155,11 +137,7 @@ void MachineEditorTab::onBlankSymbolChanged()
     alphabet = newAlphabet;
     rebuildTransitionsTable();
 
-    const bool rebuilt = rebuildMachineFromEditor();
-    if (statusLabel)
-    {
-        statusLabel->setText(rebuilt ? "Rebuilt" : "Edit");
-    }
+    rebuildMachineFromEditor();
 }
 
 void MachineEditorTab::onTableItemChanged(QTableWidgetItem *item)
@@ -196,22 +174,11 @@ void MachineEditorTab::onTableItemChanged(QTableWidgetItem *item)
         transitionMap.erase({state, symbol});
     }
 
-    if (rebuildMachineFromEditor() && statusLabel)
-    {
-        statusLabel->setText("Rebuilt");
-    }
+    rebuildMachineFromEditor();
 }
 
-bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDialog)
+bool MachineEditorTab::buildMachineFromCurrentConfiguration()
 {
-    auto showValidationWarning = [this, showSuccessDialog](const QString &message)
-    {
-        if (showSuccessDialog)
-        {
-            QMessageBox::warning(this, "Validation Error", message);
-        }
-    };
-
     if (initialStateCombo && !initialStateCombo->currentText().isEmpty())
     {
         initialState = initialStateCombo->currentText().toStdString();
@@ -232,25 +199,21 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
     // Walidacja.
     if (states.empty())
     {
-        showValidationWarning("Please set the number of states");
         return false;
     }
 
     if (alphabet.empty())
     {
-        showValidationWarning("Please define the alphabet");
         return false;
     }
 
     if (initialState.empty())
     {
-        showValidationWarning("Please select an initial state");
         return false;
     }
 
     if (transitionMap.empty())
     {
-        showValidationWarning("Please define at least one transition");
         return false;
     }
 
@@ -277,12 +240,6 @@ bool MachineEditorTab::buildMachineFromCurrentConfiguration(bool showSuccessDial
             move = HeadMove::STOP;
 
         machine->addTransition(fromState, readSymbol, {writeSymbol, move, toState});
-    }
-
-    if (showSuccessDialog)
-    {
-        statusLabel->setText("Built");
-        QMessageBox::information(this, "Success", "Machine built successfully! You can run it above.");
     }
 
     return true;
@@ -313,10 +270,10 @@ bool MachineEditorTab::executeMachineStep()
     if (!executedStep || machine->isHalted())
     {
         isRunning = false;
-        runButton->setText("Run");
+        runButton->setText(TR("Run"));
         stepButton->setEnabled(true);
         executionTimer->stop();
-        statusLabel->setText(machine->isAccepted() ? "Accepted" : "Halted");
+        statusLabel->setText(machine->isAccepted() ? TR("Accepted") : TR("Halted"));
         return false;
     }
 
@@ -329,17 +286,32 @@ bool MachineEditorTab::rebuildMachineFromEditor()
     {
         isRunning = false;
         executionTimer->stop();
-        runButton->setText("Run");
+        runButton->setText(TR("Run"));
         stepButton->setEnabled(true);
     }
 
-    if (!buildMachineFromCurrentConfiguration(false) || !machine)
+    if (!buildMachineFromCurrentConfiguration() || !machine)
     {
+        if (statusLabel)
+        {
+            statusLabel->setText(TR("Edit"));
+        }
+        if (runButton) runButton->setEnabled(false);
+        if (stepButton) stepButton->setEnabled(false);
         return false;
     }
 
     machine->loadTape(tapeInputField->text().trimmed().toStdString());
     updateDisplay();
+
+    if (statusLabel)
+    {
+        statusLabel->setText(TR("Rebuilt"));
+    }
+
+    if (runButton) runButton->setEnabled(true);
+    if (stepButton) stepButton->setEnabled(true);
+
     return true;
 }
 
@@ -351,10 +323,7 @@ void MachineEditorTab::onTapeInputChanged()
         tapeWarningLabel->hide();
     }
 
-    if (rebuildMachineFromEditor() && statusLabel)
-    {
-        statusLabel->setText("Rebuilt");
-    }
+    rebuildMachineFromEditor();
 }
 
 void MachineEditorTab::checkTapeForUndefinedSymbols()
@@ -378,7 +347,6 @@ void MachineEditorTab::onStepClicked()
 {
     if (!machine)
     {
-        QMessageBox::warning(this, "Error", "Please build a machine first");
         return;
     }
 
@@ -391,7 +359,6 @@ void MachineEditorTab::onRunClicked()
 {
     if (!machine)
     {
-        QMessageBox::warning(this, "Error", "Please build a machine first");
         return;
     }
 
@@ -401,12 +368,12 @@ void MachineEditorTab::onRunClicked()
     }
 
     isRunning = !isRunning;
-    runButton->setText(isRunning ? "Stop" : "Run");
+    runButton->setText(isRunning ? TR("Stop") : TR("Run"));
     stepButton->setEnabled(!isRunning);
 
     if (isRunning)
     {
-        statusLabel->setText("Running");
+        statusLabel->setText(TR("Running"));
         if (executeMachineStep())
         {
             executionTimer->start(2001 - executionSpeed);
@@ -414,7 +381,7 @@ void MachineEditorTab::onRunClicked()
     }
     else
     {
-        statusLabel->setText("Paused");
+        statusLabel->setText(TR("Paused"));
         executionTimer->stop();
     }
 }
@@ -429,11 +396,11 @@ void MachineEditorTab::onResetClicked()
     {
         machine->reset();
         isRunning = false;
-        runButton->setText("Run");
+        runButton->setText(TR("Run"));
         stepButton->setEnabled(true);
         executionTimer->stop();
         updateDisplay();
-        statusLabel->setText("Reset");
+        statusLabel->setText(TR("Reset"));
     }
 }
 
@@ -503,7 +470,7 @@ void MachineEditorTab::applyDefaultExample()
 
     if (rebuildMachineFromEditor())
     {
-        statusLabel->setText("Ready");
+        statusLabel->setText(TR("Ready"));
     }
 }
 
@@ -518,6 +485,6 @@ void MachineEditorTab::applyBlankMachine()
 
     if (rebuildMachineFromEditor())
     {
-        statusLabel->setText("Ready");
+        statusLabel->setText(TR("Ready"));
     }
 }

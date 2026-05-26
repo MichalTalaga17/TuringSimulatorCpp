@@ -30,6 +30,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     Gui
     Widgets
     Sql
+    Network
 )
 
 # Core Turing Machine library (non-GUI)
@@ -57,16 +58,25 @@ add_executable(TuringSimulatorCpp
     src/ui/MachineEditorTabLogic.cpp
     src/ui/MachineEditorTabPersistence.cpp
     src/ui/MachineEditorTabView.cpp
+    src/ui/MachineEditorTabAi.cpp
     src/ui/TransitionDelegate.cpp
     src/ui/TuringSimulatorUI.cpp
+    src/ui/GeminiApiKeysDialog.cpp
+    src/ui/GeminiDialogStyle.cpp
+    src/ui/GeminiGenerationRunner.cpp
+    src/ui/GeminiSettingsDialog.cpp
     src/ThemeManager.cpp
+    src/LanguageManager.cpp
+    src/GeminiMachineGenerator.cpp
     include/TransitionDelegate.h
     include/MachineEditorTab.h
     include/TuringSimulatorUI.h
     include/ThemeManager.h
+    include/LanguageManager.h
     include/ui.h
     include/ui/TransitionTableRoles.h
     include/storage.h
+    include/GeminiMachineGenerator.h
     src/storage/FileStorage.cpp
     src/storage/DatabaseStorage.cpp
 )
@@ -79,6 +89,7 @@ target_link_libraries(TuringSimulatorCpp PRIVATE
     Qt6::Gui
     Qt6::Widgets
     Qt6::Sql
+    Qt6::Network
 )
 
 find_package(Doxygen QUIET)
@@ -102,6 +113,8 @@ if(WIN32)
             "${QT_BIN_DIR}/Qt6Cored.dll"
             "${QT_BIN_DIR}/Qt6Guid.dll"
             "${QT_BIN_DIR}/Qt6Widgetsd.dll"
+            "${QT_BIN_DIR}/Qt6Networkd.dll"
+            "${QT_BIN_DIR}/Qt6Sqld.dll"
             "$<TARGET_FILE_DIR:TuringSimulatorCpp>/"
         COMMENT "Copying Qt6 runtime DLLs"
     )
@@ -113,5 +126,25 @@ if(WIN32)
             "${QT_PLUGINS_DIR}/platforms/qwindowsd.dll"
             "$<TARGET_FILE_DIR:TuringSimulatorCpp>/platforms/"
         COMMENT "Copying Qt6 platform plugins"
+    )
+
+    # Copy TLS plugins for HTTPS support
+    add_custom_command(TARGET TuringSimulatorCpp POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:TuringSimulatorCpp>/tls"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${QT_PLUGINS_DIR}/tls/qcertonlybackendd.dll"
+            "${QT_PLUGINS_DIR}/tls/qopensslbackendd.dll"
+            "${QT_PLUGINS_DIR}/tls/qschannelbackendd.dll"
+            "$<TARGET_FILE_DIR:TuringSimulatorCpp>/tls/"
+        COMMENT "Copying Qt6 TLS plugins"
+    )
+
+    # Copy SQL drivers for Database functionality
+    add_custom_command(TARGET TuringSimulatorCpp POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:TuringSimulatorCpp>/sqldrivers"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${QT_PLUGINS_DIR}/sqldrivers/qsqlited.dll"
+            "$<TARGET_FILE_DIR:TuringSimulatorCpp>/sqldrivers/"
+        COMMENT "Copying Qt6 SQL drivers"
     )
 endif()

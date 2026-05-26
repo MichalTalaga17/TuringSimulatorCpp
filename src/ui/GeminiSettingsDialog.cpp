@@ -2,6 +2,7 @@
 
 #include "GeminiMachineGenerator.h"
 #include "ui/GeminiDialogStyle.h"
+#include <LanguageManager.h>
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -21,11 +22,11 @@ GeminiSettingsDialog::GeminiSettingsDialog(
     : QDialog(parent),
       descriptionEdit(new QTextEdit(this)),
       tierCombo(new QComboBox(this)),
-      thinkingCheckBox(new QCheckBox("Włącz myślenie modelu", this)),
+      thinkingCheckBox(new QCheckBox(TR("turn_on_thinking"), this)),
       buttonBox(new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this))
 {
     setObjectName("geminiSettingsDialog");
-    setWindowTitle("Generuj maszynę z Gemini");
+    setWindowTitle(TR("generate_with_gemini"));
     setModal(true);
     setMinimumWidth(560);
     resize(620, 440);
@@ -34,21 +35,21 @@ GeminiSettingsDialog::GeminiSettingsDialog(
     layout->setContentsMargins(22, 20, 22, 18);
     layout->setSpacing(14);
 
-    auto *titleLabel = new QLabel("Generuj maszynę z Gemini", this);
+    auto *titleLabel = new QLabel(TR("generate_with_gemini"), this);
     titleLabel->setObjectName("dialogTitle");
     layout->addWidget(titleLabel);
 
-    auto *subtitleLabel = new QLabel("Opisz zadanie, wybierz tier API i ustaw tryb myślenia.", this);
+    auto *subtitleLabel = new QLabel(TR("generation_info"), this);
     subtitleLabel->setObjectName("dialogSubtitle");
     subtitleLabel->setWordWrap(true);
     layout->addWidget(subtitleLabel);
 
-    auto *descriptionLabel = new QLabel("Opis maszyny", this);
+    auto *descriptionLabel = new QLabel(TR("machine_description"), this);
     descriptionLabel->setObjectName("fieldLabel");
     layout->addWidget(descriptionLabel);
 
     descriptionEdit->setPlainText(initialDescription);
-    descriptionEdit->setPlaceholderText("np. Odejmowanie 1 od liczby zapisanej binarnie na taśmie.");
+    descriptionEdit->setPlaceholderText(TR("example_prompt"));
     descriptionEdit->setMinimumHeight(130);
     descriptionEdit->setAcceptRichText(false);
     layout->addWidget(descriptionEdit);
@@ -71,17 +72,17 @@ GeminiSettingsDialog::GeminiSettingsDialog(
     }
     tierCombo->setCurrentIndex(tiers.indexOf(selectedInitialTier));
     tierCombo->setMinimumWidth(260);
-    formLayout->addRow("Tier:", tierCombo);
+    formLayout->addRow(TR("Tier:"), tierCombo);
 
     thinkingCheckBox->setChecked(initialThinking);
-    formLayout->addRow("Myślenie:", thinkingCheckBox);
+    formLayout->addRow(TR("Thinking:"), thinkingCheckBox);
 
     layout->addWidget(settingsFrame);
     layout->addStretch(1);
 
-    buttonBox->button(QDialogButtonBox::Ok)->setText("Generuj");
+    buttonBox->button(QDialogButtonBox::Ok)->setText(TR("generate"));
     buttonBox->button(QDialogButtonBox::Ok)->setObjectName("primaryButton");
-    buttonBox->button(QDialogButtonBox::Cancel)->setText("Anuluj");
+    buttonBox->button(QDialogButtonBox::Cancel)->setText(TR("cancel"));
     buttonBox->button(QDialogButtonBox::Cancel)->setObjectName("secondaryButton");
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);

@@ -1,6 +1,7 @@
 #include "ui/GeminiApiKeysDialog.h"
 
 #include "ui/GeminiDialogStyle.h"
+#include <LanguageManager.h>
 
 #include <QDialogButtonBox>
 #include <QDebug>
@@ -58,7 +59,7 @@ GeminiApiKeysDialog::GeminiApiKeysDialog(
       proApiKeyField(new QLineEdit(this))
 {
     setObjectName("geminiApiKeysDialog");
-    setWindowTitle("Ustawienia Gemini API");
+    setWindowTitle(TR("gemini_API_settings_title"));
     setModal(true);
     setMinimumWidth(560);
 
@@ -66,11 +67,11 @@ GeminiApiKeysDialog::GeminiApiKeysDialog(
     layout->setContentsMargins(22, 20, 22, 18);
     layout->setSpacing(14);
 
-    auto *titleLabel = new QLabel("Klucze Gemini API", this);
+    auto *titleLabel = new QLabel(TR("gemini_API_keys"), this);
     titleLabel->setObjectName("dialogTitle");
     layout->addWidget(titleLabel);
 
-    auto *subtitleLabel = new QLabel("Zapisz osobne klucze dla Free tier i Pro tier.", this);
+    auto *subtitleLabel = new QLabel(TR("API_tiers_info"), this);
     subtitleLabel->setObjectName("dialogSubtitle");
     subtitleLabel->setWordWrap(true);
     layout->addWidget(subtitleLabel);
@@ -81,21 +82,21 @@ GeminiApiKeysDialog::GeminiApiKeysDialog(
 
     freeApiKeyField->setText(initialFreeApiKey);
     freeApiKeyField->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-    freeApiKeyField->setPlaceholderText("Free tier API key");
+    freeApiKeyField->setPlaceholderText(TR("Free_API_key"));
     formLayout->addRow("Free tier:", freeApiKeyField);
 
     proApiKeyField->setText(initialProApiKey);
     proApiKeyField->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-    proApiKeyField->setPlaceholderText("Pro tier API key");
+    proApiKeyField->setPlaceholderText(TR("Pro_API_key"));
     formLayout->addRow("Pro tier:", proApiKeyField);
 
     layout->addLayout(formLayout);
     layout->addStretch(1);
 
     auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-    buttonBox->button(QDialogButtonBox::Ok)->setText("Zapisz");
+    buttonBox->button(QDialogButtonBox::Ok)->setText(TR("gemini_keys_save"));
     buttonBox->button(QDialogButtonBox::Ok)->setObjectName("primaryButton");
-    buttonBox->button(QDialogButtonBox::Cancel)->setText("Anuluj");
+    buttonBox->button(QDialogButtonBox::Cancel)->setText(TR("gemini_keys_cancel"));
     buttonBox->button(QDialogButtonBox::Cancel)->setObjectName("secondaryButton");
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);

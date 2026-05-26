@@ -60,8 +60,6 @@ private slots:
     void saveCurrentMachineToDatabase();
     /// Zamyka aktualnie aktywną kartę.
     void closeCurrentMachineTab();
-    /// Waliduje i przebudowuje bieżącą maszynę.
-    void validateCurrentMachine();
     /// Przywraca przykład startowy w bieżącej karcie.
     void resetCurrentMachineToExample();
     /// Generuje maszynę z użyciem Gemini AI w bieżącej albo nowej karcie.
@@ -80,12 +78,16 @@ private slots:
     void selectNextTab();
     /// Odświeża dostępność akcji menu i tytuł okna.
     void updateMenuState();
+    /// Tłumaczy wszystkie elementy UI (dla zmiany języka "w locie").
+    void retranslateUi();
     /// Pokazuje okno informacji o programie.
     void showAboutDialog();
     /// Pokazuje okno informacji o autorach.
     void showAboutAuthorsDialog();
     /// Przełącza jasny i ciemny motyw aplikacji.
     void toggleTheme();
+    /// Przełącza język aplikacji.
+    void toggleLanguage();
 
 private:
     /// Buduje główny QTabWidget i przycisk dodawania kart.
@@ -115,12 +117,29 @@ private:
     QTabWidget *machineTabs;
     /// Przycisk `+` tworzący lub pokazujący stronę startową.
     QPushButton *newTabButton;
+    /// Przycisk zmiany języka.
+    QPushButton *langButton;
+
+    /// @name Menu główne
+    /// @{
+    QMenu *fileMenu;
+    QMenu *machineMenu;
+    QMenu *simulationMenu;
+    QMenu *viewMenu;
+    QMenu *helpMenu;
+    /// @}
+
     /// @name Akcje menu zależne od aktywnej karty
     /// @{
+    QAction *newTabAction;
+    QAction *exampleTabAction;
+    QAction *openAction;
+    QAction *openDbAction;
+    QAction *saveDbAction;
     QAction *saveAction;
     QAction *saveAsAction;
     QAction *closeTabAction;
-    QAction *validateAction;
+    QAction *quitAction;
     QAction *resetExampleAction;
     QAction *generateAiAction;
     QAction *geminiSettingsAction;
@@ -130,6 +149,8 @@ private:
     QAction *previousTabAction;
     QAction *nextTabAction;
     QAction *toggleThemeAction;
+    QAction *aboutAction;
+    QAction *aboutAuthorsAction;
     /// @}
     /// Licznik tytułów nowych, niezapisanych kart.
     int untitledTabCounter;
