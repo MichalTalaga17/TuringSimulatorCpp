@@ -1,5 +1,7 @@
 #include "ui/GeminiGenerationRunner.h"
 
+#include "LanguageManager.h"
+
 #include <QDebug>
 #include <QNetworkReply>
 #include <QObject>
@@ -23,7 +25,7 @@ public:
           onFinished(std::move(onFinished)),
           onCanceled(std::move(onCanceled)),
           generator(new GeminiMachineGenerator(this)),
-          progressDialog(new QProgressDialog("Gemini generuje maszynę...", "Anuluj", 0, 0, parent))
+          progressDialog(new QProgressDialog(LanguageManager::text("gemini_progress"), LanguageManager::text("button_cancel"), 0, 0, parent))
     {
         progressDialog->setAttribute(Qt::WA_DeleteOnClose);
         progressDialog->setWindowModality(Qt::WindowModal);
@@ -55,7 +57,7 @@ private:
     {
         if (fallbackUsed && progressDialog)
         {
-            progressDialog->setLabelText("Gemini generuje maszynę przez model zapasowy...");
+            progressDialog->setLabelText(LanguageManager::text("gemini_progress_fallback"));
         }
 
         currentReply = generator->generate(

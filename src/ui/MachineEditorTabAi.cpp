@@ -1,6 +1,7 @@
 #include "MachineEditorTab.h"
 
 #include "GeminiMachineGenerator.h"
+#include "LanguageManager.h"
 #include "ui/GeminiApiKeysDialog.h"
 #include "ui/GeminiGenerationRunner.h"
 #include "ui/GeminiSettingsDialog.h"
@@ -92,8 +93,8 @@ bool MachineEditorTab::resolveGeminiGenerationRequest(
         qInfo().noquote() << "[GeminiAI] Anulowano: brakuje klucza API dla wybranego wariantu";
         QMessageBox::warning(
             parent,
-            "Gemini API",
-            QString("Brakuje klucza API dla %1. Uzupełnij go w ustawieniach Gemini.")
+            LanguageManager::text("gemini_api_title"),
+            LanguageManager::text("gemini_missing_key")
                 .arg(GeminiMachineGenerator::tierDisplayName(tierId)));
         return false;
     }
@@ -120,7 +121,7 @@ void MachineEditorTab::generateMachineWithAi()
     if (aiGenerationInProgress)
     {
         qInfo().noquote() << "[GeminiAI] Zignorowano: generowanie już trwa";
-        QMessageBox::information(this, "Gemini AI", "Generowanie maszyny jest już w toku.");
+        QMessageBox::information(this, LanguageManager::text("gemini_title"), LanguageManager::text("gemini_busy"));
         return;
     }
 
@@ -147,7 +148,7 @@ void MachineEditorTab::generateMachineWithAi(
     if (aiGenerationInProgress)
     {
         qInfo().noquote() << "[GeminiAI] Zignorowano: generowanie już trwa";
-        QMessageBox::information(this, "Gemini AI", "Generowanie maszyny jest już w toku.");
+        QMessageBox::information(this, LanguageManager::text("gemini_title"), LanguageManager::text("gemini_busy"));
         return;
     }
 
@@ -186,19 +187,19 @@ void MachineEditorTab::generateMachineWithAi(
     }
     if (statusLabel)
     {
-        statusLabel->setText("AI...");
+        setStatusText("status_ai_generating");
     }
 
-    auto finishGeneration = [this](const QString &statusText)
+    auto finishGeneration = [this](const QString &statusKey)
     {
         aiGenerationInProgress = false;
         if (aiGenerateButton)
         {
             aiGenerateButton->setEnabled(true);
         }
-        if (statusLabel && !statusText.isEmpty())
+        if (!statusKey.isEmpty())
         {
-            statusLabel->setText(statusText);
+            setStatusText(statusKey.toLatin1().constData());
         }
     };
 
@@ -222,9 +223,9 @@ void MachineEditorTab::generateMachineWithAi(
                                      << result.errorMessage;
                 if (statusLabel)
                 {
-                    statusLabel->setText("Błąd AI");
+                    setStatusText("status_ai_error");
                 }
-                QMessageBox::warning(this, "Gemini AI", result.errorMessage);
+                QMessageBox::warning(this, LanguageManager::text("gemini_title"), result.errorMessage);
                 return;
             }
 
@@ -235,15 +236,15 @@ void MachineEditorTab::generateMachineWithAi(
                               << "przejścia=" + QString::number(static_cast<int>(result.machineData.transitions.size()));
             if (rebuildMachineFromEditor() && statusLabel)
             {
-                statusLabel->setText("Wygenerowano AI");
+                setStatusText("status_ai_generated");
             }
 
             emit titleChanged(tabTitle());
-            QMessageBox::information(this, "Gemini AI", "Maszyna została wygenerowana i wczytana do edytora.");
+            QMessageBox::information(this, LanguageManager::text("gemini_title"), LanguageManager::text("gemini_generated_success"));
         },
         [this, finishGeneration]()
         {
-            finishGeneration("Anulowano AI");
+            finishGeneration("status_ai_canceled");
         });
 }
 
@@ -253,7 +254,7 @@ void MachineEditorTab::applyGeneratedMachineData(const MachineData &data)
     applyMachineData(data);
     if (rebuildMachineFromEditor() && statusLabel)
     {
-        statusLabel->setText("Wygenerowano AI");
+        setStatusText("status_ai_generated");
     }
 
     emit titleChanged(tabTitle());

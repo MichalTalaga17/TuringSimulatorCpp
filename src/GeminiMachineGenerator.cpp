@@ -1,5 +1,7 @@
 #include "GeminiMachineGenerator.h"
 
+#include "LanguageManager.h"
+
 #include <QList>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -174,7 +176,7 @@ MachineData parseMachineDataFromModelText(const QString &modelText, QString &err
     }
 
     errorMessage = data.errorMessage.isEmpty()
-                       ? "Gemini nie zwrócił poprawnego JSON-a maszyny."
+                       ? LanguageManager::text("gemini_invalid_json")
                        : data.errorMessage;
     return data;
 }
@@ -183,7 +185,7 @@ bool normalizeGeneratedData(MachineData &data, QString &errorMessage)
 {
     if (!isAllowedSymbol(data.blankSymbol))
     {
-        errorMessage = "Gemini zwrócił niepoprawny symbol pusty. Użyj jednego znaku ASCII bez spacji i przecinka.";
+        errorMessage = LanguageManager::text("gemini_invalid_blank");
         return false;
     }
 
@@ -194,7 +196,7 @@ bool normalizeGeneratedData(MachineData &data, QString &errorMessage)
 
     if (data.numStates > maxGeneratedStates)
     {
-        errorMessage = QString("Gemini zwrócił za dużo stanów. Maksimum w edytorze to %1.").arg(maxGeneratedStates);
+        errorMessage = LanguageManager::text("gemini_too_many_states").arg(maxGeneratedStates);
         return false;
     }
 
@@ -204,7 +206,7 @@ bool normalizeGeneratedData(MachineData &data, QString &errorMessage)
     {
         if (!isAllowedSymbol(symbol))
         {
-            errorMessage = "Gemini zwrócił alfabet z nieobsługiwanym symbolem.";
+            errorMessage = LanguageManager::text("gemini_invalid_alphabet");
             return false;
         }
 
@@ -234,7 +236,7 @@ bool normalizeGeneratedData(MachineData &data, QString &errorMessage)
 
         if (!normalizeMove(move))
         {
-            errorMessage = QString("Gemini zwrócił nieobsługiwany ruch głowicy: %1.")
+            errorMessage = LanguageManager::text("gemini_unsupported_move")
                                .arg(QString::fromStdString(std::get<4>(transition)));
             return false;
         }
@@ -242,7 +244,7 @@ bool normalizeGeneratedData(MachineData &data, QString &errorMessage)
         const int currentIndex = stateIndex(currentState);
         if (currentIndex < 0)
         {
-            errorMessage = QString("Gemini zwrócił niepoprawny stan: %1. Stany muszą mieć postać q0, q1, ...")
+            errorMessage = LanguageManager::text("gemini_invalid_state")
                                .arg(QString::fromStdString(currentState));
             return false;
         }
@@ -257,7 +259,7 @@ bool normalizeGeneratedData(MachineData &data, QString &errorMessage)
             }
             else
             {
-                errorMessage = QString("Gemini zwrócił niepoprawny stan docelowy: %1.")
+                errorMessage = LanguageManager::text("gemini_invalid_target_state")
                                    .arg(QString::fromStdString(nextState));
                 return false;
             }
@@ -269,7 +271,7 @@ bool normalizeGeneratedData(MachineData &data, QString &errorMessage)
 
         if (!isAllowedSymbol(readSymbol) || !isAllowedSymbol(writeSymbol))
         {
-            errorMessage = "Gemini zwrócił przejście z nieobsługiwanym symbolem.";
+            errorMessage = LanguageManager::text("gemini_invalid_transition_symbol");
             return false;
         }
 
@@ -280,7 +282,7 @@ bool normalizeGeneratedData(MachineData &data, QString &errorMessage)
 
     if (maxStateIndex >= maxGeneratedStates)
     {
-        errorMessage = QString("Gemini zwrócił stan poza zakresem q0...q%1.")
+        errorMessage = LanguageManager::text("gemini_state_out_of_range")
                            .arg(maxGeneratedStates - 1);
         return false;
     }
@@ -323,8 +325,8 @@ GeminiMachineGenerator::GeminiMachineGenerator(QObject *parent)
 QList<GeminiMachineGenerator::TierConfig> GeminiMachineGenerator::tierConfigs()
 {
     return {
-        {"pro", "Wariant Pro", "gemini-3.5-flash", {}},
-        {"free", "Wariant Free", "gemini-3.5-flash", "gemini-3.1-flash-lite"}};
+        {"pro", LanguageManager::text("tier_pro"), "gemini-3.5-flash", {}},
+        {"free", LanguageManager::text("tier_free"), "gemini-3.5-flash", "gemini-3.1-flash-lite"}};
 }
 
 GeminiMachineGenerator::TierConfig GeminiMachineGenerator::tierConfig(const QString &tierId)
@@ -437,7 +439,7 @@ QNetworkReply *GeminiMachineGenerator::generate(
         Result result;
         if (*timedOut)
         {
-            result.errorMessage = "Przekroczono czas oczekiwania na odpowiedź Gemini.";
+            result.errorMessage = LanguageManager::text("gemini_timeout");
             qWarning().noquote() << "[GeminiAI] Przekroczono czas żądania";
         }
         else if (reply->error() != QNetworkReply::NoError)
@@ -562,7 +564,7 @@ GeminiMachineGenerator::Result GeminiMachineGenerator::parseResponse(const QByte
     const QJsonDocument responseDocument = QJsonDocument::fromJson(responseBody, &parseError);
     if (parseError.error != QJsonParseError::NoError || !responseDocument.isObject())
     {
-        result.errorMessage = QString("Gemini API zwróciło niepoprawną odpowiedź: %1.")
+        result.errorMessage = LanguageManager::text("gemini_invalid_api_response")
                                   .arg(parseError.errorString());
         return result;
     }
@@ -571,13 +573,13 @@ GeminiMachineGenerator::Result GeminiMachineGenerator::parseResponse(const QByte
     if (root.contains("error"))
     {
         const QJsonObject errorObject = root.value("error").toObject();
-        result.errorMessage = errorObject.value("message").toString("Gemini API zwróciło błąd.");
+        result.errorMessage = errorObject.value("message").toString(LanguageManager::text("gemini_api_error"));
         return result;
     }
 
     if (httpStatus < 200 || httpStatus >= 300)
     {
-        result.errorMessage = QString("Gemini API zwróciło status HTTP %1.").arg(httpStatus);
+        result.errorMessage = LanguageManager::text("gemini_http_status").arg(httpStatus);
         return result;
     }
 
@@ -595,7 +597,7 @@ GeminiMachineGenerator::Result GeminiMachineGenerator::parseResponse(const QByte
     const QString modelText = candidateTextFromResponse(root);
     if (modelText.trimmed().isEmpty())
     {
-        result.errorMessage = "Gemini nie zwrócił treści z definicją maszyny.";
+        result.errorMessage = LanguageManager::text("gemini_empty_content");
         return result;
     }
 
@@ -607,7 +609,7 @@ GeminiMachineGenerator::Result GeminiMachineGenerator::parseResponse(const QByte
     {
         if (finishReason == "MAX_TOKENS")
         {
-            result.errorMessage = "Gemini ucięło odpowiedź (MAX_TOKENS). Spróbuj wyłączyć myślenie albo wybrać mocniejszy model.";
+            result.errorMessage = LanguageManager::text("gemini_max_tokens");
         }
         else
         {

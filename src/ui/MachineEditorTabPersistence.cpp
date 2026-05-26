@@ -1,4 +1,5 @@
 #include "MachineEditorTab.h"
+#include "LanguageManager.h"
 #include "storage.h"
 #include <QComboBox>
 #include <QFileDialog>
@@ -28,13 +29,13 @@ QString moveToUiText(const std::string &move)
     }
     if (move == "P" || move == "R")
     {
-        return "P";
+        return LanguageManager::moveRightText();
     }
     if (move == "STOP" || move == "Stop")
     {
-        return "Stop";
+        return LanguageManager::moveStopText();
     }
-    return "Bez ruchu";
+    return LanguageManager::moveStayText();
 }
 
 int columnForSymbol(const std::vector<char> &orderedAlphabet, char symbol)
@@ -98,7 +99,10 @@ void MachineEditorTab::rebuildTransitionsTable()
             QTableWidgetItem *item = new QTableWidgetItem();
             item->setTextAlignment(Qt::AlignCenter);
             // Reguła domyślna: zapis = odczyt, ruch = P, stan = bieżący.
-            QString defaultText = QString("%1, P, %2").arg(readSymbol).arg(defaultState);
+            QString defaultText = QString("%1, %2, %3")
+                                      .arg(readSymbol)
+                                      .arg(LanguageManager::moveRightText())
+                                      .arg(defaultState);
             item->setText(defaultText);
             
             transitionsTable->setItem(row, col, item);
@@ -167,7 +171,11 @@ bool MachineEditorTab::saveToFile()
 
 bool MachineEditorTab::saveToFileAs()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "Zapisz maszynę", currentFilePath, "Pliki JSON (*.json)");
+    QString filePath = QFileDialog::getSaveFileName(
+        this,
+        LanguageManager::text("save_machine_title"),
+        currentFilePath,
+        LanguageManager::text("file_filter_json"));
     if (filePath.isEmpty())
     {
         return false;
@@ -188,14 +196,14 @@ bool MachineEditorTab::saveMachineToPath(const QString &filePath)
 
     if (!saveInstructionsToFile(*machine, filePath, currentInitialState, currentBlank, states.size(), alphabet))
     {
-        QMessageBox::warning(this, "Błąd", "Nie udało się zapisać pliku.");
+        QMessageBox::warning(this, LanguageManager::text("error_title"), LanguageManager::text("save_failed"));
         return false;
     }
 
     currentFilePath = filePath;
-    statusLabel->setText("Zapisano maszynę");
+    setStatusText("status_saved_file");
     emit titleChanged(tabTitle());
-    QMessageBox::information(this, "Sukces", "Zapisano pomyślnie do pliku.");
+    QMessageBox::information(this, LanguageManager::text("success_title"), LanguageManager::text("save_file_success"));
     return true;
 }
 
@@ -204,7 +212,7 @@ bool MachineEditorTab::loadFromFile(const QString &filePath)
     MachineData data = loadInstructionsFromFile(filePath);
     if (!data.success)
     {
-        QMessageBox::warning(this, "Błąd", data.errorMessage);
+        QMessageBox::warning(this, LanguageManager::text("error_title"), data.errorMessage);
         return false;
     }
 
@@ -212,7 +220,7 @@ bool MachineEditorTab::loadFromFile(const QString &filePath)
 
     if (rebuildMachineFromEditor() && statusLabel)
     {
-        statusLabel->setText("Wczytano z pliku");
+        setStatusText("status_loaded_file");
     }
 
     currentFilePath = filePath;
@@ -227,7 +235,13 @@ bool MachineEditorTab::saveToDatabase()
     // Zakładka SAMA pyta o nazwę, jeśli to konieczne
     QString machineName = tabTitle();
     bool ok;
-    machineName = QInputDialog::getText(this, "Zapisz do bazy", "Podaj nazwę dla tej maszyny:", QLineEdit::Normal, machineName, &ok);
+    machineName = QInputDialog::getText(
+        this,
+        LanguageManager::text("save_db_title"),
+        LanguageManager::text("save_db_prompt"),
+        QLineEdit::Normal,
+        machineName,
+        &ok);
 
     // Jeśli użytkownik anulował
     if (!ok || machineName.isEmpty()) return false;
@@ -236,15 +250,15 @@ bool MachineEditorTab::saveToDatabase()
     const char currentBlank = blankSymbolField->text().isEmpty() ? '_' : blankSymbolField->text()[0].toLatin1();
 
     if (!saveMachineToDatabase(*machine, machineName, currentInitialState, currentBlank, states.size(), alphabet)) {
-        QMessageBox::warning(this, "Błąd", "Wystąpił problem z zapisem do bazy danych.");
+        QMessageBox::warning(this, LanguageManager::text("error_title"), LanguageManager::text("save_db_failed"));
         return false;
     }
 
-    statusLabel->setText("Zapisano w bazie");
+    setStatusText("status_saved_db");
     currentFilePath.clear();
     untitledTitle = machineName;
     emit titleChanged(tabTitle());
-    QMessageBox::information(this, "Sukces", "Zapisano maszynę w bazie danych!");
+    QMessageBox::information(this, LanguageManager::text("success_title"), LanguageManager::text("save_db_success"));
     return true;
 }
 
@@ -255,7 +269,7 @@ bool MachineEditorTab::loadFromDatabase(const QString &machineName)
 
     // 2. Jeśli coś poszło nie tak (np. baza nie istnieje), informujemy użytkownika
     if (!data.success) {
-        QMessageBox::warning(this, "Błąd", data.errorMessage);
+        QMessageBox::warning(this, LanguageManager::text("error_title"), data.errorMessage);
         return false;
     }
 
@@ -265,7 +279,7 @@ bool MachineEditorTab::loadFromDatabase(const QString &machineName)
 
     // 4. Przebudowujemy logikę maszyny, żeby symulator wiedział co uruchomić
     if (rebuildMachineFromEditor() && statusLabel) {
-        statusLabel->setText("Wczytano z bazy: " + machineName);
+        setStatusText("status_loaded_db", machineName);
     }
 
     // 5. Aktualizujemy nazwę karty na tę wczytaną z bazy

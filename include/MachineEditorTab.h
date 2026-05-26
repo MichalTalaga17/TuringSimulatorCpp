@@ -23,6 +23,8 @@
 #include "storage.h"
 #include "TuringMachine.h"
 
+class QGroupBox;
+
 /**
  * @brief Pojedyncza karta edycji i uruchamiania maszyny Turinga.
  *
@@ -103,6 +105,10 @@ public:
      * @brief Wczytuje maszynę wygenerowaną poza kartą edytora.
      */
     void applyGeneratedMachineData(const MachineData &data);
+    /**
+     * @brief Odświeża teksty interfejsu po zmianie języka.
+     */
+    void retranslateUi();
     /**
      * @brief Pyta o opis maszyny, model i klucz API potrzebne do generowania.
      */
@@ -223,6 +229,14 @@ private:
     bool saveMachineToPath(const QString &filePath);
     /// Stosuje dane maszyny odczytane z pliku lub bazy do formularza i tabeli.
     void applyMachineData(const MachineData& data);
+    /// Ustawia status wykonania według klucza tłumaczenia.
+    void setStatusText(const char *key);
+    /// Ustawia status wykonania według klucza tłumaczenia i argumentu.
+    void setStatusText(const char *key, const QString &argument);
+    /// Odświeża etykietę statusu z zapamiętanego klucza.
+    void updateStatusLabelText();
+    /// Tłumaczy kierunki ruchu widoczne w tabeli przejść.
+    void retranslateTransitionMoves();
 
     /// @name Komponenty edytora definicji
     /// @{
@@ -232,12 +246,20 @@ private:
     QComboBox *initialStateCombo;
     QPushButton *aiGenerateButton;
     QTableWidget *transitionsTable;
+    QGroupBox *logicEditorGroup;
+    QLabel *statesLabel;
+    QLabel *alphabetLabel;
+    QLabel *blankLabel;
+    QLabel *initialLabel;
     /// @}
 
     /// @name Komponenty panelu wykonania
     /// @{
     QLabel *machineStateLabel;
     QLabel *stepCountLabel;
+    QLabel *stepMetricTitleLabel;
+    QLabel *stateMetricTitleLabel;
+    QLabel *modeMetricTitleLabel;
     /// Przewijany kontener widoku taśmy używany do centrowania aktywnej komórki.
     QScrollArea *tapeScrollArea;
     /// Kontener z widocznymi komórkami reprezentującymi wycinek taśmy.
@@ -250,6 +272,10 @@ private:
     QSlider *speedSlider;
     QLabel *speedLabel;
     QLabel *statusLabel;
+    QLabel *tapeInputLabel;
+    QGroupBox *statusGroup;
+    QGroupBox *inputGroup;
+    QGroupBox *tapeGroup;
     /// @}
 
     /// @name Stan logiczny maszyny i symulacji
@@ -279,6 +305,8 @@ private:
     int highlightedTransitionRow;
     int highlightedTransitionCol;
     bool aiGenerationInProgress;
+    QString currentStatusKey;
+    QString currentStatusArgument;
     /// @}
 public:
     /**

@@ -10,9 +10,12 @@
 #include <QTabWidget>
 #include <memory>
 
+#include "LanguageManager.h"
 #include "MachineEditorTab.h"
 #include "ThemeManager.h"
 
+class QActionGroup;
+class QMenu;
 class QPushButton;
 class QResizeEvent;
 
@@ -86,6 +89,10 @@ private slots:
     void showAboutAuthorsDialog();
     /// Przełącza jasny i ciemny motyw aplikacji.
     void toggleTheme();
+    /// Przełącza interfejs na język polski.
+    void setPolishLanguage();
+    /// Przełącza interfejs na język angielski.
+    void setEnglishLanguage();
 
 private:
     /// Buduje główny QTabWidget i przycisk dodawania kart.
@@ -100,6 +107,8 @@ private:
     bool isStartPage(QWidget *widget) const;
     /// Dodaje kartę z własnym przyciskiem zamykania.
     int addClosableTab(QWidget *tab, const QString &title, int insertIndex = -1);
+    /// Zakłada przycisk zamykania na wskazaną kartę.
+    void installCloseButtonForTab(QWidget *tab, int index);
     /// Dodaje kartę maszyny i podłącza sygnał zmiany tytułu.
     void addMachineTab(MachineEditorTab *tab, int insertIndex = -1);
     /// Dodaje kartę maszyny, zastępując stronę startową, jeśli była aktywna.
@@ -110,11 +119,40 @@ private:
     void closeTabAt(int index);
     /// Utrzymuje przycisk nowej karty nad paskiem kart.
     void updateNewTabButtonPosition();
+    /// Ustawia wybrany język interfejsu.
+    void setLanguage(LanguageManager::Language language);
+    /// Odświeża teksty głównego okna i menu.
+    void retranslateUi();
+    /// Odtwarza stronę startową po zmianie języka.
+    void refreshStartPages();
 
     /// Kontener kart maszyn i strony startowej.
     QTabWidget *machineTabs;
     /// Przycisk `+` tworzący lub pokazujący stronę startową.
     QPushButton *newTabButton;
+    /// @name Menu główne
+    /// @{
+    QMenu *fileMenu;
+    QMenu *machineMenu;
+    QMenu *simulationMenu;
+    QMenu *viewMenu;
+    QMenu *languageMenu;
+    QMenu *helpMenu;
+    /// @}
+    /// @name Stałe akcje menu
+    /// @{
+    QAction *newTabAction;
+    QAction *exampleTabAction;
+    QAction *openAction;
+    QAction *openDbAction;
+    QAction *saveDbAction;
+    QAction *quitAction;
+    QAction *aboutAction;
+    QAction *aboutAuthorsAction;
+    QAction *polishLanguageAction;
+    QAction *englishLanguageAction;
+    QActionGroup *languageActionGroup;
+    /// @}
     /// @name Akcje menu zależne od aktywnej karty
     /// @{
     QAction *saveAction;

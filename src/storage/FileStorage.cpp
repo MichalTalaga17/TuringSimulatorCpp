@@ -1,5 +1,6 @@
 #include "storage.h"
 
+#include "LanguageManager.h"
 #include "TuringMachine.h"
 
 #include <QFile>
@@ -35,7 +36,7 @@ bool readRequiredString(const QJsonObject &object, const char *field, QString &v
     const QJsonValue jsonValue = object.value(field);
     if (!jsonValue.isString() || jsonValue.toString().isEmpty())
     {
-        errorMessage = QString("Brak lub niepoprawne pole: %1.").arg(field);
+        errorMessage = LanguageManager::text("json_missing_field").arg(field);
         return false;
     }
 
@@ -53,7 +54,7 @@ bool readRequiredChar(const QJsonObject &object, const char *field, char &value,
 
     if (text.size() != 1)
     {
-        errorMessage = QString("Pole %1 musi zawierać dokładnie jeden znak.").arg(field);
+        errorMessage = LanguageManager::text("json_field_one_char").arg(field);
         return false;
     }
 
@@ -153,7 +154,7 @@ MachineData parseInstructionsDocument(const QJsonDocument &document)
     MachineData data;
     if (!document.isObject())
     {
-        return failLoad(data, "Niepoprawny JSON: dokument nie jest obiektem.");
+        return failLoad(data, LanguageManager::text("json_not_object"));
     }
 
     const QJsonObject root = document.object();
@@ -173,13 +174,13 @@ MachineData parseInstructionsDocument(const QJsonDocument &document)
     const QJsonValue numStatesValue = root.value("numStates");
     if (!numStatesValue.isDouble() || numStatesValue.toInt() < 1)
     {
-        return failLoad(data, "Pole numStates musi być dodatnią liczbą całkowitą.");
+        return failLoad(data, LanguageManager::text("json_num_states"));
     }
 
     const QJsonValue alphabetValue = root.value("alphabet");
     if (!alphabetValue.isArray() || alphabetValue.toArray().isEmpty())
     {
-        return failLoad(data, "Pole alphabet musi zawierać listę symboli.");
+        return failLoad(data, LanguageManager::text("json_alphabet"));
     }
 
     data.initialState = initialState.toStdString();
@@ -191,7 +192,7 @@ MachineData parseInstructionsDocument(const QJsonDocument &document)
     {
         if (!alphabetArray[index].isString() || alphabetArray[index].toString().size() != 1)
         {
-            return failLoad(data, QString("Niepoprawny symbol alfabetu pod indeksem %1.").arg(index));
+            return failLoad(data, LanguageManager::text("json_invalid_alphabet_symbol").arg(index));
         }
 
         const char symbol = alphabetArray[index].toString()[0].toLatin1();
@@ -209,7 +210,7 @@ MachineData parseInstructionsDocument(const QJsonDocument &document)
     const QJsonValue transitionsValue = root.value("transitions");
     if (!transitionsValue.isArray())
     {
-        return failLoad(data, "Pole transitions musi zawierać listę instrukcji.");
+        return failLoad(data, LanguageManager::text("json_transitions"));
     }
 
     const QJsonArray transitionsArray = transitionsValue.toArray();
@@ -218,7 +219,7 @@ MachineData parseInstructionsDocument(const QJsonDocument &document)
     {
         if (!transitionsArray[index].isObject())
         {
-            return failLoad(data, QString("Instrukcja #%1 nie jest obiektem JSON.").arg(index + 1));
+            return failLoad(data, LanguageManager::text("json_transition_not_object").arg(index + 1));
         }
 
         const QJsonObject transitionObject = transitionsArray[index].toObject();
@@ -234,7 +235,7 @@ MachineData parseInstructionsDocument(const QJsonDocument &document)
             !readRequiredChar(transitionObject, "writeSymbol", writeSymbol, errorMessage) ||
             !readRequiredString(transitionObject, "move", move, errorMessage))
         {
-            return failLoad(data, QString("Niepoprawna instrukcja #%1: %2").arg(index + 1).arg(errorMessage));
+            return failLoad(data, LanguageManager::text("json_invalid_transition").arg(index + 1).arg(errorMessage));
         }
 
         data.transitions.push_back({
@@ -255,7 +256,7 @@ MachineData loadInstructionsFromFile(const QString &filePath)
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly))
     {
-        return failLoad(MachineData{}, "Nie można otworzyć pliku.");
+        return failLoad(MachineData{}, LanguageManager::text("json_file_open_failed"));
     }
 
     return loadInstructionsFromJson(file.readAll());
@@ -267,7 +268,7 @@ MachineData loadInstructionsFromJson(const QByteArray &jsonData)
     const QJsonDocument document = QJsonDocument::fromJson(jsonData, &parseError);
     if (parseError.error != QJsonParseError::NoError)
     {
-        return failLoad(MachineData{}, "Niepoprawny JSON: " + parseError.errorString());
+        return failLoad(MachineData{}, LanguageManager::text("json_parse_error").arg(parseError.errorString()));
     }
 
     return parseInstructionsDocument(document);
