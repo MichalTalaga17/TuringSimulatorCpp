@@ -30,7 +30,7 @@ jobs:
           
       - name: Install Linux Dependencies
         if: matrix.os == 'ubuntu-22.04'
-        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 patchelf
 
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -41,23 +41,19 @@ jobs:
       - name: Package Linux (AppImage)
         if: matrix.os == 'ubuntu-22.04'
         run: |
-          # Create the AppDir structure required for an AppImage
           mkdir -p AppDir/usr/bin
-          # IMPORTANT: Change "TuringSimulatorCpp" to match your CMake add_executable name
           cp build/TuringSimulatorCpp AppDir/usr/bin/
           
-          # Create a basic .desktop file
           echo "[Desktop Entry]" > AppDir/TuringSimulatorCpp.desktop
           echo "Name=TuringSimulatorCpp" >> AppDir/TuringSimulatorCpp.desktop
           echo "Exec=TuringSimulatorCpp" >> AppDir/TuringSimulatorCpp.desktop
-          echo "Icon=icon" >> AppDir/TuringSimulatorCpp.desktop
+          echo "Icon=TuringSimulatorCpp" >> AppDir/TuringSimulatorCpp.desktop
           echo "Type=Application" >> AppDir/TuringSimulatorCpp.desktop
           echo "Categories=Utility;" >> AppDir/TuringSimulatorCpp.desktop
           
-          # Create a dummy icon file to satisfy the packaging tool
-          echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="blue"/></svg>' > AppDir/icon.svg
+          # Use the exact app name for the SVG file
+          echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="blue"/></svg>' > AppDir/TuringSimulatorCpp.svg
           
-          # Download and run linuxdeployqt to bundle everything
           wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
           chmod a+x linuxdeployqt-continuous-x86_64.AppImage
           ./linuxdeployqt-continuous-x86_64.AppImage AppDir/TuringSimulatorCpp.desktop -appimage -unsupported-allow-new-glibc
