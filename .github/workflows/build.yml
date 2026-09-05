@@ -30,7 +30,7 @@ jobs:
           
       - name: Install Linux Dependencies
         if: matrix.os == 'ubuntu-22.04'
-        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 patchelf
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 patchelf libfuse2
 
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -51,15 +51,16 @@ jobs:
           echo "Type=Application" >> AppDir/TuringSimulatorCpp.desktop
           echo "Categories=Utility;" >> AppDir/TuringSimulatorCpp.desktop
           
-          # Use the exact app name for the SVG file
           echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="blue"/></svg>' > AppDir/TuringSimulatorCpp.svg
           
-          wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-          chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-      
-          # Set the required VERSION variable and explicitly point to the Qt 6 qmake
-          export VERSION=1.0.0
-          ./linuxdeployqt-continuous-x86_64.AppImage AppDir/TuringSimulatorCpp.desktop -appimage -unsupported-allow-new-glibc -qmake=$(which qmake)
+          # Download modern linuxdeploy and its Qt plugin
+          wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage"
+          wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage"
+          chmod a+x linuxdeploy-x86_64.AppImage linuxdeploy-plugin-qt-x86_64.AppImage
+          
+          # Explicitly pass the Qt 6 qmake path to the plugin and build the AppImage
+          export QMAKE=$(which qmake)
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt --output appimage
           
           mv TuringSimulatorCpp*.AppImage TuringSimulatorCpp-Linux.AppImage
 
