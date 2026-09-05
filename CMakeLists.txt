@@ -128,12 +128,12 @@ if(APPLE)
     ]])
 endif()
 
-if(COMMAND qt_generate_deploy_app_script)
-    qt_generate_deploy_app_script(
-        TARGET TuringSimulatorCpp
-        OUTPUT_SCRIPT qt_deploy_script
-        NO_UNSUPPORTED_PLATFORM_ERROR
-        INCLUDE_PLUGIN_TYPES platforms sqldrivers tls
-    )
-    install(SCRIPT ${qt_deploy_script})
-endif()
+# if(COMMAND qt_generate_deploy_app_script)
+#     qt_generate_deploy_app_script(
+#         TARGET TuringSimulatorCpp
+#         OUTPUT_SCRIPT qt_deploy_script
+#         NO_UNSUPPORTED_PLATFORM_ERROR
+#         INCLUDE_PLUGIN_TYPES platforms sqldrivers tls
+#     )
+#     install(SCRIPT ${qt_deploy_script})
+# endif()
