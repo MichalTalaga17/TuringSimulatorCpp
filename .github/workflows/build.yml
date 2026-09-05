@@ -55,7 +55,7 @@ jobs:
           echo "Categories=Utility;" >> AppDir/TuringSimulatorCpp.desktop
           
           # Create a dummy icon file to satisfy the packaging tool
-          touch AppDir/icon.png
+          echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="blue"/></svg>' > AppDir/icon.svg
           
           # Download and run linuxdeployqt to bundle everything
           wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
