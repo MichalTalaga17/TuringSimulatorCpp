@@ -46,12 +46,15 @@ jobs:
           
           echo "[Desktop Entry]" > AppDir/TuringSimulatorCpp.desktop
           echo "Name=TuringSimulatorCpp" >> AppDir/TuringSimulatorCpp.desktop
-          echo "Exec=TuringSimulatorCpp" >> AppDir/TuringSimulatorCpp.desktop
+          echo "Exec=TuringSimulatorCpp %F" >> AppDir/TuringSimulatorCpp.desktop
           echo "Icon=TuringSimulatorCpp" >> AppDir/TuringSimulatorCpp.desktop
           echo "Type=Application" >> AppDir/TuringSimulatorCpp.desktop
           echo "Categories=Utility;" >> AppDir/TuringSimulatorCpp.desktop
           
           echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="blue"/></svg>' > AppDir/TuringSimulatorCpp.svg
+          
+          # Force the AppImage to execute the binary directly, bypassing the buggy launcher
+          ln -s usr/bin/TuringSimulatorCpp AppDir/AppRun
           
           # Download modern linuxdeploy and its Qt plugin
           wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage"
