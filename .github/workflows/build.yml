@@ -1,0 +1,86 @@
+name: Build and Package
+
+on:
+  push:
+    tags:
+      - 'v*' # Runs automatically when you push a tag like v1.0
+  workflow_dispatch: # Allows you to manually click "Run workflow" in GitHub
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # We use an older Ubuntu version to ensure the AppImage works on older Linux systems
+        os: [ubuntu-22.04, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.11.1' 
+          
+      - name: Install Linux Dependencies
+        if: matrix.os == 'ubuntu-22.04'
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0
+
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Project
+        run: cmake --build build --config Release
+
+      - name: Package Linux (AppImage)
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          # Create the AppDir structure required for an AppImage
+          mkdir -p AppDir/usr/bin
+          # IMPORTANT: Change "TuringSimulatorCpp" to match your CMake add_executable name
+          cp build/TuringSimulatorCpp AppDir/usr/bin/
+          
+          # Create a basic .desktop file
+          echo "[Desktop Entry]" > AppDir/TuringSimulatorCpp.desktop
+          echo "Name=TuringSimulatorCpp" >> AppDir/TuringSimulatorCpp.desktop
+          echo "Exec=TuringSimulatorCpp" >> AppDir/TuringSimulatorCpp.desktop
+          echo "Icon=icon" >> AppDir/TuringSimulatorCpp.desktop
+          echo "Type=Application" >> AppDir/TuringSimulatorCpp.desktop
+          echo "Categories=Utility;" >> AppDir/TuringSimulatorCpp.desktop
+          
+          # Create a dummy icon file to satisfy the packaging tool
+          touch AppDir/icon.png
+          
+          # Download and run linuxdeployqt to bundle everything
+          wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+          chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+          ./linuxdeployqt-continuous-x86_64.AppImage AppDir/TuringSimulatorCpp.desktop -appimage -unsupported-allow-new-glibc
+          
+          mv TuringSimulatorCpp*.AppImage TuringSimulatorCpp-Linux.AppImage
+
+      - name: Package Windows (Portable Zip)
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir release_folder
+          # Windows CMake builds typically place the exe in a Release subfolder
+          cp build\Release\TuringSimulatorCpp.exe release_folder\
+          windeployqt release_folder\TuringSimulatorCpp.exe
+          Compress-Archive -Path release_folder\* -DestinationPath TuringSimulatorCpp-Windows.zip
+
+      - name: Package macOS (DMG)
+        if: matrix.os == 'macos-latest'
+        run: |
+          # Bundle the Qt frameworks into the .app and convert it to a .dmg
+          macdeployqt build/TuringSimulatorCpp.app -dmg
+          mv build/TuringSimulatorCpp.dmg TuringSimulatorCpp-macOS.dmg
+
+      - name: Upload Final Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: App-Release-${{ matrix.os }}
+          path: |
+            *.AppImage
+            *.zip
+            *.dmg
