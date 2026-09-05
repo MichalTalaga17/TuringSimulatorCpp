@@ -30,7 +30,7 @@ jobs:
           
       - name: Install Linux Dependencies
         if: matrix.os == 'ubuntu-22.04'
-        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 patchelf libfuse2 libxcb-cursor0 libmimerapi.so
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 patchelf libfuse2 libxcb-cursor0
 
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -57,7 +57,11 @@ jobs:
           wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage"
           wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage"
           chmod a+x linuxdeploy-x86_64.AppImage linuxdeploy-plugin-qt-x86_64.AppImage
-          
+      
+          # Delete exotic database drivers so the packager ignores them
+          find ~/work -name "libqsqlmimer.so" -delete
+          find ~/work -name "libqsqlodbc.so" -delete
+      
           # Explicitly pass the Qt 6 qmake path to the plugin and build the AppImage
           export QMAKE=$(which qmake)
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt --output appimage
