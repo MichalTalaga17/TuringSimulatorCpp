@@ -56,7 +56,10 @@ jobs:
           
           wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
           chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-          ./linuxdeployqt-continuous-x86_64.AppImage AppDir/TuringSimulatorCpp.desktop -appimage -unsupported-allow-new-glibc
+      
+          # Set the required VERSION variable and explicitly point to the Qt 6 qmake
+          export VERSION=1.0.0
+          ./linuxdeployqt-continuous-x86_64.AppImage AppDir/TuringSimulatorCpp.desktop -appimage -unsupported-allow-new-glibc -qmake=$(which qmake)
           
           mv TuringSimulatorCpp*.AppImage TuringSimulatorCpp-Linux.AppImage
 
