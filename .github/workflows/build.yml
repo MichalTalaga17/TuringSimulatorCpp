@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         # We use an older Ubuntu version to ensure the AppImage works on older Linux systems
-        os: [ubuntu-22.04, windows-latest, macos-latest]
+        os: [ubuntu-22.04, windows-latest, macos-13]
         include:
           - os: windows-latest
             qt_arch: 'win64_msvc2022_64'
