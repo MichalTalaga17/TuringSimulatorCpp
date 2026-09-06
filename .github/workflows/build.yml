@@ -38,8 +38,8 @@ jobs:
 
       - name: Configure CMake (macOS)
         if: matrix.os == 'macos-latest'
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DOPENGL_opengl_LIBRARY="-framework OpenGL" -DOPENGL_gl_LIBRARY="-framework OpenGL" -DOPENGL_glu_LIBRARY="-framework OpenGL"
-
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DOPENGL_opengl_LIBRARY="/System/Library/Frameworks/OpenGL.framework" -DOPENGL_gl_LIBRARY="/System/Library/Frameworks/OpenGL.framework" -DOPENGL_glu_LIBRARY="/System/Library/Frameworks/OpenGL.framework"
+      
       - name: Build Project
         run: cmake --build build --config Release
 
