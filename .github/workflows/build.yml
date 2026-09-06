@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         # We use an older Ubuntu version to ensure the AppImage works on older Linux systems
-        os: [ubuntu-22.04, windows-latest, macos-13]
+        os: [ubuntu-22.04, windows-latest, macos-latest]
         include:
           - os: windows-latest
             qt_arch: 'win64_msvc2022_64'
@@ -33,7 +33,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 patchelf libfuse2 libxcb-cursor0
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DOPENGL_opengl_LIBRARY="-framework OpenGL" -DOPENGL_gl_LIBRARY="-framework OpenGL" -DOPENGL_glu_LIBRARY="-framework OpenGL"
 
       - name: Build Project
         run: cmake --build build --config Release
