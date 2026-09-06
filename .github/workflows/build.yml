@@ -39,8 +39,9 @@ jobs:
       - name: Configure CMake (macOS)
         if: matrix.os == 'macos-latest'
         run: |
+          find ${{ runner.workspace }}/Qt -type f -name "*.cmake" -exec sed -i '' 's/-framework AGL/-framework OpenGL/g' {} +
+          find ${{ runner.workspace }}/Qt -type f -name "*.cmake" -exec sed -i '' 's/-framework;AGL/-framework;OpenGL/g' {} +
           cmake -B build -DCMAKE_BUILD_TYPE=Release
-          find build -type f \( -name "*.txt" -o -name "*.make" -o -name "*.ninja" \) -exec sed -i '' 's/-framework AGL//g' {} +
       
       - name: Build Project
         run: cmake --build build --config Release
