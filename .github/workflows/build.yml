@@ -32,7 +32,12 @@ jobs:
         if: matrix.os == 'ubuntu-22.04'
         run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 patchelf libfuse2 libxcb-cursor0
 
-      - name: Configure CMake
+      - name: Configure CMake (Linux & Windows)
+        if: matrix.os != 'macos-latest'
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Configure CMake (macOS)
+        if: matrix.os == 'macos-latest'
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DOPENGL_opengl_LIBRARY="-framework OpenGL" -DOPENGL_gl_LIBRARY="-framework OpenGL" -DOPENGL_glu_LIBRARY="-framework OpenGL"
 
       - name: Build Project
