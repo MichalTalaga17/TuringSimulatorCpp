@@ -83,6 +83,10 @@ jobs:
           
           mv TuringSimulatorCpp*.AppImage TuringSimulatorCpp-Linux.AppImage
 
+          # Clean up the downloaded packaging tools so they aren't uploaded to the release
+          rm linuxdeploy-x86_64.AppImage linuxdeploy-plugin-qt-x86_64.AppImage
+
+
       - name: Package Windows (Portable Zip)
         if: matrix.os == 'windows-latest'
         run: |
