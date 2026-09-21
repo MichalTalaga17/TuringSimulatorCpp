@@ -62,7 +62,7 @@ chmod +x TuringSimulatorCpp-Linux.AppImage
 An `AI` button is available in the editor, and there is a `Start with AI` option on the start page.
 The application will ask for a description of the machine and generate a transition table via the Gemini API.
 
-You can set the API keys in the `Maszyna -> Ustawienia Gemini API...` menu.
+You can set the API keys in the `Machine -> Gemini API settings...` menu.
 The application stores a separate key for the `Free tier` and a separate key for the `Pro tier`.
 
 You can create your API key at https://ai.google.dev/gemini-api/docs/api-key
