@@ -39,8 +39,8 @@ jobs:
       - name: Configure CMake (macOS)
         if: matrix.os == 'macos-latest'
         run: |
-          find ${{ runner.workspace }}/Qt -type f -name "*.cmake" -exec sed -i '' 's/-framework AGL/-framework OpenGL/g' {} +
-          find ${{ runner.workspace }}/Qt -type f -name "*.cmake" -exec sed -i '' 's/-framework;AGL/-framework;OpenGL/g' {} +
+          mkdir -p ${{ runner.workspace }}/Qt/6.8.0/macos/lib/AGL.framework
+          ln -s /System/Library/Frameworks/OpenGL.framework/OpenGL ${{ runner.workspace }}/Qt/6.8.0/macos/lib/AGL.framework/AGL
           cmake -B build -DCMAKE_BUILD_TYPE=Release
       
       - name: Build Project
