@@ -39,8 +39,12 @@ jobs:
       - name: Configure CMake (macOS)
         if: matrix.os == 'macos-latest'
         run: |
+          # Forge an empty static framework to permanently silence the AGL error
           mkdir -p ${{ runner.workspace }}/Qt/6.8.0/macos/lib/AGL.framework
-          ln -s /System/Library/Frameworks/OpenGL.framework/OpenGL ${{ runner.workspace }}/Qt/6.8.0/macos/lib/AGL.framework/AGL
+          echo "void dummy_agl_symbol() {}" > dummy.c
+          clang -c dummy.c -o dummy.o -arch arm64
+          ar rcs ${{ runner.workspace }}/Qt/6.8.0/macos/lib/AGL.framework/AGL dummy.o
+          
           cmake -B build -DCMAKE_BUILD_TYPE=Release
       
       - name: Build Project
