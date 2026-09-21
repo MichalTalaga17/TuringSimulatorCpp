@@ -11,65 +11,11 @@ Aktualnie projekt zawiera:
 - notację stanów w stylu `q0`, `q1`, `q2` itd.,
 - notację ruchów głowicy widoczną dla użytkownika: `L`, `P`, `_`, `STOP`.
 
-## Wymagania
-
-Do uruchomienia projektu na innym komputerze potrzebne są:
-- `git`
-- `cmake` w wersji 3.20 lub nowszej
-- kompilator obsługujący C++17
-- Qt 6 z modułami `Core`, `Gui`, `Network`, `Widgets` i `Sql`
-
-Przykłady:
-- macOS: `clang++` z Xcode Command Line Tools
-- Linux: `g++` albo `clang++`
-- Windows: MSVC albo MinGW
-
-## Instalacja CMake
-
-### macOS
-
-Najpierw warto doinstalować narzędzia deweloperskie Apple:
-
-```bash
-xcode-select --install
-```
-
-Jeśli używasz Homebrew:
-
-```bash
-brew install cmake
-```
-
-### Ubuntu / Debian
-
-```bash
-sudo apt update
-sudo apt install cmake build-essential git
-```
-
-### Fedora
-
-```bash
-sudo dnf install cmake gcc-c++ git
-```
-
-### Windows
-
-Najwygodniejsze opcje:
-- zainstalować Visual Studio Community z modułem `Desktop development with C++`,
-- albo pobrać `CMake` bezpośrednio ze strony producenta: [cmake.org](https://cmake.org/download/).
-
-Po instalacji warto sprawdzić, czy polecenie działa:
-
-```bash
-cmake --version
-```
 
 ## Pobranie projektu
 
 ```bash
-git clone https://github.com/MichalTalaga17/TuringSimulatorCpp
-cd TuringSimulatorCpp
+https://github.com/MichalTalaga17/TuringSimulatorCpp/releases
 ```
 
 ## Budowanie
