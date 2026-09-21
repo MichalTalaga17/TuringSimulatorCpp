@@ -45,7 +45,7 @@ Tip: For quick access, right-click the `.exe` file and create shortcut on deskto
 
 Note: Because this is an open-source tool and not cryptographically signed with an Apple Developer certificate, macOS Gatekeeper may flag it on the first launch. To bypass this, right-click (or Control-click) the app in your Applications folder and select Open.
 
-### Linux
+### Linux (Ubuntu)
 
 - Download the `TuringSimulatorCpp-Linux.AppImage` file.
 - Make the file executable. You can do this via your file manager by right-clicking the AppImage, selecting Properties, navigating to the Permissions tab, and checking the box to "Allow executing file as program".
