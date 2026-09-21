@@ -1,4 +1,4 @@
-# Symulator Maszyny Turinga w C++
+# C++ Turing Machine Simulator
 
 A simple single-tape deterministic Turing machine simulator written in C++.
 
@@ -57,7 +57,7 @@ chmod +x TuringSimulatorCpp-Linux.AppImage
 - Double-click the AppImage to run the simulator.
 
 
-## Generowanie maszyn z Gemini AI
+## Generating transition tables with Gemini AI
 
 An `AI` button is available in the editor, and there is a `Start with AI` option on the start page.
 The application will ask for a description of the machine and generate a transition table via the Gemini API.
