@@ -15,6 +15,7 @@ The app features:
 
 - English
 - Polish
+
 To switch languages on the fly, navigate to:
   `view` > `language` 
   `widok` > `język`
@@ -32,6 +33,7 @@ https://github.com/MichalTalaga17/TuringSimulatorCpp/releases
 - Download the TuringSimulatorCpp-Windows.zip file.
 - Extract the contents of the archive to a folder of your choice.
 - Open the extracted folder and double-click TuringSimulatorCpp.exe to start the application.
+
 Tip: For quick access, right-click the .exe file and create shortcut on desktop.
 
 ### macOS 
@@ -40,12 +42,14 @@ Tip: For quick access, right-click the .exe file and create shortcut on desktop.
 - Double-click the downloaded .dmg file to mount the disk image.
 - Drag and drop the TuringSimulatorCpp app icon into your Applications folder shortcut.
 - Launch the simulator from your Launchpad or Applications folder.
+
 Note: Because this is an open-source tool and not cryptographically signed with an Apple Developer certificate, macOS Gatekeeper may flag it on the first launch. To bypass this, right-click (or Control-click) the app in your Applications folder and select Open.
 
 ### Linux
 
 - Download the TuringSimulatorCpp-Linux.AppImage file.
 - Make the file executable. You can do this via your file manager by right-clicking the AppImage, selecting Properties, navigating to the Permissions tab, and checking the box to "Allow executing file as program".
+
 Alternatively, open your terminal and run:
 ```bash
 chmod +x TuringSimulatorCpp-Linux.AppImage
