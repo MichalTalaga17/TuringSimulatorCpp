@@ -44,7 +44,7 @@ jobs:
           cmake -B build -DCMAKE_BUILD_TYPE=Release
       
       - name: Build Project
-        run: cmake --build build --config Release
+        run: cmake --build build --config Release --verbose
 
       - name: Package Linux (AppImage)
         if: matrix.os == 'ubuntu-22.04'
