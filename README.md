@@ -18,7 +18,7 @@ The app features:
 
 To switch languages on the fly, navigate to:
   `view` > `language` 
-  `widok` > `język`
+  (PL: `widok` > `język`)
 
 
 ## Download 
