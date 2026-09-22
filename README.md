@@ -34,7 +34,7 @@ https://github.com/MichalTalaga17/TuringSimulatorCpp/releases
 - Extract the contents of the archive to a folder of your choice.
 - Open the extracted folder and double-click `TuringSimulatorCpp.exe` to start the application.
 
-Tip: For quick access, right-click the `.exe` file and create shortcut on desktop.
+Tip: For quick access, right-click the `.exe` file, then choose `show more options` and click `Create shortcut`. You can drag the created shortcut to your desktop or any desired location for easier access.
 
 ### macOS 
 
