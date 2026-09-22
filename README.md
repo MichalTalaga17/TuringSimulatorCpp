@@ -77,23 +77,6 @@ Before generating, the application displays a single window with the task descri
 The application also asks whether to enable model thinking. For Gemini 3 models, it sends `thinkingLevel`: `high` or `minimal`.
 
 
-## Doxygen
-
-The project includes a `Doxyfile` configuration and a main documentation page in `docs/mainpage.dox`.
-
-Generating directly via Doxygen:
-
-    doxygen Doxyfile
-
-If CMake finds the `doxygen` program, a target is also available:
-
-    cmake --build build --target docs
-
-The result will appear in the directory:
-
-    docs/doxygen/html
-
-
 ## Starting example
 
 The default example:
@@ -121,3 +104,23 @@ Most important files:
 - `src/ui/` - Qt interface implementation
 - `src/storage/` - saving and loading implementation
 - `tests/` - simulation core tests
+
+  
+## Doxygen
+
+The project includes a `Doxyfile` configuration and a main documentation page in `docs/mainpage.dox`.
+
+Generating directly via Doxygen:
+
+    doxygen Doxyfile
+
+If CMake finds the `doxygen` program, a target is also available:
+
+    cmake --build build --target docs
+
+The result will appear in the directory:
+
+    docs/doxygen/html
+
+
+
