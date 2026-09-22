@@ -48,13 +48,18 @@ Note: Because this is an open-source tool and not cryptographically signed with 
 ### Linux (Ubuntu)
 
 - Download the `TuringSimulatorCpp-Linux.AppImage` file.
-- Make the file executable. You can do this via your file manager by right-clicking the AppImage, selecting Properties, navigating to the Permissions tab, and checking the box to "Allow executing file as program".
+- Make the file executable. You can do this via your file manager by right-clicking the AppImage, selecting `Properties`, navigating to the `Permissions` tab, and checking the box to `"Allow executing file as program"`.
 
-Alternatively, open your terminal and run:
+Alternatively, open your terminal and navigate with `cd` to the folder where the AppImage is located. 
+(The default location of the following command execution is `/home`). 
+- Then run:
 ```bash
 chmod +x TuringSimulatorCpp-Linux.AppImage
 ```
-- Double-click the AppImage to run the simulator.
+- Double-click the AppImage to run the simulator, or execute it directly in the terminal:
+```
+./TuringSimulatorCpp-Linux.AppImage
+```
 
 
 ## Generating transition tables with Gemini AI
