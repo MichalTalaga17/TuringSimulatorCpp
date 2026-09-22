@@ -36,6 +36,8 @@ https://github.com/MichalTalaga17/TuringSimulatorCpp/releases
 
 Tip: For quick access, right-click the `.exe` file, then choose `show more options` and click `Create shortcut`. You can drag the created shortcut to your desktop or any desired location for easier access.
 
+Note: Because this is an open-source tool, Microsoft Defender may prevent running the app on the first launch. To bypass this, on the `Windows protected your PC` popup window click `more options` and choose `Run anyway`.
+
 ### macOS 
 
 - Download the `TuringSimulatorCpp-macOS.dmg` file.
