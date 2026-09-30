@@ -100,7 +100,7 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: |
           # Bundle the Qt frameworks into the .app and convert it to a .dmg
-          macdeployqt build/TuringSimulatorCpp.app -dmg
+          macdeployqt build/TuringSimulatorCpp.app -dmg -codesign=-
           mv build/TuringSimulatorCpp.dmg TuringSimulatorCpp-macOS.dmg
 
       - name: Upload Final Artifacts
